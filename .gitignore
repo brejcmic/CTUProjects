@@ -1,0 +1,57 @@
+#--------------------------------------
+#all files are ignored by default
+#--------------------------------------
+*.*
+
+#--------------------------------------
+#permited files
+#--------------------------------------
+
+#.txt
+
+#ignore list
+!*.gitignore
+
+#tex files
+!*.tex
+!*.cls
+!*.bib
+!*.bst
+!*.sty
+
+#C source files
+!*.c
+!*.h
+
+
+#JAVA files
+!*.java
+
+!*.form
+
+!*.jar
+
+#office files
+!*.docx
+!*.docm
+!*.xlsx
+!*.xlsm
+
+#matlab files
+!*.m
+!*.mat
+!*.slx
+
+#adobe
+!*.pdf
+
+#--------------------------------------
+#ignored files - special specifications
+#--------------------------------------
+
+#some files, that do not have suffix
+makefile
+
+#office temporary files
+~$*.docx
+~$*.xlsx
