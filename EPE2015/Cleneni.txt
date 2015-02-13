@@ -1,0 +1,13 @@
+Title: Evaluation of public lighting by using of genetic algorithm
+Introduction
+Požadavky na osvìtlení pìších kominikací S1 až S4
+        minimální osvìtlení,
+        èinitel údržby
+Typy testovaných svítidel - vyzaøovací charakteristiky, studovné vzorky
+Genetický algoritmus
+        Princip
+        Fitness funkce
+        Elitismus
+Výsledky návrhu rozmístìní svítidel
+        Porovnání s programem dialux
+Závìr
