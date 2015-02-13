@@ -47,7 +47,7 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
 %delka komunikace
                 kom.delka = 200;%m
 %sirka komunikace
-                kom.sirka = 4;%m
+                kom.sirka = 3;%m
 %delka sledovaneho prostoru v pruseciku os komunikce
                 kom.delPr = 80;%m
 %vzdalenost paty svitidel od krajnice

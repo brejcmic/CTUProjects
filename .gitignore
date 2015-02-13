@@ -12,6 +12,12 @@
 #ignore list
 !*.gitignore
 
+#figures
+!*.png
+
+#PROFICAD
+!*.xse
+
 #tex files
 !*.tex
 !*.cls
