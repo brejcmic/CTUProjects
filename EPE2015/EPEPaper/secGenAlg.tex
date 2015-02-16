@@ -16,7 +16,7 @@ D_X \in \left\langle 0.5 \text{ m}, 50 \text{ m}\right\rangle
 \end{equation}
 
 \begin{equation}
-D_Y \in \left\langle -1 \text{ m}, 1 \text{ m}\right\rangle
+D_Y \in \left\langle -2 \text{ m}, 2 \text{ m}\right\rangle
 \end{equation}
 
 \begin{equation}
@@ -27,14 +27,16 @@ Z \in \left\langle 2 \text{ m}, 15 \text{ m}\right\rangle
 \alpha \in \left\langle 0^\circ, 20^\circ \right\rangle
 \end{equation}
 
-The algorithm evaluated the illuminance at the sidewalk of length 200~m and width 3~m. The control area was set in the middle of the sidewalk of the length 80~m.
+The algorithm evaluated the illuminance at the sidewalk of length 200~m and width 3~m. The control area was set in the middle of the sidewalk of the length 80~m. Control area consisted of 6000 points evenly covering the whole field with 20~cm distances between each other. These points were used for illuminance evaluation. The pillars were placed 1~m out of the sidewalk. The pillars placement just shifted the overlap of the lamp. So the same effect could be done by setting the limits of DY in interval $\left\langle -3 \text{ m}, 1 \text{ m}\right\rangle$ with the pillars at the bound of the sidewalk.
 
 \begin{figure}[htb]
   \centering
   \includegraphics[width=\columnwidth]{kotyChodniku}
-  \caption{Dimensions of studied sidewalk}
+  \caption{Dimensions of studied sidewalks}
   \label{fig:sidewalk}
 \end{figure}
+
+Two cases of of lamp placement was studied as it is shown in figure~\ref{fig:sidewalk}.
 
 \subsection{Fitness function}
 \subsection{Elitism}

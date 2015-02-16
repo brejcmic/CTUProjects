@@ -16,7 +16,7 @@
 !*.png
 
 #PROFICAD
-!*.xse
+!*.sxe
 
 #tex files
 !*.tex
