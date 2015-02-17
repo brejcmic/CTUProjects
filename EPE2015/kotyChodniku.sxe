@@ -6,10 +6,10 @@
 <layer name="0" v="1"/>
 </layers>
 </tb>
-<PageSettings bgColor="FFFFFF" pgsHor="1" pgsVer="1" pgsMrgn="0, 0, 0, 0" pageMargins="10, 10, 10, 10" zoom="300" frame="YES" rastr="20" showT="YES" showV="YES" includeMargins="YES"/>
+<PageSettings bgColor="FFFFFF" pgsHor="1" pgsVer="1" pgsMrgn="0, 0, 0, 0" pageMargins="10, 10, 10, 10" zoom="100" frame="YES" rastr="20" showT="YES" showV="YES" includeMargins="YES"/>
 <RefGridSettings FieldSize="50"/>
 <NumberingWire Digits="3" TypeRenumbering="0" ShowWireName="0" WireLabelDist_a="6" WireLabelDist_b="7" WireLabelDist_c="7"/>
-<summary jazyk="" prezkousel="" nazev="" zmena="" cisloDok="" author="" _pc="1" _file="kotyChodniku" druhDokumentu="" statusDokumentu="" date="13.2.2015" _path="C:\Users\Brejcmic\Documents\GitRep\CTUProjects\EPE2015\kotyChodniku.sxe" techRef="" nazevDopln="" odd=""/>
+<summary jazyk="" prezkousel="" nazev="" zmena="" _pc="1" author="" cisloDok="" statusDokumentu="" druhDokumentu="" _file="kotyChodniku" date="13.2.2015" _path="C:\Users\Brejcmic\Documents\GitRep\CTUProjects\EPE2015\kotyChodniku.sxe" techRef="" nazevDopln="" odd=""/>
 <BillColumns/>
 <pages current="0">
 <page name="1">
@@ -17,22 +17,21 @@
 <layers current="1">
 <layer name="-1" v="1"/>
 <layer name="0" v="1">
+<rect left="500" top="1250" right="800" bottom="1370" op-lw="1" op-fd="1" op-fc="16777215">
+<hatch type="3" penSize="1" spacing="20" offSetX="0" offSetY="0"/>
+</rect>
+<rect left="500" top="800" right="800" bottom="920" op-lw="1" op-fd="1" op-fc="16777215">
+<hatch type="3" penSize="1" spacing="20" offSetX="0" offSetY="0"/>
+</rect>
+<rect left="500" top="930" right="800" bottom="1050" op-lw="1" op-fd="1" op-fc="16777215">
+<hatch type="3" penSize="1" spacing="20" offSetX="0" offSetY="0"/>
+</rect>
 <polyline op-lw="4" pts="300,600,1000,600,"/>
 <polyline op-lw="4" pts="300,800,1000,800,"/>
 <rect left="500" top="600" right="800" bottom="800">
 <hatch type="2" penSize="1" spacing="20" offSetX="0" offSetY="0"/>
 </rect>
-<ellipse left="390" top="890" right="410" bottom="910"/>
-<ellipse left="490" top="890" right="510" bottom="910"/>
-<ellipse left="590" top="890" right="610" bottom="910"/>
-<ellipse left="690" top="890" right="710" bottom="910"/>
-<ellipse left="790" top="890" right="810" bottom="910"/>
-<ellipse left="890" top="890" right="910" bottom="910"/>
-<ellipse left="990" top="890" right="1010" bottom="910"/>
-<ellipse left="290" top="890" right="310" bottom="910"/>
 <text x="650" y="700" f="110,0,0,0,Times New Roman,000000" al="9">Control Area</text>
-<text x="873" y="430" f="110,0,0,0,Times New Roman,000000" al="2">Pillars
-Lamps</text>
 <ellipse left="290" top="840" right="310" bottom="860" op-fd="1" op-fc="0"/>
 <ellipse left="390" top="840" right="410" bottom="860" op-fd="1" op-fc="0"/>
 <ellipse left="490" top="840" right="510" bottom="860" op-fd="1" op-fc="0"/>
@@ -41,91 +40,81 @@ Lamps</text>
 <ellipse left="790" top="840" right="810" bottom="860" op-fd="1" op-fc="0"/>
 <ellipse left="890" top="840" right="910" bottom="860" op-fd="1" op-fc="0"/>
 <ellipse left="990" top="840" right="1010" bottom="860" op-fd="1" op-fc="0"/>
-<polyline op-lw="4" pts="300,850,300,890,"/>
-<polyline op-lw="4" pts="400,850,400,890,"/>
-<polyline op-lw="4" pts="500,850,500,890,"/>
-<polyline op-lw="4" pts="600,850,600,890,"/>
-<polyline op-lw="4" pts="700,850,700,890,"/>
-<polyline op-lw="4" pts="800,850,800,890,"/>
-<polyline op-lw="4" pts="900,850,900,890,"/>
-<polyline op-lw="4" pts="1000,850,1000,890,"/>
-<ellipse left="840" top="400" right="860" bottom="420"/>
-<ellipse left="840" top="442" right="860" bottom="462" op-fd="1" op-fc="0"/>
 <polyline op-lw="1" op-at="9" pts="1000,800,1000,600,"/>
 <text x="976" y="731" t="2" f="110,0,0,0,Times New Roman,000000" al="2">3 m</text>
+<polyline op-lw="1" pts="1000,800,1070,800,"/>
 <polyline op-lw="1" pts="1000,850,1070,850,"/>
-<polyline op-lw="1" pts="1000,900,1070,900,"/>
-<polyline op-lw="1" op-at="5" pts="1060,770,1060,850,"/>
-<text x="1036" y="821" t="2" f="110,0,0,0,Times New Roman,000000" al="2">D</text>
-<text x="1046" y="791" t="2" f="70,0,0,0,Times New Roman,000000" al="2">Y</text>
-<polyline op-lw="1" pts="1060,850,1060,900,"/>
-<polyline op-lw="1" op-at="5" pts="1060,930,1060,900,"/>
-<polyline op-lw="1" pts="250,900,300,900,"/>
-<polyline op-lw="1" pts="250,800,300,800,"/>
-<polyline op-lw="1" op-at="9" pts="260,800,260,900,"/>
-<text x="226" y="881" t="2" f="110,0,0,0,Times New Roman,000000" al="2">1 m</text>
-<text x="830" y="932" f="110,0,0,0,Times New Roman,000000" al="2">D</text>
-<text x="858" y="947" f="70,0,0,0,Times New Roman,000000" al="2">X</text>
-<polyline op-lw="1" pts="800,1000,800,900,"/>
-<polyline op-lw="1" pts="900,900,900,1400,"/>
-<polyline op-lw="1" op-at="9" pts="800,960,900,960,"/>
-<polyline op-lw="1" pts="300,490,300,600,"/>
-<polyline op-lw="1" pts="1000,490,1000,600,"/>
-<polyline op-lw="1" op-at="9" pts="300,500,1000,500,"/>
-<text x="600" y="482" f="110,0,0,0,Times New Roman,000000" al="2">200 m</text>
-<polyline op-lw="1" pts="500,560,500,600,"/>
-<polyline op-lw="1" pts="800,560,800,600,"/>
-<polyline op-lw="1" op-at="9" pts="500,570,800,570,"/>
-<text x="610" y="552" f="110,0,0,0,Times New Roman,000000" al="2">80 m</text>
-<polyline op-lw="4" pts="300,1100,1000,1100,"/>
-<polyline op-lw="4" pts="300,1300,1000,1300,"/>
-<rect left="500" top="1100" right="800" bottom="1300">
+<polyline op-lw="1" op-at="5" pts="1060,720,1060,800,"/>
+<text x="1036" y="771" t="2" f="110,0,0,0,Times New Roman,000000" al="2">D</text>
+<text x="1046" y="741" t="2" f="70,0,0,0,Times New Roman,000000" al="2">Y</text>
+<polyline op-lw="1" pts="1060,800,1060,850,"/>
+<polyline op-lw="1" op-at="5" pts="1060,880,1060,850,"/>
+<text x="930" y="902" f="110,0,0,0,Times New Roman,000000" al="2">D</text>
+<text x="958" y="917" f="70,0,0,0,Times New Roman,000000" al="2">X</text>
+<polyline op-lw="1" pts="1000,1000,1000,850,"/>
+<polyline op-lw="1" pts="900,850,900,1300,"/>
+<polyline op-lw="1" op-at="9" pts="900,930,1000,930,"/>
+<polyline op-lw="1" pts="300,390,300,600,"/>
+<polyline op-lw="1" pts="1000,390,1000,600,"/>
+<polyline op-lw="1" op-at="9" pts="300,400,1000,400,"/>
+<text x="600" y="382" f="110,0,0,0,Times New Roman,000000" al="2">200 m</text>
+<polyline op-lw="1" pts="500,440,500,480,"/>
+<polyline op-lw="1" pts="800,440,800,480,"/>
+<polyline op-lw="1" op-at="9" pts="500,450,800,450,"/>
+<text x="610" y="432" f="110,0,0,0,Times New Roman,000000" al="2">80 m</text>
+<polyline op-lw="4" pts="300,1050,1000,1050,"/>
+<polyline op-lw="4" pts="300,1250,1000,1250,"/>
+<rect left="500" top="1050" right="800" bottom="1250">
 <hatch type="2" penSize="1" spacing="20" offSetX="0" offSetY="0"/>
 </rect>
-<ellipse left="490" top="1390" right="510" bottom="1410"/>
-<ellipse left="690" top="1390" right="710" bottom="1410"/>
-<ellipse left="890" top="1390" right="910" bottom="1410"/>
-<ellipse left="290" top="1390" right="310" bottom="1410"/>
-<text x="650" y="1200" f="110,0,0,0,Times New Roman,000000" al="9">Control Area</text>
-<ellipse left="290" top="1340" right="310" bottom="1360" op-fd="1" op-fc="0"/>
-<ellipse left="490" top="1340" right="510" bottom="1360" op-fd="1" op-fc="0"/>
-<ellipse left="690" top="1340" right="710" bottom="1360" op-fd="1" op-fc="0"/>
-<ellipse left="890" top="1340" right="910" bottom="1360" op-fd="1" op-fc="0"/>
-<polyline op-lw="4" pts="300,1350,300,1390,"/>
-<polyline op-lw="4" pts="500,1350,500,1390,"/>
-<polyline op-lw="4" pts="700,1350,700,1390,"/>
-<polyline op-lw="4" pts="900,1350,900,1390,"/>
-<polyline op-lw="1" op-at="9" pts="1000,1300,1000,1100,"/>
-<text x="976" y="1231" t="2" f="110,0,0,0,Times New Roman,000000" al="2">3 m</text>
-<polyline op-lw="1" pts="250,1400,300,1400,"/>
-<polyline op-lw="1" pts="250,1300,300,1300,"/>
-<polyline op-lw="1" op-at="9" pts="260,1300,260,1400,"/>
-<text x="226" y="1381" t="2" f="110,0,0,0,Times New Roman,000000" al="2">1 m</text>
-<ellipse left="390" top="1040" right="410" bottom="1060" op-fd="1" op-fc="0"/>
-<ellipse left="390" top="990" right="410" bottom="1010"/>
-<polyline op-lw="4" pts="400,1010,400,1050,"/>
-<ellipse left="590" top="1040" right="610" bottom="1060" op-fd="1" op-fc="0"/>
-<ellipse left="590" top="990" right="610" bottom="1010"/>
-<polyline op-lw="4" pts="600,1010,600,1050,"/>
-<ellipse left="790" top="1040" right="810" bottom="1060" op-fd="1" op-fc="0"/>
-<ellipse left="790" top="990" right="810" bottom="1010"/>
-<polyline op-lw="4" pts="800,1010,800,1050,"/>
-<ellipse left="990" top="1040" right="1010" bottom="1060" op-fd="1" op-fc="0"/>
-<ellipse left="990" top="990" right="1010" bottom="1010"/>
-<polyline op-lw="4" pts="1000,1010,1000,1050,"/>
-<polyline op-lw="1" pts="250,1100,300,1100,"/>
-<polyline op-lw="1" pts="250,1000,400,1000,"/>
-<polyline op-lw="1" op-at="9" pts="260,1000,260,1100,"/>
-<text x="226" y="1081" t="2" f="110,0,0,0,Times New Roman,000000" al="2">1 m</text>
+<text x="650" y="1150" f="110,0,0,0,Times New Roman,000000" al="9">Control Area</text>
+<ellipse left="290" top="1290" right="310" bottom="1310" op-fd="1" op-fc="0"/>
+<ellipse left="490" top="1290" right="510" bottom="1310" op-fd="1" op-fc="0"/>
+<ellipse left="690" top="1290" right="710" bottom="1310" op-fd="1" op-fc="0"/>
+<ellipse left="890" top="1290" right="910" bottom="1310" op-fd="1" op-fc="0"/>
+<polyline op-lw="1" op-at="9" pts="1000,1250,1000,1050,"/>
+<text x="976" y="1181" t="2" f="110,0,0,0,Times New Roman,000000" al="2">3 m</text>
+<ellipse left="390" top="990" right="410" bottom="1010" op-fd="1" op-fc="0"/>
+<ellipse left="590" top="990" right="610" bottom="1010" op-fd="1" op-fc="0"/>
+<ellipse left="790" top="990" right="810" bottom="1010" op-fd="1" op-fc="0"/>
+<ellipse left="990" top="990" right="1010" bottom="1010" op-fd="1" op-fc="0"/>
 <text x="313" y="710" f="110,0,0,0,Times New Roman,000000" al="2">one side</text>
-<text x="313" y="1210" f="110,0,0,0,Times New Roman,000000" al="2">two sides</text>
-<polyline op-lw="1" pts="900,1350,1070,1350,"/>
-<polyline op-lw="1" pts="900,1400,1070,1400,"/>
-<polyline op-lw="1" op-at="5" pts="1060,1270,1060,1350,"/>
-<text x="1036" y="1321" t="2" f="110,0,0,0,Times New Roman,000000" al="2">D</text>
-<text x="1046" y="1291" t="2" f="70,0,0,0,Times New Roman,000000" al="2">Y</text>
-<polyline op-lw="1" pts="1060,1350,1060,1400,"/>
-<polyline op-lw="1" op-at="5" pts="1060,1430,1060,1400,"/>
+<text x="313" y="1160" f="110,0,0,0,Times New Roman,000000" al="2">two sides</text>
+<polyline op-lw="1" pts="1000,1000,1070,1000,"/>
+<polyline op-lw="1" pts="1000,1050,1070,1050,"/>
+<polyline op-lw="1" op-at="5" pts="1060,920,1060,1000,"/>
+<text x="1036" y="971" t="2" f="110,0,0,0,Times New Roman,000000" al="2">D</text>
+<text x="1046" y="941" t="2" f="70,0,0,0,Times New Roman,000000" al="2">Y</text>
+<polyline op-lw="1" pts="1060,1000,1060,1050,"/>
+<polyline op-lw="1" op-at="5" pts="1060,1080,1060,1050,"/>
+<polyline op-lw="1" pts="1000,1250,1070,1250,"/>
+<polyline op-lw="1" pts="900,1300,1070,1300,"/>
+<polyline op-lw="1" op-at="5" pts="1060,1170,1060,1250,"/>
+<text x="1036" y="1221" t="2" f="110,0,0,0,Times New Roman,000000" al="2">D</text>
+<text x="1046" y="1191" t="2" f="70,0,0,0,Times New Roman,000000" al="2">Y</text>
+<polyline op-lw="1" pts="1060,1250,1060,1300,"/>
+<polyline op-lw="1" op-at="5" pts="1060,1330,1060,1300,"/>
+<text x="583" y="1340" f="110,0,0,0,Times New Roman,000000" al="2">Zero Area</text>
+<text x="583" y="890" f="110,0,0,0,Times New Roman,000000" al="2">Zero Area</text>
+<polyline op-lw="1" pts="455,1370,500,1370,"/>
+<polyline op-lw="1" op-at="9" pts="470,1250,470,1370,"/>
+<text x="446" y="1341" t="2" f="110,0,0,0,Times New Roman,000000" al="2">2 m</text>
+<polyline op-lw="1" pts="455,920,500,920,"/>
+<polyline op-lw="1" op-at="9" pts="470,800,470,920,"/>
+<text x="446" y="891" t="2" f="110,0,0,0,Times New Roman,000000" al="2">2 m</text>
+<polyline op-lw="1" pts="455,930,500,930,"/>
+<polyline op-lw="1" op-at="9" pts="470,930,470,1050,"/>
+<text x="446" y="1021" t="2" f="110,0,0,0,Times New Roman,000000" al="2">2 m</text>
+<text x="583" y="960" f="110,0,0,0,Times New Roman,000000" al="2">Zero Area</text>
+<rect left="500" top="480" right="800" bottom="600" op-lw="1" op-fd="1" op-fc="16777215">
+<hatch type="3" penSize="1" spacing="20" offSetX="0" offSetY="0"/>
+</rect>
+<text x="583" y="510" f="110,0,0,0,Times New Roman,000000" al="2">Zero Area</text>
+<polyline op-lw="1" pts="455,480,500,480,"/>
+<polyline op-lw="1" op-at="9" pts="470,480,470,600,"/>
+<text x="446" y="571" t="2" f="110,0,0,0,Times New Roman,000000" al="2">2 m</text>
+<polyline op-lw="1" pts="900,1300,940,1370,1035,1370,"/>
+<text x="950" y="1347" f="110,0,0,0,Times New Roman,000000" al="2">Lamp</text>
 </layer>
 </layers>
 </page>

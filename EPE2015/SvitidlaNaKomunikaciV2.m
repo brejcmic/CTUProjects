@@ -33,7 +33,7 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
                 norma.cinitel.starnuti = 0.91;
                 norma.Emin = 1;%lx
                 norma.Eavg.min = 5;%lx
-                norma.Eavg.max = 7.5;%lx
+                norma.Eavg.max = 1.5*norma.Eavg.min;%lx
                 
                 norma.Emin = norma.Emin/norma.cinitel.znecisteni/norma.cinitel.starnuti;
                 norma.Eavg.min = norma.Eavg.min/norma.cinitel.znecisteni/norma.cinitel.starnuti;
@@ -56,17 +56,24 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
                 kom.sirka = 3;%m
 %delka sledovaneho prostoru v pruseciku os komunikce
                 kom.delPr = 80;%m
-%vzdalenost paty svitidel od krajnice
-                kom.yPata = 1;%m
-%y offset komunikace (aby vsechny souradnice byly kladne)
-                kom.yOffset = kom.yPata - mez.min.DY;
 %pocet kontrolnich bodu v ose x a y ve sledovanem prostoru
                 kom.Nx = 400;
                 kom.Ny = 15;
-%Generovani souradnic:
+%--------------------------------------------------------------------------
+%PARAMETRY NULOVE PLOCHY
+%sirka nulove plochy podel komunikace
+                kom.sirkaMimo = 2;%m
+%pocet kontrolnich bodu v ose y ve sledovanem prostoru mimo komunikaci
+                kom.NyMimo = 10;
+%y offset komunikace (aby vsechny souradnice byly kladne)
+                kom.yOffset = kom.sirkaMimo;
+                
+%Generovani souradnic na komunikaci:
 kom.bx = (kom.delka - kom.delPr)/2+((1:kom.Nx).*kom.delPr - kom.delPr/2)./kom.Nx;
 kom.by = kom.yOffset +((1:kom.Ny).*kom.sirka - kom.sirka/2)./kom.Ny;
-
+%Generovani souradnic mimo komunikaci (bez offsetu):
+kom.bmx = (kom.delka - kom.delPr)/2+((1:kom.Nx).*kom.delPr - kom.delPr/2)./kom.Nx;
+kom.bmy = ((1:kom.NyMimo).*kom.sirkaMimo - kom.sirkaMimo/2)./kom.NyMimo;
 %--------------------------------------------------------------------------
 %Pocatecni populace je nahodna:
 pop.dna.DX = mez.min.DX + (mez.max.DX-mez.min.DX).*rand(pop.N, 1);
@@ -91,8 +98,8 @@ for generace = 1:1:pop.gen
         E.Ns = floor(kom.delka/pop.dna.DX(i));
         E.xs = (kom.delka - E.Ns * pop.dna.DX(i))/2 + (0:2:2*floor(E.Ns/2))*pop.dna.DX(i);
         E.xs = [E.xs, (kom.delka - E.Ns * pop.dna.DX(i))/2 + (1:2:2*floor((E.Ns-1)/2)+1)*pop.dna.DX(i)];
-        E.ys = (kom.yOffset - kom.yPata + pop.dna.DY(i))*ones(1,floor(E.Ns/2)+1);
-        E.ys = [E.ys, (kom.yOffset + kom.yPata + kom.sirka - pop.dna.DY(i))*ones(1,ceil(E.Ns/2))];
+        E.ys = (kom.yOffset + pop.dna.DY(i))*ones(1,floor(E.Ns/2)+1);
+        E.ys = [E.ys, (kom.yOffset + kom.sirka - pop.dna.DY(i))*ones(1,ceil(E.Ns/2))];
         %souradnice svitidel se opakuji ve sloupcich matice
         E.mat.xs = E.xs' * ones(1, kom.Nx*kom.Ny);
         E.mat.ys = E.ys' * ones(1, kom.Nx*kom.Ny);
@@ -195,8 +202,8 @@ for generace = 1:1:pop.gen
     E.Ns = floor(kom.delka/pop.dna.DX(IDX));
     E.xs = (kom.delka - E.Ns * pop.dna.DX(IDX))/2 + (0:2:2*floor(E.Ns/2))*pop.dna.DX(IDX);
     E.xs = [E.xs, (kom.delka - E.Ns * pop.dna.DX(IDX))/2 + (1:2:2*floor((E.Ns-1)/2)+1)*pop.dna.DX(IDX)];
-    E.ys = (kom.yOffset - kom.yPata + pop.dna.DY(IDX))*ones(1,floor(E.Ns/2)+1);
-    E.ys = [E.ys, (kom.yOffset + kom.yPata + kom.sirka - pop.dna.DY(IDX))*ones(1,ceil(E.Ns/2))];
+    E.ys = (kom.yOffset + pop.dna.DY(IDX))*ones(1,floor(E.Ns/2)+1);
+    E.ys = [E.ys, (kom.yOffset + kom.sirka - pop.dna.DY(IDX))*ones(1,ceil(E.Ns/2))];
    
     E.mat.xb = zeros(1, kom.Nx*kom.Ny);
     E.mat.yb = zeros(1, kom.Nx*kom.Ny);
