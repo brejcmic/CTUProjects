@@ -3,10 +3,16 @@ Lighting system designs of public roads in the Czech Republic have to meet among
 
 The maintenance factor $MF$ is another entry that has to be taken into account. This factor defines the depreciation of the design level, in this case, the depreciation of illuminance $\overline{E}$ and $E_{min}$ over the course of operation of the road lighting. After choosing the luminaire Atos from Schr\'{e}der as the luminaire to be used throughout this project, the maintenance factor can be calculated from \v{C}SN EN 13201-2 ZM\v{E}NA Z1:
 \begin{equation}
-MF=LLMF \times LMF
+MF=LLMF \times LSF \times LMF
 \end{equation}
 Where:
 \begin{description}
-	\item[LLMF is the lamp lumen maintenance factor] 
+	\item[LLMF is the lamp lumen maintenance factor]
+	\item[LSF is the lamp survival factor]
 	\item[LMF is the luminaire factor]
 \end{description}
+
+The Atos luminaire's are fitted with high pressure sodium lamps. The operating time of the sodium lamps were chosen to be 10000 hours. In the table NA.2 of \v{C}SN EN 13201-2 Z1 $LLMF=0.91$ can be found. Looking at the datasheet of a Philips 70W high pressure sodium lamp, the value $LSF=0.87$ can be found for 10000 hours of operation. The IP Code of the luminaire's optical system is IP66, meaning that for an environment of medium air pollution and cleaning intervals of 2 years $LMF=0.89$ can be found in table NA.1 of \v{C}SN EN 13201-2 Z1. All summed up we get:
+\begin{equation}
+0.785603=0.91 \times 0.89 \times 0.97
+\end{equation}
