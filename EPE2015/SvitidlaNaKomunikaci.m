@@ -12,15 +12,15 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
 %Mutace (pomerna hodnota):
                 pop.mut = 0.05;
 %Pocet generací:
-                pop.gen = 200;
+                pop.gen = 60;
 %Velikost populace:
                 pop.N = 100;
 %Meze parametru (dano pozadavky na komunikaci):
                 mez.min.DX = 0.5;%m
-                mez.max.DX = 80;%m
-                mez.min.DY = -0.5;%m presah mimo silnici je zaporny
-                mez.max.DY = 0.5;%m presah do silnice je kladny
-                mez.min.Z = 5;%m
+                mez.max.DX = 50;%m
+                mez.min.DY = -2;%m presah mimo silnici je zaporny
+                mez.max.DY = 2;%m presah do silnice je kladny
+                mez.min.Z = 2;%m
                 mez.max.Z = 15;%m
                 mez.min.alfa = 0*pi/180;%rad
                 mez.max.alfa = 20*pi/180;%rad
@@ -29,12 +29,18 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
                 historie.dna = zeros(pop.gen, 4);
 %--------------------------------------------------------------------------
 %POZADOVANE VYSLEDKY
-                norma.Emin = 1.25;%lx
-                norma.Eavg.min = 6.25;%lx
-                norma.Eavg.max = 9.375;%lx
+                norma.cinitel.znecisteni = 0.89;
+                norma.cinitel.starnuti = 0.91;
+                norma.Emin = 1;%lx
+                norma.Eavg.min = 5;%lx
+                norma.Eavg.max = 7.5;%lx
+                
+                norma.Emin = norma.Emin/norma.cinitel.znecisteni/norma.cinitel.starnuti;
+                norma.Eavg.min = norma.Eavg.min/norma.cinitel.znecisteni/norma.cinitel.starnuti;
+                norma.Eavg.max = norma.Eavg.max/norma.cinitel.znecisteni/norma.cinitel.starnuti;
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDLA
-                svt.I = load('F reflektor 1 patice 1.txt', '-ascii');
+                svt.I = load('Svitidla\ATOS_70W_C4.txt', '-ascii');
                 [svt.B.N, svt.beta.N] = size(svt.I);
 %pocatky uhlu
                 svt.beta.Nula = -pi/2;
@@ -51,12 +57,12 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
 %delka sledovaneho prostoru v pruseciku os komunikce
                 kom.delPr = 80;%m
 %vzdalenost paty svitidel od krajnice
-                kom.yPata = 0;%m
+                kom.yPata = 1;%m
 %y offset komunikace (aby vsechny souradnice byly kladne)
                 kom.yOffset = kom.yPata - mez.min.DY;
 %pocet kontrolnich bodu v ose x a y ve sledovanem prostoru
-                kom.Nx = 160;
-                kom.Ny = 8;
+                kom.Nx = 400;
+                kom.Ny = 15;
 %Generovani souradnic:
 kom.bx = (kom.delka - kom.delPr)/2+((1:kom.Nx).*kom.delPr - kom.delPr/2)./kom.Nx;
 kom.by = kom.yOffset +((1:kom.Ny).*kom.sirka - kom.sirka/2)./kom.Ny;
@@ -307,9 +313,12 @@ for generace = 1:1:pop.gen
     end
 end;
 
-disp(pop.dna.vse(IDX,:));
-disp(pop.Eavg(IDX));
-disp(pop.Emin(IDX));
+fprintf('DX= %f\n', pop.dna.DX(IDX));
+fprintf('DY= %f\n', pop.dna.DY(IDX));
+fprintf('Z= %f\n', pop.dna.Z(IDX));
+fprintf('alfa= %f\n', pop.dna.alfa(IDX)*180/pi);
+fprintf('Eavg= %f\n', pop.Eavg(IDX));
+fprintf('Eavg= %f\n', pop.Emin(IDX));
 
 clear i;
 clear j;
