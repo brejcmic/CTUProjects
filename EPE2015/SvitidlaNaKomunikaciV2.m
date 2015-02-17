@@ -71,9 +71,13 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
 %Generovani souradnic na komunikaci:
 kom.bx = (kom.delka - kom.delPr)/2+((1:kom.Nx).*kom.delPr - kom.delPr/2)./kom.Nx;
 kom.by = kom.yOffset +((1:kom.Ny).*kom.sirka - kom.sirka/2)./kom.Ny;
-%Generovani souradnic mimo komunikaci (bez offsetu):
-kom.bmx = (kom.delka - kom.delPr)/2+((1:kom.Nx).*kom.delPr - kom.delPr/2)./kom.Nx;
-kom.bmy = ((1:kom.NyMimo).*kom.sirkaMimo - kom.sirkaMimo/2)./kom.NyMimo;
+%Generovani souradnic mimo komunikaci (bez offsetu a s offsetem a sirkou komunikace):
+kom.bm.xa = (kom.delka - kom.delPr)/2+((1:kom.Nx).*kom.delPr - kom.delPr/2)./kom.Nx;
+kom.bm.ya = ((1:kom.NyMimo).*kom.sirkaMimo - kom.sirkaMimo/2)./kom.NyMimo;
+kom.bm.xb = (kom.delka - kom.delPr)/2+((1:kom.Nx).*kom.delPr - kom.delPr/2)./kom.Nx;
+kom.bm.yb = kom.yOffset + kom.sirka + ((1:kom.NyMimo).*kom.sirkaMimo - kom.sirkaMimo/2)./kom.NyMimo;
+kom.bmx = [kom.bm.xa kom.bm.xb];
+kom.bmy = [kom.bm.ya kom.bm.yb];
 %--------------------------------------------------------------------------
 %Pocatecni populace je nahodna:
 pop.dna.DX = mez.min.DX + (mez.max.DX-mez.min.DX).*rand(pop.N, 1);
@@ -169,7 +173,7 @@ for generace = 1:1:pop.gen
             pop.weight.Eavg(j) = exp(pop.Eavg(j) - (norma.Eavg.min + norma.Eavg.max)/2);
         end;
         
-        if pop.Emin(j) > 1.25
+        if pop.Emin(j) > norma.Emin
             pop.weight.Emin(j) = exp(-(pop.Emin(j) - norma.Emin)/10);
         else
             pop.weight.Emin(j) = exp((pop.Emin(j) - norma.Emin)*10);
@@ -335,7 +339,7 @@ fprintf('DY= %f\n', pop.dna.DY(IDX));
 fprintf('Z= %f\n', pop.dna.Z(IDX));
 fprintf('alfa= %f\n', pop.dna.alfa(IDX)*180/pi);
 fprintf('Eavg= %f\n', pop.Eavg(IDX));
-fprintf('Eavg= %f\n', pop.Emin(IDX));
+fprintf('Emin= %f\n', pop.Emin(IDX));
 
 clear i;
 clear j;

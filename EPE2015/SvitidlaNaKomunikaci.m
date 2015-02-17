@@ -40,7 +40,7 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
                 norma.Eavg.max = norma.Eavg.max/norma.cinitel.znecisteni/norma.cinitel.starnuti;
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDLA
-                svt.I = load('Svitidla\ATOS_70W_C4.txt', '-ascii');
+                svt.I = load('Svitidla\ATOS_70W_A1.txt', '-ascii');
                 [svt.B.N, svt.beta.N] = size(svt.I);
 %pocatky uhlu
                 svt.beta.Nula = -pi/2;
@@ -71,9 +71,13 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
 %Generovani souradnic na komunikaci:
 kom.bx = (kom.delka - kom.delPr)/2+((1:kom.Nx).*kom.delPr - kom.delPr/2)./kom.Nx;
 kom.by = kom.yOffset +((1:kom.Ny).*kom.sirka - kom.sirka/2)./kom.Ny;
-%Generovani souradnic mimo komunikaci (bez offsetu):
-kom.bmx = (kom.delka - kom.delPr)/2+((1:kom.Nx).*kom.delPr - kom.delPr/2)./kom.Nx;
-kom.bmy = ((1:kom.NyMimo).*kom.sirkaMimo - kom.sirkaMimo/2)./kom.NyMimo;
+%Generovani souradnic mimo komunikaci (bez offsetu a s offsetem a sirkou komunikace):
+kom.bm.ya = ((1:kom.NyMimo).*kom.sirkaMimo - kom.sirkaMimo/2)./kom.NyMimo;
+kom.bm.yb = kom.yOffset + kom.sirka + ((1:kom.NyMimo).*kom.sirkaMimo - kom.sirkaMimo/2)./kom.NyMimo;
+kom.bmx = kom.bx;
+kom.bmy = [kom.bm.ya kom.bm.yb];
+kom.NyMimo = kom.NyMimo * 2; %pocet bodu je nyni dvojnasobny, protoze jsou 
+                             %po obou stranach komunikace
 %--------------------------------------------------------------------------
 %Pocatecni populace je nahodna:
 pop.dna.DX = mez.min.DX + (mez.max.DX-mez.min.DX).*rand(pop.N, 1);
@@ -91,8 +95,9 @@ for generace = 1:1:pop.gen
     %pocatecni osvetlenost je nulova
     bod.E = zeros(pop.N,kom.Nx*kom.Ny);
 
-    %Osvetlenost jednotlivych bodu srovnavaci roviny
     for i= 1:1:pop.N
+        %------------------------------------------------------------------
+        %Osvetlenost jednotlivych bodu na komunikaci
         %1) Pozice svitidel v teto populaci
         %pocet svitidel na danem useku
         E.Ns = floor(kom.delka/pop.dna.DX(i));
@@ -133,6 +138,48 @@ for generace = 1:1:pop.gen
         
         %5) Urceni vysledne osvetlenosti z prispevku vsech svitidel
         pop.E(i, :) = sum(E.mat.I .* E.mat.cosTheta./ (E.mat.l.^2));
+        
+        %------------------------------------------------------------------
+        %Osvetlenost jednotlivych bodu mimo komunikaci
+        %1) Pozice svitidel v teto populaci
+        %pocet svitidel na danem useku je stejny jako minule
+        
+        %souradnice svitidel se opakuji ve sloupcich matice
+        E.mat.xs = E.xs' * ones(1, kom.Nx*kom.NyMimo);
+        E.mat.ys = kom.yOffset + pop.dna.DY(i) * ones(E.Ns+1, kom.Nx*kom.NyMimo);
+        E.mat.zs = pop.dna.Z(i) * ones(E.Ns+1, kom.Nx*kom.NyMimo);
+        E.mat.alfas = pop.dna.alfa(i) * ones(E.Ns+1, kom.Nx*kom.NyMimo);
+        
+        %2) Pozice bodu pro tuto populaci
+        E.mat.xb = zeros(E.Ns+1, kom.Nx*kom.NyMimo);
+        E.mat.yb = zeros(E.Ns+1, kom.Nx*kom.NyMimo);
+        for j= 1:1:kom.NyMimo
+            E.mat.xb(:, (((j-1)*kom.Nx)+1):((j*kom.Nx))) = ones(E.Ns+1, 1)*kom.bx;
+            E.mat.yb(:, (((j-1)*kom.Nx)+1):((j*kom.Nx))) = kom.bmy(j) .* ones(E.Ns+1, kom.Nx);
+        end
+        
+        %3) Charakteristiky potrebne pro urceni osvetlenosti (+eps kvuli deleni nulou!!!)
+        E.mat.l = (((E.mat.xs-E.mat.xb).^2 + (E.mat.ys-E.mat.yb).^2 + E.mat.zs.^2)).^0.5 +eps;
+        E.mat.sinB = (E.mat.yb - E.mat.ys)./ E.mat.l;
+        E.mat.sinBeta = (E.mat.xs - E.mat.xb)./ E.mat.l; %Tady je to obracene
+        %odklon paprsku plosky od normaly bodu dopadu je Theta
+        E.mat.cosTheta = E.mat.zs./ E.mat.l;
+        
+        E.mat.B = asin(E.mat.sinB) - E.mat.alfas;%Tady ma byt myslim minus
+        E.mat.beta = asin(E.mat.sinBeta);
+        
+        %4) Zjisteni svitivosti v danych uhlech
+        E.mat.I = zeros(E.Ns+1, kom.Nx*kom.NyMimo);
+        E.mat.indexIB = 1 + floor((E.mat.B - svt.B.Nula)/svt.B.krok);
+        E.mat.indexIbeta = 1 + floor((E.mat.beta - svt.beta.Nula)/svt.beta.krok);
+        for j = 1:1:E.Ns+1
+            for k = 1:1:kom.Nx*kom.NyMimo
+                E.mat.I(j,k) = svt.I(E.mat.indexIB(j,k), E.mat.indexIbeta(j,k));
+            end
+        end
+        
+        %5) Urceni vysledne osvetlenosti z prispevku vsech svitidel
+        pop.EMimo(i, :) = sum(E.mat.I .* E.mat.cosTheta./ (E.mat.l.^2));   
     end
     
     %----------------------------------------------------------------------
@@ -140,7 +187,7 @@ for generace = 1:1:pop.gen
     %Pocet bodu mezi dvema svitidly
     kom.Ns = floor(kom.Nx * pop.dna.DX/ kom.delPr);
     
-    %Prumerna hodnota osvetlenosti v dane populaci
+    %Prumerna hodnota osvetlenosti komunikace v dane populaci
     pop.Eavg = zeros(pop.N, 1);
     for j= 1:1:pop.N
         kom.ME = vec2mat(pop.E(j,:),kom.Nx);
@@ -148,7 +195,13 @@ for generace = 1:1:pop.gen
         pop.Eavg(j) = pop.Eavg(j)/ kom.Ny/ kom.Ns(j);
     end
 
-%    pop.Eavg = sum(pop.E,2)/ kom.Nx/ kom.Ny;
+    %Prumerna hodnota osvetlenosti mimo komunikaci v dane populaci
+    pop.EavgMimo = zeros(pop.N, 1);
+    for j= 1:1:pop.N
+        kom.ME = vec2mat(pop.EMimo(j,:),kom.Nx);
+        pop.EavgMimo(j)= sum(sum(kom.ME(:, 1:kom.Ns(j))));
+        pop.EavgMimo(j) = pop.EavgMimo(j)/ kom.NyMimo/ kom.Ns(j);
+    end
     
     %Minimalni svitivost v danych populacich
     pop.Emin = min(pop.E,[],2);
@@ -157,6 +210,7 @@ for generace = 1:1:pop.gen
     pop.weight.Eavg = zeros(pop.N, 1);
     pop.weight.Emin = zeros(pop.N, 1);
     pop.weight.DX = (pop.dna.DX/mez.max.DX).^2;
+    pop.weight.EavgMimo = 1./(pop.EavgMimo + 1);
     for j= 1:1:pop.N
         if pop.Eavg(j) > (norma.Eavg.min + norma.Eavg.max)/2
             pop.weight.Eavg(j) = exp(-(pop.Eavg(j) - (norma.Eavg.min + norma.Eavg.max)/2));
@@ -164,13 +218,13 @@ for generace = 1:1:pop.gen
             pop.weight.Eavg(j) = exp(pop.Eavg(j) - (norma.Eavg.min + norma.Eavg.max)/2);
         end;
         
-        if pop.Emin(j) > 1.25
+        if pop.Emin(j) > norma.Emin
             pop.weight.Emin(j) = exp(-(pop.Emin(j) - norma.Emin)/10);
         else
             pop.weight.Emin(j) = exp((pop.Emin(j) - norma.Emin)*10);
         end;
     end
-    pop.fitness = pop.weight.Eavg .* pop.weight.DX .* pop.weight.Emin + eps;
+    pop.fitness = pop.weight.Eavg .* pop.weight.DX .* pop.weight.Emin .* pop.weight.EavgMimo+ eps;
    
     %Pravdepodobnosti vyberu rodice
     pop.prVyb = pop.fitness ./ sum(pop.fitness);
@@ -325,7 +379,8 @@ fprintf('DY= %f\n', pop.dna.DY(IDX));
 fprintf('Z= %f\n', pop.dna.Z(IDX));
 fprintf('alfa= %f\n', pop.dna.alfa(IDX)*180/pi);
 fprintf('Eavg= %f\n', pop.Eavg(IDX));
-fprintf('Eavg= %f\n', pop.Emin(IDX));
+fprintf('Emin= %f\n', pop.Emin(IDX));
+fprintf('Emimo= %f\n', pop.EavgMimo(IDX));
 
 clear i;
 clear j;
