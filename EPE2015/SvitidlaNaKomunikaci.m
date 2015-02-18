@@ -210,7 +210,7 @@ for generace = 1:1:pop.gen
     pop.weight.Eavg = zeros(pop.N, 1);
     pop.weight.Emin = zeros(pop.N, 1);
     pop.weight.DX = (pop.dna.DX/mez.max.DX).^2;
-    pop.weight.EavgMimo = 1./(pop.EavgMimo + 1);
+    pop.weight.EavgMimo = exp(-pop.EavgMimo/100);
     for j= 1:1:pop.N
         if pop.Eavg(j) > (norma.Eavg.min + norma.Eavg.max)/2
             pop.weight.Eavg(j) = exp(-(pop.Eavg(j) - (norma.Eavg.min + norma.Eavg.max)/2));
