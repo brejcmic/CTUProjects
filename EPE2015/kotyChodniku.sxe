@@ -6,10 +6,10 @@
 <layer name="0" v="1"/>
 </layers>
 </tb>
-<PageSettings bgColor="FFFFFF" pgsHor="1" pgsVer="1" pgsMrgn="0, 0, 0, 0" pageMargins="10, 10, 10, 10" zoom="100" frame="YES" rastr="20" showT="YES" showV="YES" includeMargins="YES"/>
+<PageSettings bgColor="FFFFFF" pgsHor="1" pgsVer="1" pgsMrgn="0, 0, 0, 0" pageMargins="10, 10, 10, 10" zoom="150" frame="YES" rastr="20" showT="YES" showV="YES" includeMargins="YES"/>
 <RefGridSettings FieldSize="50"/>
 <NumberingWire Digits="3" TypeRenumbering="0" ShowWireName="0" WireLabelDist_a="6" WireLabelDist_b="7" WireLabelDist_c="7"/>
-<summary jazyk="" prezkousel="" nazev="" zmena="" _pc="1" author="" cisloDok="" statusDokumentu="" druhDokumentu="" _file="kotyChodniku" date="13.2.2015" _path="C:\Users\Brejcmic\Documents\GitRep\CTUProjects\EPE2015\kotyChodniku.sxe" techRef="" nazevDopln="" odd=""/>
+<summary jazyk="" prezkousel="" nazev="" zmena="" cisloDok="" author="" _pc="1" _file="kotyChodniku" druhDokumentu="" statusDokumentu="" date="13.2.2015" _path="C:\Users\Brejcmic\Documents\GitRep\CTUProjects\EPE2015\kotyChodniku.sxe" techRef="" nazevDopln="" odd=""/>
 <BillColumns/>
 <pages current="0">
 <page name="1">
@@ -94,8 +94,8 @@
 <text x="1046" y="1191" t="2" f="70,0,0,0,Times New Roman,000000" al="2">Y</text>
 <polyline op-lw="1" pts="1060,1250,1060,1300,"/>
 <polyline op-lw="1" op-at="5" pts="1060,1330,1060,1300,"/>
-<text x="583" y="1340" f="110,0,0,0,Times New Roman,000000" al="2">Zero Area</text>
-<text x="583" y="890" f="110,0,0,0,Times New Roman,000000" al="2">Zero Area</text>
+<text x="623" y="1000" f="110,0,0,0,Times New Roman,000000" al="2">Unwanted
+Lightening</text>
 <polyline op-lw="1" pts="455,1370,500,1370,"/>
 <polyline op-lw="1" op-at="9" pts="470,1250,470,1370,"/>
 <text x="446" y="1341" t="2" f="110,0,0,0,Times New Roman,000000" al="2">2 m</text>
@@ -105,16 +105,19 @@
 <polyline op-lw="1" pts="455,930,500,930,"/>
 <polyline op-lw="1" op-at="9" pts="470,930,470,1050,"/>
 <text x="446" y="1021" t="2" f="110,0,0,0,Times New Roman,000000" al="2">2 m</text>
-<text x="583" y="960" f="110,0,0,0,Times New Roman,000000" al="2">Zero Area</text>
 <rect left="500" top="480" right="800" bottom="600" op-lw="1" op-fd="1" op-fc="16777215">
 <hatch type="3" penSize="1" spacing="20" offSetX="0" offSetY="0"/>
 </rect>
-<text x="583" y="510" f="110,0,0,0,Times New Roman,000000" al="2">Zero Area</text>
 <polyline op-lw="1" pts="455,480,500,480,"/>
 <polyline op-lw="1" op-at="9" pts="470,480,470,600,"/>
 <text x="446" y="571" t="2" f="110,0,0,0,Times New Roman,000000" al="2">2 m</text>
 <polyline op-lw="1" pts="900,1300,940,1370,1035,1370,"/>
 <text x="950" y="1347" f="110,0,0,0,Times New Roman,000000" al="2">Lamp</text>
+<text x="533" y="1320" f="110,0,0,0,Times New Roman,000000" al="2">Unwanted
+Lightening</text>
+<text x="563" y="540" f="110,0,0,0,Times New Roman,000000" al="2">Unwanted
+Lightening</text>
+<text x="523" y="890" f="110,0,0,0,Times New Roman,000000" al="2">Unwanted Light.</text>
 </layer>
 </layers>
 </page>
