@@ -9,23 +9,14 @@ The genetic algorithms are currently well known so only the introduction of the 
 	\item [$\alpha$...] the lamp tilt.
 \end{description}
 
-The DNA string was made in the order of appearance of each value. The same value limits were chosen for each tested lamp:
+The DNA string was made in the order of appearance of each value. The same value limits were chosen for all tested lamps:
 
-\begin{equation}
-D_X \in \left\langle 0.5 \text{ m}, 50 \text{ m}\right\rangle
-\end{equation}
-
-\begin{equation}
-D_Y \in \left\langle -2 \text{ m}, 2 \text{ m}\right\rangle
-\end{equation}
-
-\begin{equation}
-Z \in \left\langle 2 \text{ m}, 15 \text{ m}\right\rangle
-\end{equation}
-
-\begin{equation}
-\alpha \in \left\langle 0^\circ, 20^\circ \right\rangle
-\end{equation}
+\begin{eqnarray}
+&&D_X \in \left\langle 0.5 \text{ m}, 50 \text{ m}\right\rangle \label{eq:DXLim}\\
+&&D_Y \in \left\langle -2 \text{ m}, 2 \text{ m}\right\rangle \\
+&&Z \in \left\langle 2 \text{ m}, 15 \text{ m}\right\rangle \\
+&&\alpha \in \left\langle 0^\circ, 20^\circ \right\rangle
+\end{eqnarray}
 
 The algorithm evaluated the illuminance at the sidewalk of length 200~m and width 3~m. The control area was set in the middle of the sidewalk of the length 80~m. Control area consisted of 6000 points evenly covering the whole field with 20~cm distances between each other. These points were used for illuminance evaluation and the average value $\overline{E}$ and minimum value $E_{min}$ were watched here. The unwanted lightening was evaluated too up to 2~m distance from the sidewalk. This area was set on both sides of the sidewalk with amount of 8000 control points in total. The average iluminance between two pillars $\overline{E}_o$ was calculated here. Author tested both one side and two side placement of the lamps. The distances and arrangements are shown in Figure~\ref{fig:sidewalk}.
 
@@ -41,7 +32,7 @@ There was used one point crossover in the genetic algorithm. The probability of 
 \subsection{Fitness function}
 Suitable fitness function is the key factor for genetic evaluation. This function is used for determination which results are better than others. It is set up by knowing the target behavior of the result in common cases. However there is no cookbook which would define how to create such function.
 
-Authors decided to create several weights $w\left(x\right)$ based on exponential function and these rules multiply one with each other to get resulting fitness function. The basic function was defined by the formula:
+Authors decided to create several weights $w\left(x\right)$ based on exponential function and these weights multiply one with each other to get resulting fitness function. The basic function was defined by the formula:
 
 \begin{equation}
 w\left(x\right)= e^{-a\cdot x}
@@ -54,29 +45,50 @@ where:
 \item [$a$...] is parameter which defines the slope (first derivation) of the function.
 \end{description}
 
-There were several reasons to choose the (\ref{eq:rule}). However the main advantage is that the function is equal to 1 at zero and the limit at infinity is equal to zero. The specific weights were defined as follow:
+There were several reasons to choose the rule (\ref{eq:rule}). However the main advantage is that the function is equal to 1 at zero and the limit at infinity is equal to zero. The specific weights were defined as follow:
 
-\begin{equation}
-w_1\left(E_{min}\right)= \left\{
-  \begin{array}{l l}
-    e^{10 \cdot (E_{min} - E_{minT})} & E_{min} \in \left\langle 0, E_{minT}\right\rangle\\
-    e^{(E_{minT}-E_{min})/10} & E_{min} \in \left( E_{minT}, \infty\right)
-  \end{array}\right.
-\label{eq:weightEmin}
-\end{equation}
 
-\begin{equation}
-w_2\left(\overline{E}\right)= \left\{
-  \begin{array}{l l}
-    e^{\overline{E} - \overline{E}_{T}} & \overline{E} \in \left\langle 0, \overline{E}_{T}\right\rangle\\
-    e^{\overline{E}_{T} -\overline{E}} & \overline{E} \in \left( \overline{E}_{T}, \infty\right)
-  \end{array}\right.
-\label{eq:weightEavg}
-\end{equation}
+\begin{subnumcases}{\label{eq:w1} w_1\left(E_{min}\right)=} 
+  e^{10 \cdot (E_{min} - E_{mT})} & for $\left\langle 0, E_{mT}\right\rangle$ \label{eq:w1A}\\
+  e^{(E_{mT}-E_{min})/10} & for $\left( E_{mT}, \infty\right)$
+\end{subnumcases}
+
+\begin{subnumcases}{\label{eq:w2} w_2\left(\overline{E}\right)=} 
+  e^{\overline{E} - \overline{E}_{T}} & for $\left\langle 0, \overline{E}_{T}\right\rangle$\\
+  e^{\overline{E}_{T} -\overline{E}} & for $\left( \overline{E}_{T}, \infty\right)$
+\end{subnumcases}
 
 \begin{equation}
 w_3\left(\overline{E}_o\right)= e^{\overline{E}_o/100}
-\label{eq:weightEo}
+\label{eq:w3}
+\end{equation}
+
+where:
+\begin{description}
+\item [$E_{mT}$...] is target iluminance minimum defined by the directive
+\item [$\overline{E}_{T}$...] is target average value of iluminance in the control area. It was determined from the minimal average value $\overline{E}_{norm}$ in the directive as $1.25 \cdot \overline{E}_{norm}$
+\end{description}
+
+The priority of each weight is set up by parameter $a$ in the exponential function. The lowest priority is in case of equation~(\ref{eq:w3}). The highest priority is to get the minimum iluminance over the defined limit so the highest parameter is in case of equation~(\ref{eq:w1A}).
+
+There is another parameter, which was watched by the fitness function. The number of lamps per unit distance is proportional to maintenance cost. So it is also demanded to get as few lamps per unit distance as possible. There is not linear dependency between maintenance cost and number of lamps. Therefore authors use the quadratic function to model it. The weight was then defined by the equation:
+
+\begin{equation}
+w_4\left(D_X\right)= \left(\frac{D_{X}}{D_{XM}}\right)^2
+\label{eq:w4}
+\end{equation}
+
+where:
+\begin{description}
+\item [$D_{XM}$...] is the upper limit defined in equation~(\ref{eq:DXLim}).
+\end{description}
+
+Because all weights assumes values between zero and one, the fitness function will assumes the values in the same interval. The fitness function is then given by the equation:
+
+\begin{equation}
+\textit{fitness}= w_1 \cdot w_2 \cdot w_3 \cdot w_4
+\label{eq:fitness}
 \end{equation}
 
 \subsection{Elitism}
+There appeared effect of losing best offspring in case of earlier solution of the genetic algorithm. Authors added an elitism to fix that problem. The elitism means to take the best offspring every time to the next generation. After adding the elitism, the algorithm showed smoother convergence. The output solutions were also of higher fitness and therefore the whole calculation was able to last less generations.

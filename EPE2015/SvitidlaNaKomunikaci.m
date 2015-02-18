@@ -41,7 +41,7 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
                 norma.Eavg.max = norma.Eavg.max/norma.cinitel.LLMF/norma.cinitel.LSF/norma.cinitel.LMF;
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDLA
-                svt.I = load('Svitidla\ATOS_70W_A4.txt', '-ascii');
+                svt.I = load('Svitidla\ATOS_70W_B4.txt', '-ascii');
                 [svt.B.N, svt.beta.N] = size(svt.I);
 %pocatky uhlu
                 svt.beta.Nula = -pi/2;
