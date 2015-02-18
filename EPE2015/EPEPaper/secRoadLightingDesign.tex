@@ -1,7 +1,7 @@
 \section{Road Lighting Design}
-Lighting system designs of public roads in the Czech Republic have to meet among others the Czech Technical Standard \cite{CSN_EN_13201-2}. For this project a road for mainly cyclists but also for pedestrians has been chosen, that is according to \cite{CSN_EN_13201-1} lighting situation C1 and lighting class S4. Road lighting conforming to this class must meet in terms of \cite{CSN_EN_13201-2} the requirement of maintained average horizontal illuminance $\overline{E}\geq 5$, minimum maintained illuminance $E_{min}\geq 1$ and uniformity so that the actual $\overline{E}$ must not exceed 1.5 times the minimum $\overline{E}$ for the given lighting class.
+Lighting system designs of public roads in the Czech Republic have to meet among others the Czech Technical Standard \cite{CSN_EN_13201-2}. For this project a road for mainly cyclists but also for pedestrians has been chosen, that is according to \cite{CSN_EN_13201-1} lighting situation C1 and lighting class S4. Road lighting conforming to this class must meet in terms of \cite{CSN_EN_13201-2} the requirement of maintained average horizontal illuminance $\overline{E}_{M}\geq 5$, minimum maintained illuminance $E_{min,M}\geq 1$ and uniformity so that the actual $\overline{E}_{M}$ must not exceed 1.5 times the minimal $\overline{E}_{M}$ for the given lighting class.
 
-The maintenance factor $MF$ is another entry that has to be taken into account. This factor defines the depreciation of the design level, in this case, the depreciation of illuminance $\overline{E}$ and $E_{min}$ over the course of operation of the road lighting. After choosing the luminaire Atos from Schr\'{e}der as the luminaire to be used throughout this project, the maintenance factor can be calculated from \cite{CSN_EN_13201-2_Z1}:
+The maintenance factor $MF$ is another entry that has to be taken into account. This factor defines the depreciation of the design level, in this case, the depreciation of illuminance $\overline{E}_{M}$ and $E_{min,M}$ over the course of operation of the road lighting. After choosing the luminaire Atos from Schr\'{e}der as the luminaire to be used throughout this project, the maintenance factor can be calculated from \cite{CSN_EN_13201-2_Z1}:
 \begin{equation} \label{eq:MF}
 MF = LLMF \cdot LSF \cdot LMF
 \end{equation}
@@ -26,3 +26,23 @@ Where:
 	\item[$MF_{70W}$] is the maintenance factor for the 70 Watt Osram sodium lamp
 	\item[$MF_{50W}$] is the maintenance factor for the 50 Watt Osram sodium lamp
 \end{description}
+
+To obtain the initially required illuminances of $\overline{E}$ and $E_{min}$ at the beginning of the road lighting operation, maintenance factors have to be taken into account:
+\begin{equation}
+E = E_{M} \div MF
+\end{equation}
+Where:
+\begin{description}
+	\item[$E$] is the general illuminance value calculated or measured at the beginning of the operation cycle
+	\item[$E_{M}$] is the maintained illuminance value assumed at the end of the operation cycle
+	\item[$MF$] is the maintenance factor
+\end{description}
+
+Having calculated both maintenance factors, the initial illuminances can be calculated:
+\begin{equation}
+\overline{E}_{70W} = \overline{E} \div MF_{70W} \doteq 6.36 lx
+\end{equation}
+
+\begin{equation}
+\overline{E}_{50W} = \overline{E} \div MF_{50W} \doteq 6.73 lx
+\end{equation}
