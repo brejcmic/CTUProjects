@@ -14,7 +14,7 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
 %Pocet generací:
                 pop.gen = 60;
 %Velikost populace:
-                pop.N = 100;
+                pop.N = 200;
 %Meze parametru (dano pozadavky na komunikaci):
                 mez.min.DX = 0.5;%m
                 mez.max.DX = 50;%m
@@ -29,18 +29,19 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
                 historie.dna = zeros(pop.gen, 4);
 %--------------------------------------------------------------------------
 %POZADOVANE VYSLEDKY
-                norma.cinitel.znecisteni = 0.89;
-                norma.cinitel.starnuti = 0.91;
+                norma.cinitel.LLMF = 0.89;
+                norma.cinitel.LSF = 0.97;
+                norma.cinitel.LMF = 0.89;
                 norma.Emin = 1;%lx
                 norma.Eavg.min = 5;%lx
                 norma.Eavg.max = 1.5*norma.Eavg.min;%lx
                 
-                norma.Emin = norma.Emin/norma.cinitel.znecisteni/norma.cinitel.starnuti;
-                norma.Eavg.min = norma.Eavg.min/norma.cinitel.znecisteni/norma.cinitel.starnuti;
-                norma.Eavg.max = norma.Eavg.max/norma.cinitel.znecisteni/norma.cinitel.starnuti;
+                norma.Emin = norma.Emin/norma.cinitel.LLMF/norma.cinitel.LSF/norma.cinitel.LMF;
+                norma.Eavg.min = norma.Eavg.min/norma.cinitel.LLMF/norma.cinitel.LSF/norma.cinitel.LMF;
+                norma.Eavg.max = norma.Eavg.max/norma.cinitel.LLMF/norma.cinitel.LSF/norma.cinitel.LMF;
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDLA
-                svt.I = load('Svitidla\ATOS_70W_A1.txt', '-ascii');
+                svt.I = load('Svitidla\ATOS_70W_A4.txt', '-ascii');
                 [svt.B.N, svt.beta.N] = size(svt.I);
 %pocatky uhlu
                 svt.beta.Nula = -pi/2;
