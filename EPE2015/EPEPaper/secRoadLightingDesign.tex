@@ -1,20 +1,28 @@
 \section{Road Lighting Design}
-Lighting system designs of public roads in the Czech Republic have to meet among others the Czech Technical Standard \v{C}SN EN 13201-2 (Road lighting - Part 2: Performance requirements). For this project a road for mainly cyclists but also for pedestrians has been chosen, that is according to \v{C}SN EN 13201-1 (Road lighting - Part 1: Selection of lighting classes) lighting situation C1 and lighting class S4. Road lighting conforming to this class must meet in terms of \v{C}SN EN 13201-2 the requirement of maintained average horizontal illuminance $\overline{E}\geq 5$, minimum maintained illuminance $E_{min}\geq 1$ and uniformity so that the actual $\overline{E}$ must not exceed 1.5 times the minimum $\overline{E}$ for the given lighting class.
+Lighting system designs of public roads in the Czech Republic have to meet among others the Czech Technical Standard \cite{CSN_EN_13201-2}. For this project a road for mainly cyclists but also for pedestrians has been chosen, that is according to \cite{CSN_EN_13201-1} lighting situation C1 and lighting class S4. Road lighting conforming to this class must meet in terms of \cite{CSN_EN_13201-2} the requirement of maintained average horizontal illuminance $\overline{E}\geq 5$, minimum maintained illuminance $E_{min}\geq 1$ and uniformity so that the actual $\overline{E}$ must not exceed 1.5 times the minimum $\overline{E}$ for the given lighting class.
 
-The maintenance factor $MF$ is another entry that has to be taken into account. This factor defines the depreciation of the design level, in this case, the depreciation of illuminance $\overline{E}$ and $E_{min}$ over the course of operation of the road lighting. After choosing the luminaire Atos from Schr\'{e}der as the luminaire to be used throughout this project, the maintenance factor can be calculated from \v{C}SN EN 13201-2 ZM\v{E}NA Z1:
-\begin{equation}
-MF=LLMF \times LSF \times LMF
+The maintenance factor $MF$ is another entry that has to be taken into account. This factor defines the depreciation of the design level, in this case, the depreciation of illuminance $\overline{E}$ and $E_{min}$ over the course of operation of the road lighting. After choosing the luminaire Atos from Schr\'{e}der as the luminaire to be used throughout this project, the maintenance factor can be calculated from \cite{CSN_EN_13201-2_Z1}:
+\begin{equation} \label{eq:MF}
+MF = LLMF \cdot LSF \cdot LMF
 \end{equation}
 Where:
 \begin{description}
-	\item[LLMF is the lamp lumen maintenance factor]
-	\item[LSF is the lamp survival factor]
-	\item[LMF is the luminaire factor]
+	\item[$LLMF$] is the lamp lumen maintenance factor
+	\item[$LSF$] is the lamp survival factor
+	\item[$LMF$] is the luminaire factor
 \end{description}
 
-The Atos luminaire's are fitted with high pressure sodium lamps. The operating time of the sodium lamps were chosen to be 10000 hours. In the table NA.2 of \v{C}SN EN 13201-2 Z1 $LLMF=0.91$ can be found. Looking at the datasheet of a Philips 70W high pressure sodium lamp, the value $LSF=0.87$ can be found for 10000 hours of operation. The IP Code of the luminaire's optical system is IP66, meaning that for an environment of medium air pollution and cleaning intervals of 2 years $LMF=0.89$ can be found in table NA.1 of \v{C}SN EN 13201-2 Z1. All summed up we get:
+The Atos luminaire's are fitted with high pressure sodium lamps. For this project Osram NAV-T 70 W super 6Y and Osram NAV-T 50 W super 6Y have been chosen to operate for a period of 12000 hours before replacement. Looking up the product datasheet \cite{Osram} of both 70 W and 50 W Osram lamps, $LLMF_{70W}=0.89$, $LLMF_{50W}=0.86$, $LSF_{70W}=0.97$ and $LSF_{50W}=0.97$ can be found. The IP Code of the luminaire's optical system is IP66, meaning that for an environment of medium air pollution and cleaning intervals of 2 years $LMF=0.89$ can be found in table NA.1 of \cite{CSN_EN_13201-2_Z1}. According to equation~\ref{eq:MF} the final maintenance factors can be calculated as follows:
+
 \begin{equation}
-0.785603=0.91 \times 0.89 \times 0.97
+MF_{70W} = 0.89 \cdot 0.97 \cdot 0.89 = 0.785603
 \end{equation}
 
-Something very stupid from this source \cite{CSN_EN_13201-1}.
+\begin{equation}
+MF_{50W} = 0.86 \cdot 0.97 \cdot 0.89 = 0.742438
+\end{equation}
+Where:
+\begin{description}
+	\item[$MF_{70W}$] is the maintenance factor for the 70 Watt Osram sodium lamp
+	\item[$MF_{50W}$] is the maintenance factor for the 50 Watt Osram sodium lamp
+\end{description}
