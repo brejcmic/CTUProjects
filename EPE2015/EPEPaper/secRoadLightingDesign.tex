@@ -1,7 +1,7 @@
 \section{Road Lighting Design}
-Lighting system designs of public roads in the Czech Republic have to meet among others the Czech Technical Standard \cite{CSN_EN_13201-2}. For this project a road for mainly cyclists but also for pedestrians has been chosen, that is according to \cite{CSN_EN_13201-1} lighting situation C1 and lighting class S4. Road lighting conforming to this class must meet in terms of \cite{CSN_EN_13201-2} the requirement of maintained average horizontal illuminance $\overline{E}_{M}\geq 5$, minimum maintained illuminance $E_{min,M}\geq 1$ and uniformity so that the actual $\overline{E}_{M}$ must not exceed 1.5 times the minimal $\overline{E}_{M}$ for the given lighting class.
+Lighting system designs of public roads in the Czech Republic have to meet among others the Czech Technical Standard \cite{CSN_EN_13201-2}. For this project a road for mainly cyclists but also for pedestrians has been chosen, that is according to \cite{CSN_EN_13201-1} lighting situation C1 and lighting class S4. Road lighting conforming to this class must meet in terms of \cite{CSN_EN_13201-2} the requirement of maintained average horizontal illuminance $\overline{E}_{M}\geq 5 lx$, minimum maintained illuminance $E_{min,M}\geq 1 lx$ and uniformity so that the actual $\overline{E}_{M}$ must not exceed 1.5 times the minimal allowed $\overline{E}_{M}$ for the given lighting class, which is for class S4 $\overline{E}_{max,M} = 7.5 lx$.
 
-The maintenance factor $MF$ is another entry that has to be taken into account. This factor defines the depreciation of the design level, in this case, the depreciation of illuminance $\overline{E}_{M}$ and $E_{min,M}$ over the course of operation of the road lighting. After choosing the luminaire Atos from Schr\'{e}der as the luminaire to be used throughout this project, the maintenance factor can be calculated from \cite{CSN_EN_13201-2_Z1}:
+The maintenance factor $MF$ is another entry that has to be taken into account. This factor defines the depreciation of the design level, in this case the depreciation of illuminance $\overline{E}_{M}$ and $E_{min,M}$ over the course of operation of the road lighting. After choosing the luminaire Atos from Schr\'{e}der as the luminaire to be used throughout this project, the maintenance factor can be calculated from \cite{CSN_EN_13201-2_Z1}:
 \begin{equation} \label{eq:MF}
 MF = LLMF \cdot LSF \cdot LMF
 \end{equation}
@@ -14,13 +14,11 @@ Where:
 
 The Atos luminaire's are fitted with high pressure sodium lamps. For this project Osram NAV-T 70 W super 6Y and Osram NAV-T 50 W super 6Y have been chosen to operate for a period of 12000 hours before replacement. Looking up the product datasheet \cite{Osram} of both 70 W and 50 W Osram lamps, $LLMF_{70W}=0.89$, $LLMF_{50W}=0.86$, $LSF_{70W}=0.97$ and $LSF_{50W}=0.97$ can be found. The IP Code of the luminaire's optical system is IP66, meaning that for an environment of medium air pollution and cleaning intervals of 2 years $LMF=0.89$ can be found in table NA.1 of \cite{CSN_EN_13201-2_Z1}. According to equation~\ref{eq:MF} the final maintenance factors can be calculated as follows:
 
-\begin{equation}
-MF_{70W} = 0.89 \cdot 0.97 \cdot 0.89 = 0.785603
-\end{equation}
+\begin{align}
+&MF_{70W} = 0.89 \cdot 0.97 \cdot 0.89 = 0.785603\\
+&MF_{50W} = 0.86 \cdot 0.97 \cdot 0.89 = 0.742438
+\end{align}
 
-\begin{equation}
-MF_{50W} = 0.86 \cdot 0.97 \cdot 0.89 = 0.742438
-\end{equation}
 Where:
 \begin{description}
 	\item[$MF_{70W}$] is the maintenance factor for the 70 Watt Osram sodium lamp
@@ -38,11 +36,13 @@ Where:
 	\item[$MF$] is the maintenance factor
 \end{description}
 
-Having calculated both maintenance factors, the initial illuminances can be calculated:
-\begin{equation}
-\overline{E}_{70W} = \overline{E} \div MF_{70W} \doteq 6.36 lx
-\end{equation}
+Having calculated both maintenance factors, the initial illuminances can be specified:
 
-\begin{equation}
-\overline{E}_{50W} = \overline{E} \div MF_{50W} \doteq 6.73 lx
-\end{equation}
+\begin{align}
+&\overline{E}_{70W} = \overline{E}_{M} \div MF_{70W} \doteq 6.36 lx\\
+&\overline{E}_{max,70W} = \overline{E}_{max,M} \div MF_{70W} \doteq 9.55 lx\\
+&\overline{E}_{min,70W} = \overline{E}_{min,M} \div MF_{70W} \doteq 1.27 lx\\
+&\overline{E}_{50W} = \overline{E}_{M} \div MF_{50W} \doteq 6.73 lx\\
+&\overline{E}_{max,50W} = \overline{E}_{max,M} \div MF_{50W} \doteq 10.10 lx\\
+&\overline{E}_{min,50W} = \overline{E}_{min,M} \div MF_{50W} \doteq 1.34 lx
+\end{align}
