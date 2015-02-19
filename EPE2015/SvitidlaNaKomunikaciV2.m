@@ -14,7 +14,7 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
 %Pocet generací:
                 pop.gen = 60;
 %Velikost populace:
-                pop.N = 200;
+                pop.N = 300;
 %Meze parametru (dano pozadavky na komunikaci):
                 mez.min.DX = 0.5;%m
                 mez.max.DX = 50;%m
@@ -41,7 +41,7 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
                 norma.Eavg.max = norma.Eavg.max/norma.cinitel.LLMF/norma.cinitel.LSF/norma.cinitel.LMF;
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDLA
-                svt.I = load('Svitidla\ATOS_70W_C1.txt', '-ascii');
+                svt.I = load('Svitidla\ATOS_70W_A1.txt', '-ascii');
                 [svt.B.N, svt.beta.N] = size(svt.I);
 %pocatky uhlu
                 svt.beta.Nula = -pi/2;
@@ -58,8 +58,8 @@ fig = 0; %pocatecni index grafu, vzdy uvadet fig+1
 %delka sledovaneho prostoru v pruseciku os komunikce
                 kom.delPr = 80;%m
 %pocet kontrolnich bodu v ose x a y ve sledovanem prostoru
-                kom.Nx = 400;
-                kom.Ny = 15;
+                kom.Nx = 160;
+                kom.Ny = 6;
 %--------------------------------------------------------------------------
 %PARAMETRY NULOVE PLOCHY
 %sirka nulove plochy podel komunikace
@@ -249,7 +249,7 @@ for generace = 1:1:pop.gen
     historie.fitness(generace) = pop.fitness(IDX);
     plot(historie.fitness);
     title('Fitness nejlepsich jedincu');
-    xlabel('historie (n)');
+    xlabel('history (n)');
     ylabel('Fitness');
     grid on;
     
@@ -273,7 +273,7 @@ for generace = 1:1:pop.gen
     plot(E.mat.xb, E.mat.yb, '.')
     hold on;
     fill(x,y,[0.8,0.8,0.8]);
-    plot(E.xs, E.ys, 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'y', 'MarkerEdgeColor', 'y');
+    plot(E.xs, E.ys, 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'y', 'MarkerEdgeColor', 'k');
     title(sprintf('Nejlepsi jedinec, generace = %i, P_{vyberu}= %3.2f %%', generace, pop.prVyb(IDX)*100));
     grid on;
     axis([0 kom.delka 0 (2*kom.yOffset+ kom.sirka)]);
@@ -293,7 +293,7 @@ for generace = 1:1:pop.gen
     %fig= fig+1;
     %figure(fig)
     subplot(2,2,4)
-    plot(E.xs, E.ys, 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'y', 'MarkerEdgeColor', 'y');
+    plot(E.xs, E.ys, 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'y', 'MarkerEdgeColor', 'k');
     hold on;
     %plot(E.mat.xb, E.mat.yb, '.')
     pcolor(kom.bx,kom.by,kom.ME);
