@@ -2,12 +2,14 @@
 <fonts letter="155,0,0,0,Lucida Sans Unicode,000000" text="110,0,0,0,Lucida Sans Unicode,000000" type="85,0,0,0,Arial,000000" refs="85,0,0,0,Arial,000000" cross_refs="85,0,0,1,Arial,0000FF"/>
 <PrintSettings PrinterName="" PaperSize="1" FormName="letter" SheetSizeX="289" SheetSizeY="202" WantsCustom="0" CustomSizeX="283" CustomSizeY="203"/>
 <tb use="1" h="0" v="0" name="C:\Users\Public\Documents\ProfiCAD Library\_TB\standard7.ptb">
-<layers current="0"/>
+<layers current="0">
+<layer name="0" v="1"/>
+</layers>
 </tb>
 <PageSettings bgColor="FFFFFF" pgsHor="1" pgsVer="1" pgsMrgn="0, 0, 0, 0" pageMargins="10, 10, 10, 10" zoom="150" frame="YES" rastr="20" showT="YES" showV="YES" includeMargins="YES"/>
 <RefGridSettings FieldSize="50"/>
 <NumberingWire Digits="3" TypeRenumbering="0" ShowWireName="0" WireLabelDist_a="6" WireLabelDist_b="7" WireLabelDist_c="7"/>
-<summary jazyk="" prezkousel="" nazev="" zmena="" _pc="1" author="" cisloDok="" _file="Cgama" statusDokumentu="" druhDokumentu="" date="19.2.2015" _path="C:\Users\Brejcmic\Documents\GitRep\CTUProjects\EPE2015\Cgama.sxe" techRef="" nazevDopln="" odd=""/>
+<summary jazyk="" prezkousel="" nazev="" zmena="" cisloDok="" author="" _pc="1" druhDokumentu="" statusDokumentu="" _file="Cgama" date="19.2.2015" _path="C:\Users\Brejcmic\Documents\GitRep\CTUProjects\EPE2015\Cgama.sxe" techRef="" nazevDopln="" odd=""/>
 <BillColumns/>
 <pages current="0">
 <page name="1">
@@ -55,6 +57,10 @@
 <polyline op-lw="1" pts="670,570,816,505,">
 <op-lt head="čerchovaná (.5x), _._._._._._._._._._._._._._._." body="A,.25,-.125,0,-.125"/>
 </polyline>
+<ellipse left="543" top="612" right="552" bottom="628" op-fd="1" op-fc="16777215"/>
+<polygon op-fd="1" op-fc="16777215" pts="514,626,546,612,548,628,516,642,"/>
+<ellipse left="511" top="626" right="520" bottom="642" op-fd="1" op-fc="16777215"/>
+<polyline op-lw="3" op-lc="16777215" pts="546,615,548,625,"/>
 </layer>
 </layers>
 </page>
