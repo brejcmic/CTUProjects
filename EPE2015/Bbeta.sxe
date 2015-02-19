@@ -1,0 +1,61 @@
+<document type="ProfiCAD sxe" version="7.0">
+<fonts letter="155,0,0,0,Lucida Sans Unicode,000000" text="110,0,0,0,Lucida Sans Unicode,000000" type="85,0,0,0,Arial,000000" refs="85,0,0,0,Arial,000000" cross_refs="85,0,0,1,Arial,0000FF"/>
+<PrintSettings PrinterName="" PaperSize="1" FormName="letter" SheetSizeX="289" SheetSizeY="202" WantsCustom="0" CustomSizeX="283" CustomSizeY="203"/>
+<tb use="1" h="0" v="0" name="C:\Users\Public\Documents\ProfiCAD Library\_TB\standard7.ptb">
+<layers current="0">
+<layer name="0" v="1"/>
+</layers>
+</tb>
+<PageSettings bgColor="FFFFFF" pgsHor="1" pgsVer="1" pgsMrgn="0, 0, 0, 0" pageMargins="10, 10, 10, 10" zoom="150" frame="YES" rastr="20" showT="YES" showV="YES" includeMargins="YES"/>
+<RefGridSettings FieldSize="50"/>
+<NumberingWire Digits="3" TypeRenumbering="0" ShowWireName="0" WireLabelDist_a="6" WireLabelDist_b="7" WireLabelDist_c="7"/>
+<summary jazyk="" prezkousel="" nazev="" zmena="" cisloDok="" author="" _pc="1" _file="Bbeta" druhDokumentu="" statusDokumentu="" date="19.2.2015" _path="C:\Users\Brejcmic\Documents\GitRep\CTUProjects\EPE2015\Bbeta.sxe" techRef="" nazevDopln="" odd=""/>
+<BillColumns/>
+<pages current="0">
+<page name="1">
+<summary _potb="1" _po="1" _pa="1"/>
+<layers current="1">
+<layer name="-1" v="1"/>
+<layer name="0" v="1">
+<polygon op-fd="1" op-fc="16777215" pts="900,600,1100,520,500,520,90,680,700,680,"/>
+<polygon op-fd="1" op-fc="16777215" pts="500,630,600,590,700,590,600,630,"/>
+<polygon op-fd="1" op-fc="16777215" pts="500,610,600,570,700,570,600,610,"/>
+<polygon op-fd="1" op-fc="16777215" pts="500,630,500,610,600,610,700,570,700,590,600,630,"/>
+<polyline pts="600,630,600,610,"/>
+<polyline op-lw="1" pts="676,600,896,600,">
+<op-lt head="čerchovaná (.5x), _._._._._._._._._._._._._._._." body="A,.25,-.125,0,-.125"/>
+</polyline>
+<polyline op-lw="1" pts="305,600,525,600,">
+<op-lt head="čerchovaná (.5x), _._._._._._._._._._._._._._._." body="A,.25,-.125,0,-.125"/>
+</polyline>
+<polyline op-lw="1" pts="600,590,600,400,">
+<op-lt head="čerchovaná (.5x), _._._._._._._._._._._._._._._." body="A,.25,-.125,0,-.125"/>
+</polyline>
+<polyline op-lw="1" pts="600,800,600,630,">
+<op-lt head="čerchovaná (.5x), _._._._._._._._._._._._._._._." body="A,.25,-.125,0,-.125"/>
+</polyline>
+<polyline pts="900,600,900,400,300,400,300,600,">
+<op-lt head="čárkovaná (.5x), _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _" body="A,.25,-.125"/>
+</polyline>
+<polyline pts="900,600,900,800,300,800,300,680,"/>
+<polygon op-fd="1" op-fc="16777215" pts="900,600,1000,700,900,700,"/>
+<arc left="470" top="470" right="730" bottom="730" bX="-82" bY="100" eX="81" eY="101" op-at="9"/>
+<text x="720" y="700" f="110,0,0,0,Times New Roman,000000" al="9">β</text>
+<text x="490" y="700" f="110,0,0,0,Times New Roman,000000" al="9">-β</text>
+<text x="600" y="760" f="110,0,0,0,Times New Roman,000000" al="9">β= 0</text>
+<polybezier op-at="5" pts="900,740,932,728,956,700,968,668,"/>
+<text x="950" y="740" f="110,0,0,0,Times New Roman,000000" al="9">B</text>
+<text x="840" y="770" f="110,0,0,0,Times New Roman,000000" al="9">B= 0º</text>
+<text x="840" y="550" f="110,0,0,0,Times New Roman,000000" al="9">B= 90º</text>
+<text x="330" y="640" f="110,0,0,0,Times New Roman,000000" al="9">B= -90º</text>
+<polyline op-lw="1" pts="410,690,546,630,">
+<op-lt head="čerchovaná (.5x), _._._._._._._._._._._._._._._." body="A,.25,-.125,0,-.125"/>
+</polyline>
+<polyline op-lw="1" pts="670,570,816,505,">
+<op-lt head="čerchovaná (.5x), _._._._._._._._._._._._._._._." body="A,.25,-.125,0,-.125"/>
+</polyline>
+</layer>
+</layers>
+</page>
+</pages>
+</document>
