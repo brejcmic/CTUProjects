@@ -23,7 +23,7 @@ Where:
 	\item[$d\Omega$] is the solid angle with its axis pointing in direction~$\gamma$
 \end{description}
 
-As mentioned in section~\ref{sec:Road_Lighting_Design}, illuminances need to be calculated. Photometric properties of luminaires are defined in eulumdat files, containing luminous intensity distribution curves needed to obtain illuminances.
+Illuminances mentioned in section~\ref{sec:Road_Lighting_Design} need to be calculated. Photometric properties of luminaires are defined in eulumdat files~\cite{Eulumdat}, containing luminous intensity distribution curves.
 
 \begin{figure}[htb]
   \centering
@@ -44,3 +44,19 @@ Where:
 	\item[$\beta$] is the angle between the surface's normal $N_{\rho}$ and the $SP$ point join $l$
 	\item[$l$] is the distance between the light source S and the point P of facet $dA$ of surface $\rho$
 \end{description}
+
+Luminous intensity distribution curves are presented in eulumdat files~\cite{Eulumdat} in the $C-\gamma$ coordinate system (figure~\ref{fig:Cgamma}). For photometric calculations in the situation of road lighting it is more suitable to use the $B-\beta$ coordinate system (figure~\ref{fig:Bbeta}), therefore it was necessary for this project to convert luminous intensities from $C-\gamma$ coordinate system to $B-\beta$ coordinate system.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.7\columnwidth]{Cgama}
+  \caption{$C-\gamma$ coordinate system}
+  \label{fig:Cgamma}
+\end{figure}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=\columnwidth]{Bbeta}
+  \caption{$B-\beta$ coordinate system}
+  \label{fig:Bbeta}
+\end{figure}
