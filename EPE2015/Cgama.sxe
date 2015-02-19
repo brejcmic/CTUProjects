@@ -1,0 +1,62 @@
+<document type="ProfiCAD sxe" version="7.0">
+<fonts letter="155,0,0,0,Lucida Sans Unicode,000000" text="110,0,0,0,Lucida Sans Unicode,000000" type="85,0,0,0,Arial,000000" refs="85,0,0,0,Arial,000000" cross_refs="85,0,0,1,Arial,0000FF"/>
+<PrintSettings PrinterName="" PaperSize="1" FormName="letter" SheetSizeX="289" SheetSizeY="202" WantsCustom="0" CustomSizeX="283" CustomSizeY="203"/>
+<tb use="1" h="0" v="0" name="C:\Users\Public\Documents\ProfiCAD Library\_TB\standard7.ptb">
+<layers current="0"/>
+</tb>
+<PageSettings bgColor="FFFFFF" pgsHor="1" pgsVer="1" pgsMrgn="0, 0, 0, 0" pageMargins="10, 10, 10, 10" zoom="150" frame="YES" rastr="20" showT="YES" showV="YES" includeMargins="YES"/>
+<RefGridSettings FieldSize="50"/>
+<NumberingWire Digits="3" TypeRenumbering="0" ShowWireName="0" WireLabelDist_a="6" WireLabelDist_b="7" WireLabelDist_c="7"/>
+<summary jazyk="" prezkousel="" nazev="" zmena="" _pc="1" author="" cisloDok="" _file="Cgama" statusDokumentu="" druhDokumentu="" date="19.2.2015" _path="C:\Users\Brejcmic\Documents\GitRep\CTUProjects\EPE2015\Cgama.sxe" techRef="" nazevDopln="" odd=""/>
+<BillColumns/>
+<pages current="0">
+<page name="1">
+<summary _potb="1" _po="1" _pa="1"/>
+<layers current="1">
+<layer name="-1" v="1"/>
+<layer name="0" v="1">
+<polygon op-fd="1" op-fc="16777215" pts="500,630,600,590,700,590,600,630,"/>
+<polygon op-fd="1" op-fc="16777215" pts="500,610,600,570,700,570,600,610,"/>
+<polygon op-fd="1" op-fc="16777215" pts="500,630,500,610,600,610,700,570,700,590,600,630,"/>
+<polyline pts="600,630,600,610,"/>
+<polyline op-lw="1" pts="676,600,896,600,">
+<op-lt head="čerchovaná (.5x), _._._._._._._._._._._._._._._." body="A,.25,-.125,0,-.125"/>
+</polyline>
+<polyline op-lw="1" pts="305,600,525,600,">
+<op-lt head="čerchovaná (.5x), _._._._._._._._._._._._._._._." body="A,.25,-.125,0,-.125"/>
+</polyline>
+<polyline op-lw="1" pts="600,590,600,400,">
+<op-lt head="čerchovaná (.5x), _._._._._._._._._._._._._._._." body="A,.25,-.125,0,-.125"/>
+</polyline>
+<polyline op-lw="1" pts="600,800,600,630,">
+<op-lt head="čerchovaná (.5x), _._._._._._._._._._._._._._._." body="A,.25,-.125,0,-.125"/>
+</polyline>
+<text x="730" y="700" f="110,0,0,0,Times New Roman,000000" al="9">γ</text>
+<polybezier op-at="5" pts="900,400,900,375,875,345,840,330,"/>
+<polyline pts="600,400,900,400,900,800,600,800,"/>
+<polygon op-fd="1" op-fc="16777215" pts="600,400,800,320,800,400,"/>
+<polygon op-fd="1" op-fc="16777215" pts="600,400,840,330,840,400,"/>
+<polyline pts="600,400,300,400,300,800,600,800,">
+<op-lt head="čárkovaná (.5x), _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _" body="A,.25,-.125"/>
+</polyline>
+<polyline pts="600,400,400,480,400,880,600,800,">
+<op-lt head="čárkovaná (.5x), _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _" body="A,.25,-.125"/>
+</polyline>
+<arc left="450" top="450" right="750" bottom="750" bX="0" bY="150" eX="100" eY="111" op-at="5"/>
+<text x="610" y="770" f="110,0,0,0,Times New Roman,000000" al="9">γ= 0º</text>
+<text x="900" y="345" f="110,0,0,0,Times New Roman,000000" al="9">C</text>
+<text x="840" y="765" f="110,0,0,0,Times New Roman,000000" al="9">C= 0º</text>
+<text x="380" y="435" f="110,0,0,0,Times New Roman,000000" al="9">C= 180º</text>
+<text x="466" y="820" f="110,0,0,0,Times New Roman,000000" al="9">C= 270º</text>
+<text x="720" y="315" f="110,0,0,0,Times New Roman,000000" al="9">C= 90º</text>
+<polyline op-lw="1" pts="400,695,546,630,">
+<op-lt head="čerchovaná (.5x), _._._._._._._._._._._._._._._." body="A,.25,-.125,0,-.125"/>
+</polyline>
+<polyline op-lw="1" pts="670,570,816,505,">
+<op-lt head="čerchovaná (.5x), _._._._._._._._._._._._._._._." body="A,.25,-.125,0,-.125"/>
+</polyline>
+</layer>
+</layers>
+</page>
+</pages>
+</document>
