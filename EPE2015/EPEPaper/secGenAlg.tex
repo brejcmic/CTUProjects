@@ -49,24 +49,24 @@ There were several reasons to choose the rule (\ref{eq:rule}). However the main 
 
 
 \begin{subnumcases}{\label{eq:w1} w_1\left(E_{min}\right)=} 
-  e^{10 \cdot (E_{min} - E_{mT})} & for $\left\langle 0, E_{mT}\right\rangle$ \label{eq:w1A}\\
-  e^{(E_{mT}-E_{min})/10} & for $\left( E_{mT}, \infty\right)$
+  e^{10 \cdot (E_{min} - E_{mT})} &, $\left\langle 0, E_{mT}\right\rangle$ \label{eq:w1A}\\
+  e^{\frac{E_{mT}-E_{min}}{10}} &, $\left( E_{mT}, \infty\right)$
 \end{subnumcases}
 
 \begin{subnumcases}{\label{eq:w2} w_2\left(\overline{E}\right)=} 
-  e^{\overline{E} - \overline{E}_{T}} & for $\left\langle 0, \overline{E}_{T}\right\rangle$\\
-  e^{\overline{E}_{T} -\overline{E}} & for $\left( \overline{E}_{T}, \infty\right)$
+  e^{\overline{E} - \overline{E}_{T}} &, $\left\langle 0, \overline{E}_{T}\right\rangle$\\
+  e^{\overline{E}_{T} -\overline{E}} &, $\left( \overline{E}_{T}, \infty\right)$
 \end{subnumcases}
 
 \begin{equation}
-w_3\left(\overline{E}_o\right)= e^{\overline{E}_o/100}
+w_3\left(\overline{E}_o\right)= e^{\frac{\overline{E}_o}{100}}
 \label{eq:w3}
 \end{equation}
 
 where:
 \begin{description}
-\item [$E_{mT}$...] is target iluminance minimum defined by the directive
-\item [$\overline{E}_{T}$...] is target average value of iluminance in the control area. It was determined from the minimal average value $\overline{E}_{norm}$ in the directive as $1.25 \cdot \overline{E}_{norm}$
+\item [$E_{mT}$...] is target iluminance minimum defined by the directive~\cite{CSN_EN_13201-2}
+\item [$\overline{E}_{T}$...] is target average value of iluminance in the control area. It was determined from the minimal average value $\overline{E}_{M}$ in the directive~\cite{CSN_EN_13201-2} as $1.25 \cdot \overline{E}_{M}/ MF$
 \end{description}
 
 The priority of each weight is set up by parameter $a$ in the exponential function. The lowest priority is in case of equation~(\ref{eq:w3}). The highest priority is to get the minimum iluminance over the defined limit so the highest parameter is in case of equation~(\ref{eq:w1A}).
