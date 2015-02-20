@@ -79,7 +79,9 @@ The change of the fitness function during each generation is  presented in figur
 				\label{fig:exampleTS}
 \end{figure}
 
-A portion of the results were compared with data obtained from an identical situation simulated in DIALux software, where a street project has been created using luminaires Atos A1 on a single side of the road. The street project output illuminances were calculated by DIALux according to~\cite{CSN_EN_13201-3} as depicted in figure~\ref{fig:lumIntDistr} and the output in lux can be found in table~\ref{tab:DialuxOneSideLamps}.
+\subsection{Comparing Results with DIALux Output}
+
+A portion of the results were compared with data obtained from an identical situation simulated in DIALux software, where a street project has been created using luminaires Atos A1 on one side of the road. The street project output illuminances were calculated by DIALux according to~\cite{CSN_EN_13201-3} as depicted in figure~\ref{fig:lumIntDistr} and the output in lux can be found in table~\ref{tab:DialuxOneSideLamps}.
 
 \begin{figure}[htb]
   \centering
@@ -96,17 +98,34 @@ A portion of the results were compared with data obtained from an identical situ
 
 \begin{table}[htb]
 	\renewcommand{\arraystretch}{1.3}
-	\caption{DIALux calculated illuminances in lux for one side lamp placement at the surface of the road}
+	\caption{DIALux calculated design illuminances in lux for one side lamp placement at the surface of the road (fig.~\ref{fig:lumIntDistr})}
  	\label{tab:DialuxOneSideLamps}
 	\centering
-  \begin{tabular}{ l || c | c | c | c | c | c | c | c | c | c }
+  \begin{tabular}{ l || c | c | c | c | c | c | c }
     \hline
-    \textbf{(m)} & 1.3 & 3.9 & 6.5 & 9.1 & 11.7 & 14.3 & 16.9 & 19.5 & 22.1 & 24.7\\ \hline \hline
-    2.5 & 11 & 9.56 & 7.09 & 5.57 & 4.48 & 4.48 & 5.57 & 7.09 & 9.56 & 11\\ \hline
-		1.5 & 12 & 10 & 7.08 & 5.36 & 4.14 & 4.14 & 5.36 & 7.08 & 10 & 12\\ \hline
-		0.5 & 13 & 10 & 7.01 & 5.10 & 3.85 & 3.85 & 5.10 & 7.01 & 10 & 13\\ \hline
+    \textbf{(m)} & 1.421 & 4.264 & 7.107 & 9.950 & 12.793 & 15.636 & 18.479\\ \hline \hline
+    2.5 & 24.17 & 16.54 & 9.5 & 4.77 & 2.91 & 1.98 & 1.64\\ \hline
+		1.5 & 25.45 & 15.27 & 8.59 & 4.13 & 2.61 & 1.78 & 1.49\\ \hline
+		0.5 & 25.45 & 15.27 & 7.82 & 3.72 & 2.35 & 1.63 & 1.36\\ \hline \hline \hline
+		\textbf{(m)} & 21.321 & 24.164 & 27.001 & 29.850 & 32.693 & 35.536 & 38.379\\ \hline \hline
+		2.5 & 1.64 & 1.98 & 2.91 & 4.77 & 9.5 & 16.54 & 24.17\\ \hline
+		1.5 & 1.49 & 1.78 & 2.61 & 4.13 & 8.59 & 15.27 & 25.45\\ \hline
+		0.5 & 1.36 & 1.63 & 2.35 & 3.72 & 7.82 & 15.27 & 25.45\\ \hline
   \end{tabular}
 \end{table}
 
-Output values $$
-        
+According to standard~\cite{CSN_EN_13201-3} calculation points shall not be spaced in the longitudinal directions more than 3 m from each other, so 14 calculation points were used during calculations of DIALux instead of 10 depicted in figure~\ref{fig:lumIntDistr}.
+
+\begin{table}[htb]
+	\renewcommand{\arraystretch}{1.3}
+	\caption{Calculated design illuminances in lux using values from tab.~\ref{tab:DialuxOneSideLamps})}
+ 	\label{tab:DialuxIlluminances}
+	\centering
+  \begin{tabular}{ c | c | c | c | c | c | c }
+    \hline
+    \textbf{Type} & $D_X$ & $D_Y$ & $Z$ & $\alpha$ & $\overline{E}$ & $E_{min}$\\
+		& (m) & (m) & (m) & ($^\circ$) & (lx) & (lx)\\ \hline
+    ATOS 70W A1 & 39.8 & 0.67 & 6.22 & 3.1 & 8.52 & 1.36\\ \hline
+  \end{tabular}
+\end{table}
+
