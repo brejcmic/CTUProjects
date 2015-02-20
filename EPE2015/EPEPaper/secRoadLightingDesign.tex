@@ -3,7 +3,8 @@
 Lighting system designs of public roads in the Czech Republic have to meet among others the Czech Technical Standard \cite{CSN_EN_13201-2}. For this project a road for mainly cyclists but also for pedestrians has been chosen, that is according to \cite{CSN_EN_13201-1} lighting situation C1 and lighting class S4. Road lighting conforming to this class must meet in terms of \cite{CSN_EN_13201-2} the requirement of maintained average horizontal illuminance $\overline{E}_{M}\geq 5$~\text{lx}, minimum maintained illuminance $E_{min,M}\geq 1$~\text{lx} and uniformity so that the actual $\overline{E}_{M}$ must not exceed 1.5 times the minimal allowed $\overline{E}_{M}$ for the given lighting class, which is for class S4 $\overline{E}_{max,M} = 7.5$~\text{lx}.
 
 The maintenance factor $MF$ is another entry that has to be taken into account. This factor defines the depreciation of the design level, in this case the depreciation of illuminance $\overline{E}$ and $E_{min}$ over the course of operation of the road lighting. Luminaire Atos from Schr\'{e}der has been chosen to be used in this project, its maintenance factor can be calculated from \cite{CSN_EN_13201-2_Z1}:
-\begin{equation} \label{eq:MF}
+\begin{equation}
+\label{eq:MFGeneral}
 MF = LLMF \cdot LSF \cdot LMF
 \end{equation}
 Where:
@@ -16,6 +17,7 @@ Where:
 The Atos luminaire's are fitted with high pressure sodium lamps. For this project Osram NAV-T 70 W super 6Y has been chosen to operate for a period of 12000 hours before replacement. Looking up the product datasheet \cite{Osram} of the 70 W Osram lamp, $LLMF=0.89$ and $LSF=0.97$ can be obtained. The IP Code of the luminaire's optical system is IP66, meaning that for an environment of medium air pollution and cleaning intervals of 2 years $LMF=0.89$ can be found in table NA.1 of \cite{CSN_EN_13201-2_Z1}. According to equation~\ref{eq:MF} the final maintenance factor can be calculated as follows:
 
 \begin{align}
+\label{eq:MFSpecific}
 &MF = 0.89 \cdot 0.97 \cdot 0.89 \doteq 0.786
 \end{align}
 

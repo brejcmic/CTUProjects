@@ -81,7 +81,7 @@ The change of the fitness function during each generation is  presented in figur
 
 \subsection{Comparing Results with DIALux Output}
 
-A portion of the results were compared with data obtained from an identical situation simulated in DIALux software, where a street project has been created using luminaires Atos A1 on one side of the road. The street project output illuminances were calculated by DIALux according to~\cite{CSN_EN_13201-3} as depicted in figure~\ref{fig:Standard13210-3} and the output in lux can be found in table~\ref{tab:DialuxOneSideLamps}.
+A portion of the results were compared with data obtained from an identical situation simulated in DIALux software, where a street project has been created using luminaires Atos A1 on one side of the road. Horizontal illuminances at road surface level were calculated by DIALux according to~\cite{CSN_EN_13201-3} as depicted in figure~\ref{fig:Standard13210-3} and the output in lux can be found in table~\ref{tab:DialuxOneSideLamps} with applied maintenance factor $MF=0.79$ (see equation~\ref{eq:MFSpecific}).
 
 \begin{figure}[htb]
   \centering
@@ -98,7 +98,7 @@ A portion of the results were compared with data obtained from an identical situ
 
 \begin{table}[htb]
 	\renewcommand{\arraystretch}{1.3}
-	\caption{DIALux calculated design illuminances in lux for one side lamp placement at the surface of the road (fig.~\ref{fig:Standard13210-3})}
+	\caption{DIALux calculated horizontal design illuminances in lux}
  	\label{tab:DialuxOneSideLamps}
 	\centering
   \begin{tabular}{ l || c | c | c | c | c | c | c }
@@ -118,7 +118,7 @@ According to standard~\cite{CSN_EN_13201-3} calculation points shall not be spac
 
 \begin{table}[htb]
 	\renewcommand{\arraystretch}{1.3}
-	\caption{Calculated design illuminances in lux using values from tab.~\ref{tab:DialuxOneSideLamps})}
+	\caption{DIALux input data and illuminances}
  	\label{tab:DialuxIlluminances}
 	\centering
   \begin{tabular}{ c | c | c | c | c | c | c }
@@ -129,3 +129,4 @@ According to standard~\cite{CSN_EN_13201-3} calculation points shall not be spac
   \end{tabular}
 \end{table}
 
+Comparing the first data row of table~\ref{tab:onesideLamps} and table~\ref{tab:DialuxIlluminances} similar values of illuminances $\overline{E}$ and $E_{min}$ can be found calculated by both DIALux and the methods used in the genetic algorithm. Small differences for the Atos 70 W A1 used in the comparison could be caused by a vast difference in the amount of calculation points.
