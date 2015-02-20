@@ -1,8 +1,9 @@
 \section{Results Consideration}
+\subsection{Output of GA for tested lamps}
 
 The results of genetic algorithm are shown in tables~\ref{tab:onesideLamps} and \ref{tab:twosideLamps}. The results should be considered as solutions close to optimum specified by the fitness function. Genetic algorithms are capable of multi parametric optimization, but they are also unable to give exact solutions (\cite{Zelinka2009}, \cite{Fogel2006}). The perfect optimum must be found by some other usually deterministic method. These methods usually start from the solution found by genetic algorithms.
 
-The algorithm found different solution during the testing, that fulfill defined constraints. This is normal behavior of the algorithm. If more than one solution exist with close maximums of the fitness, then the algorithm randomly found one of them. There can be some preferences from designer. For example he might prefer that the pillars highs cannot be more than 10~m or that the distances between the pillars must be as far as possible an so on. These preferences must be then somehow included to set limits of searched values or in the composition of the fitness function. Authors set pretty lose limits, therefore there are more than one close to optimal solution for some types of the lamps. Other possible solutions are not presented in table~\ref{tab:onesideLamps} nor in table~\ref{tab:twosideLamps}.
+The algorithm found different solution during the testing, that fulfill defined constraints. This is normal behavior of the algorithm. If more than one solution exist with close maximums of the fitness, then the algorithm randomly found one of them. The designers can have some preferences. For example they might prefer that the pillars highs cannot be more than 10~m or that the distances between the pillars must be as far as possible an so on. These preferences must be then somehow included to set limits of searched values or in the composition of the fitness function. Authors set pretty lose limits, therefore there are more than one close to optimal solution for some types of the lamps. Other possible solutions are not presented in table~\ref{tab:onesideLamps} nor in table~\ref{tab:twosideLamps}.
  
 \begin{table}[htb]
 	\renewcommand{\arraystretch}{1.3}
@@ -13,7 +14,7 @@ The algorithm found different solution during the testing, that fulfill defined 
     \hline
     \textbf{Type} & $D_X$ & $D_Y$ & $Z$ & $\alpha$ & $\overline{E}$ & $E_{min}$ & $\overline{E}_o$\\ 
     & (m) & (m) & (m) & ($^\circ$) & (lx) & (lx) & (lx)\\ \hline
-    ATOS 70W A1 & 37.5 & 0.19 & 6.77 & 0.70 & 8.07 & 1.64 & 7.58 \\ \hline
+    ATOS 70W A1 & 39.8 & 0.67 & 6.22 & 3.15 & 8.14 & 1.31 & 7.40\\ \hline
     ATOS 70W A2 & 41.8 & -0.73 & 6.54 & 2.43 & 8.13 & 1.42 & 7.25\\ \hline
     ATOS 70W A3 & 44.9 & -1.69 & 6.47 & 3.34 & 8.15 & 1.36 & 6.86\\ \hline
     ATOS 70W A4 & 47.9 & -0.41 & 6.97 & 3.59 & 8.14 & 1.36 & 6.72\\ \hline\hline
@@ -37,7 +38,7 @@ The algorithm found different solution during the testing, that fulfill defined 
     \hline
     \textbf{Type} & $D_X$ & $D_Y$ & $Z$ & $\alpha$ & $\overline{E}$ & $E_{min}$ & $\overline{E}_o$\\ 
     & (m) & (m) & (m) & ($^\circ$) & (lx) & (lx) & (lx)\\ \hline
-    ATOS 70W A1 & 39.0 & 0.42 & 6.26 & 4.84 & 8.14 & 1.32 & 7.43 \\ \hline
+    ATOS 70W A1 & 39.2 & -0.21 & 6.24 & 3.85 & 8.14 & 1.32 & 7.55 \\ \hline
     ATOS 70W A2 & 40.9 & -0.58 & 6.19 & 7.60 & 8.13 & 1.31 & 7.40\\ \hline
     ATOS 70W A3 & 44.5 & -0.90 & 6.54 & 5.40 & 8.13 & 1.35 & 6.98\\ \hline
     ATOS 70W A4 & 45.8 & -1.42 & 6.45 & 10.51 & 8.13 & 1.42 & 6.82\\ \hline\hline
@@ -52,36 +53,27 @@ The algorithm found different solution during the testing, that fulfill defined 
   \end{tabular}
 \end{table}
 
-\subsection{Example of the result}
+\subsection{Example of specific result for ATOS 70 W A1}
+The result for the lamp ATOS 70 W A1 is discussed in this chapter. The output parameters of the algorithm can be found in the first row of the tables~\ref{tab:onesideLamps} and~\ref{tab:twosideLamps}. The count of tested points in control area were decreased to 960 for better visualization in figures~\ref{fig:exampleOS} and~\ref{fig:exampleTS}. The distances between points is then 0.5~m in the visualizations.
 
-\begin{table}[htb]
-	\renewcommand{\arraystretch}{1.3}
-	\caption{ATOS 70 W A1, data for graphical results in Figure}
- 	\label{tab:example}
-	\centering
-  \begin{tabular}{ l | c | c | c | c | c | c | c }
-    \hline
-    \textbf{Placement} & $D_X$ & $D_Y$ & $Z$ & $\alpha$ & $\overline{E}$ & $E_{min}$ & $\overline{E}_o$\\ 
-    & (m) & (m) & (m) & ($^\circ$) & (lx) & (lx) & (lx)\\ \hline
-    one side & 39.8 & 0.67 & 6.22 & 3.15 & 8.14 & 1.31 & 7.40\\ \hline
-    two side & 39.2 & -0.21 & 6.24 & 3.85 & 8.14 & 1.32 & 7.55 \\ \hline
-  \end{tabular}
-\end{table}
+The change of the fitness function during each generation is  presented in figures~\ref{fig:exampleOSFit} and~\ref{fig:exampleTSFit}. The fitness function in case of one side lamp placement has the most typical shape for a most of the done tests. The algorithm found good solution very fast on the beginning of the optimization and then the growth of the fitness function slew down. The shape in figure~\ref{fig:exampleTSFit} did not appeared too much. The faster growth at older generations was usually caused by poor initial solutions in very first generations. It is pretty possible event, because the first solutions in populations are always chosen randomly. However the algorithm is capable found good solution due to mutation presence in next generations.
+
 
 \begin{figure}[t]
         \centering
-        \subfloat[Fitness function during the optimization]{\includegraphics[width=\columnwidth]{GrafyOS_Fit}}\\
+        \subfloat[Fitness function during the optimization \label{fig:exampleOSFit}]{\includegraphics[width=\columnwidth]{GrafyOS_Fit}}\\
         \subfloat[Color map represents illuminance on the road, best offspring]{\includegraphics[width=\columnwidth]{GrafyOS_Fill}}\\
         \subfloat[Illuminance on the road, best offspring]{\includegraphics[width=\columnwidth]{GrafyOS_3D}}
-        \label{fig:exampleOS}
         \caption{Example of result of lamp ATOS~70~W~A1 for one side placement}
+        \label{fig:exampleOS}
 \end{figure}
 
 \begin{figure}[t]
+
         \centering
-        \subfloat[Fitness function during the optimization]{\includegraphics[width=\columnwidth]{GrafyTS_Fit}}\\
+        \subfloat[Fitness function during the optimization \label{fig:exampleTSFit}]{\includegraphics[width=\columnwidth]{GrafyTS_Fit}}\\
         \subfloat[Color map represents illuminance on the road, best offspring]{\includegraphics[width=\columnwidth]{GrafyTS_Fill}}\\
         \subfloat[Illuminance on the road, best offspring]{\includegraphics[width=\columnwidth]{GrafyTS_3D}}
-        \label{fig:exampleTS}
         \caption{Example of result of lamp ATOS~70~W~A1 for two side placement}
+        \label{fig:exampleTS}
 \end{figure}
