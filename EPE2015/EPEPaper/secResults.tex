@@ -57,14 +57,14 @@ The algorithm found different solution during the testing, that fulfill defined 
 \subsection{Example of specific result for ATOS 70 W A1}
 The result for the lamp ATOS 70 W A1 is discussed in this chapter. The output parameters of the algorithm can be found in the first row of the tables~\ref{tab:onesideLamps} and~\ref{tab:twosideLamps}. The count of tested points in control area were decreased to 960 for better visualization in figures~\ref{fig:exampleOS} and~\ref{fig:exampleTS}. The distances between points is then 0.5~m in the visualizations.
 
-The change of the fitness function during each generation is  presented in figures~\ref{fig:exampleOSFit} and~\ref{fig:exampleTSFit}. The fitness function in case of one side lamp placement has the most typical shape for a most of the done tests. The algorithm found good solution very fast on the beginning of the optimization and then the growth of the fitness function slew down. The shape in figure~\ref{fig:exampleTSFit} did not appeared too much. The faster growth at older generations was usually caused by poor initial solutions in very first generations. It was pretty possible event, because the first solutions in populations were always chosen randomly. However the algorithm is capable found good solution due to mutation presence in next generations.
+The change of the fitness function during each generation is  presented in figures~\ref{fig:exampleOSFit} and~\ref{fig:exampleTSFit}. The fitness function in case of one side lamp placement has the most typical shape for a most of the done tests. The algorithm found good solution very fast on the beginning of the optimization and then the growth of the fitness function slew down. The shape in figure~\ref{fig:exampleTSFit} did not appeared too much. The faster growth at older generations was usually caused by poor initial solutions in very first generations. It was pretty possible event, because the first solutions in populations were always chosen randomly. However the algorithm is capable to find good solution due to mutation presence in next generations.
 
 
 \begin{figure}[t]
         \centering
         \subfloat[Fitness function during the optimization \label{fig:exampleOSFit}]{\includegraphics[width=\columnwidth]{GrafyOS_Fit}}\\
-        \subfloat[Color map represents lighting on the road, best offspring]{\includegraphics[width=\columnwidth]{GrafyOS_Fill}}\\
-        \subfloat[Lighting on the road, best offspring]{\includegraphics[width=\columnwidth]{GrafyOS_3D}}
+        \subfloat[Color map represents illuminance on the road, best offspring]{\includegraphics[width=\columnwidth]{GrafyOS_Fill}}\\
+        \subfloat[Illuminance on the road, best offspring]{\includegraphics[width=\columnwidth]{GrafyOS_3D}}
         \caption{Example of result of lamp ATOS~70~W~A1 for one side placement}
         \label{fig:exampleOS}
 \end{figure}
@@ -73,8 +73,8 @@ The change of the fitness function during each generation is  presented in figur
 
         \centering
         \subfloat[Fitness function during the optimization \label{fig:exampleTSFit}]{\includegraphics[width=\columnwidth]{GrafyTS_Fit}}\\
-        \subfloat[Color map represents lighting on the road, best offspring]{\includegraphics[width=\columnwidth]{GrafyTS_Fill}}\\
-        \subfloat[Lighting on the road, best offspring]{\includegraphics[width=\columnwidth]{GrafyTS_3D}}
+        \subfloat[Color map represents illuminance on the road, best offspring]{\includegraphics[width=\columnwidth]{GrafyTS_Fill}}\\
+        \subfloat[Illuminance on the road, best offspring]{\includegraphics[width=\columnwidth]{GrafyTS_3D}}
         \caption{Example of result of lamp ATOS~70~W~A1 for two side placement}
 				\label{fig:exampleTS}
 \end{figure}
