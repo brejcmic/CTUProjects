@@ -2,9 +2,9 @@
 \label{sec:Results}
 \subsection{Output of GA for tested lamps}
 
-The results of genetic algorithm are shown in tables~\ref{tab:onesideLamps} and \ref{tab:twosideLamps}. The results should be considered as solutions close to optimum specified by the fitness function. Genetic algorithms are capable of multi parametric optimization, but they are also unable to give exact solutions (\cite{Zelinka2009}, \cite{Fogel2006}). The perfect optimum must be searched by some method with tighter limits around found optimum. Very often is used an combination of genetic algorithm to get close to optimum and then some other stochastic or deterministic algorithm to find the perfect optimum.
+The results of genetic algorithm are shown in tables~\ref{tab:onesideLamps} and \ref{tab:twosideLamps}. The results should be considered as solutions close to a optimum specified by the fitness function. Genetic algorithms are capable of multi parametric optimization, but they are also unable to give exact solutions (\cite{Zelinka2009}, \cite{Fogel2006}). The perfect optimum must be searched by some method with tighter limits around found optimum. Very often is used an combination of genetic algorithm to get close to optimum and then some other stochastic or deterministic algorithm to find the perfect optimum.
 
-The algorithm found different solution during the testing, that fulfill defined constraints. This is normal behavior of the algorithm. If more than one solution exist with close maximums of the fitness, then the algorithm randomly found one of them. The designers can have some preferences. For example they might prefer that the pillars highs cannot be more than 10~m or that the distances between the pillars must be as far as possible an so on. These preferences must be then somehow included to set limits of searched values or in the composition of the fitness function. Authors set pretty lose limits, therefore there are more than one close to optimal solution for some types of the lamps. Other possible solutions are not presented in table~\ref{tab:onesideLamps} nor in table~\ref{tab:twosideLamps}.
+The algorithm found different solution during the testing, that fulfill defined constraints. This is normal behavior of the genetic algorithms. If more than one solution exist with close maximums of the fitness, then the algorithm randomly found one of them. The designers can have some preferences. For example they might prefer that the pillars highs cannot be more than 10~m or that the distances between the pillars must be as far as possible an so on. These preferences must be then somehow included to set limits of searched values or in the composition of the fitness function. Authors set pretty lose limits, therefore there are more than one close to optimal solution for some types of the lamps. Other possible solutions are not presented in table~\ref{tab:onesideLamps} nor in table~\ref{tab:twosideLamps}.
  
 \begin{table}[htb]
 	\renewcommand{\arraystretch}{1.3}
@@ -69,7 +69,7 @@ The change of the fitness function during each generation is  presented in figur
         \label{fig:exampleOS}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[p]
 
         \centering
         \subfloat[Fitness function during the optimization \label{fig:exampleTSFit}]{\includegraphics[width=\columnwidth]{GrafyTS_Fit}}\\
@@ -81,7 +81,7 @@ The change of the fitness function during each generation is  presented in figur
 
 \subsection{Comparing Results with DIALux Output}
 
-\begin{table}[h]
+\begin{table}[p]
 	\renewcommand{\arraystretch}{1.3}
 	\caption{DIALux calculated horizontal design illuminances in lux}
  	\label{tab:DialuxOneSideLamps}
@@ -99,7 +99,7 @@ The change of the fitness function during each generation is  presented in figur
   \end{tabular}
 \end{table}
 
-\begin{table}[h]
+\begin{table}[p]
 	\renewcommand{\arraystretch}{1.3}
 	\caption{DIALux input data and illuminances}
  	\label{tab:DialuxIlluminances}

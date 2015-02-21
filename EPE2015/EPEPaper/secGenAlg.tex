@@ -18,7 +18,7 @@ The DNA string was made in the order of appearance of each value. The same value
 &&\alpha \in \left\langle 0^\circ, 20^\circ \right\rangle
 \end{eqnarray}
 
-The algorithm evaluated the lighting at the sidewalk of length 200~m and width 3~m. The control area was set in the middle of the sidewalk of the length 80~m. Control area consisted of 6000 points evenly covering the whole field with 20~cm distances between each other. These points were used for lighting evaluation and the average value $\overline{E}$ and minimum value $E_{min}$ were watched here. The unwanted lightening was evaluated too up to 2~m distance from the sidewalk. This area was set on both sides of the sidewalk with amount of 8000 control points in total. The average illuminance between two pillars $\overline{E}_o$ was calculated here. Author tested both one side and two side placement of the lamps. The distances and arrangements are shown in Figure~\ref{fig:sidewalk}.
+The algorithm evaluated the lighting at the sidewalk of length 200~m and width 3~m. The control area was set in the middle of the sidewalk of the length 80~m. Control area consisted of 6000 points evenly covering the whole field with 20~cm distances between each other. These points were used for lighting evaluation and the average value $\overline{E}$ and minimum value $E_{min}$ of illuminance were watched here. The unwanted lightening was evaluated too up to 2~m distance from the sidewalk. This area was set on both sides of the sidewalk with amount of 8000 control points in total. The average illuminance between two pillars $\overline{E}_o$ was calculated here. Author tested both one side and two side placement of the lamps. The distances and arrangements are shown in Figure~\ref{fig:sidewalk}.
 
 \begin{figure}[htb]
   \centering
@@ -30,9 +30,9 @@ The algorithm evaluated the lighting at the sidewalk of length 200~m and width 3
 There was used one point crossover in the genetic algorithm. The probability of crossovers was set to 80~\% and mutation was set to 5~\%. Both the parent population size and offspring size were 200. The calculations were finished after 60 births. All these settings were set after several testing to get smooth and fast calculation of the algorithm.
 
 \subsection{Fitness function}
-Suitable fitness function is the key factor for genetic evaluation. This function is used for determination which results are better than others. It is set up by knowing the target behavior of the result in common cases. However there is no cookbook which would define how to create such function.
+Suitable fitness function is the key factor for genetic evaluation. This function is used for determination which results are better than others. It is set up by known features of target solution in common cases. However there is no cookbook which would define how to create such function.
 
-Authors decided to create several weights $w\left(x\right)$ based on exponential function and these weights multiply one with each other to get resulting fitness function. The basic function was defined by the formula:
+Authors decided to create several weights $w\left(x\right)$ based on exponential function and these weights multiply one with each other to get resulting fitness function. The basic function was defined by the equation:
 
 \begin{equation}
 w\left(x\right)= e^{-a\cdot x}
@@ -41,7 +41,7 @@ w\left(x\right)= e^{-a\cdot x}
 
 where:
 \begin{description}
-\item [$x$...] is current result and
+\item [$x$...] is watched variable and
 \item [$a$...] is parameter which defines the slope (first derivation) of the function.
 \end{description}
 
@@ -65,13 +65,13 @@ w_3\left(\overline{E}_o\right)= e^{\frac{\overline{E}_o}{100}}
 
 where:
 \begin{description}
-\item [$E_{mT}$...] is target lighting minimum defined by the standard~\cite{CSN_EN_13201-2}
+\item [$E_{mT}$...] is target illuminance minimum defined by the standard~\cite{CSN_EN_13201-2}
 \item [$\overline{E}_{T}$...] is target average value of illuminance in the control area. It was determined from the minimal average value $\overline{E}_{M}$ in the standard~\cite{CSN_EN_13201-2} as $1.25 \cdot \overline{E}_{M}/ MF$
 \end{description}
 
 The priority of each weight is set up by parameter $a$ in the exponential function. The lowest priority is in case of equation~(\ref{eq:w3}). The highest priority is to get the minimum illuminance over the defined limit so the highest parameter is in case of equation~(\ref{eq:w1A}).
 
-There is another parameter, which was watched by the fitness function. The number of lamps per unit distance is proportional to maintenance cost. So it is also demanded to get as few lamps per unit distance as possible. There is not linear dependency between maintenance cost and number of lamps. Therefore authors use the quadratic function to model it. The weight was then defined by the equation:
+There is another parameter, which was watched by the fitness function. The number of lamps per unit distance is proportional to maintenance cost. So it is also demanded to get as few lamps per unit distance as possible. There is not linear dependency between maintenance cost and number of lamps. Therefore authors use the quadratic function to model it. The last weight was then defined by the equation:
 
 \begin{equation}
 w_4\left(D_X\right)= \left(\frac{D_{X}}{D_{XM}}\right)^2
@@ -91,4 +91,4 @@ Because all weights assumes values between zero and one, the fitness function wi
 \end{equation}
 
 \subsection{Elitism}
-There appeared effect of losing best offspring in case of earlier solution of the genetic algorithm. Authors added an elitism to fix that problem. The elitism means to take the best offspring every time to the next generation. After adding the elitism, the algorithm showed smoother convergence. The output solutions were also of higher fitness and therefore the whole calculation was able to last less generations.
+There appeared effect of losing best offspring in case of earlier solution of the genetic algorithm. Authors added an elitism to fix this problem. The elitism means to take the best offspring always to the next generation. After adding the elitism, the algorithm showed smoother convergence. The output solutions were also of higher fitness and therefore the whole calculation was able to last less generations.
