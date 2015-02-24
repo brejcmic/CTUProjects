@@ -49,6 +49,10 @@
 !*.mat
 !*.slx
 
+#eagle files
+!*.sch
+!*.brd
+
 #--------------------------------------
 #ignored files - special specifications
 #--------------------------------------
