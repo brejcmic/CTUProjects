@@ -41,8 +41,10 @@
 #office files
 !*.docx
 !*.docm
+!*.doc
 !*.xlsx
 !*.xlsm
+!*.xls
 
 #matlab files
 !*.m
