@@ -126,15 +126,19 @@ for generace = 1:1:pop.gen
     ylabel('y (m)');
     %======================================================================
     
-
     %Pokud se nejedna o posledni generaci, tak najit potomky
     if generace < pop.gen
+        pop.dnaP = zeros(pop.N,2*svt.N);
+        %------------------------------------------------------------------
+        %ELITISMUS - vyber nejlepsiho clena populace na prvni misto
+        %------------------------------------------------------------------
+        pop.dnaP(1,:) = pop.dna(IDX,:); %tento clen nebude mutovat
+        pop.dnaP(2,:) = pop.dna(IDX,:); %tento clen muze mutovat
         %------------------------------------------------------------------
         %KRIZENI - vyber rodicu a vytvareni potomku
         %------------------------------------------------------------------
-        pop.dnaP = zeros(pop.N,2*svt.N);
         %opakovat hledani dokud nebude vytvorena nova populace velikosti N
-        for clen = 1:2:pop.N
+        for clen = 3:2:pop.N
             %nahodne: vyber rodice1, vyber rodice2, index krizeni
             pravdepodobnost = rand(1,3);
             %Index prvniho rodice
@@ -171,7 +175,7 @@ for generace = 1:1:pop.gen
         %------------------------------------------------------------------
         pravdepodobnost= rand(pop.N,2*svt.N);
         for i= 1:2:(2*svt.N-1)
-            for clen= 1:1:pop.N
+            for clen= 2:1:pop.N
                 if pravdepodobnost(clen, i) <= pop.mut
                     pop.dnaP(clen, i)= mez.x0 + (mez.x1-mez.x0)*rand();
                 end

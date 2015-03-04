@@ -7,29 +7,29 @@ close;
 %Krizeni: jednobodove (udat pravdepodobnost)
                 pop.kriz = 0.9;
 %Mutace (pomerna hodnota):
-                pop.mut = 0.02;
+                pop.mut = 0.05;
 %Pocet generací:
-                pop.gen = 10000;
+                pop.gen = 200;
 %Velikost populace:
                 pop.N = 100;
 %Meze parametru (dany rozmery mistnosti v m):
                 mez.x0 = 0;
                 mez.x1 = 10;
                 mez.y0 = 0;
-                mez.y1 = 5;
+                mez.y1 = 2;
 %Vyska mistnosti (m):
                 mez.z0 = 0;
                 mez.z1 = 2;
 %Umisteni svitidel v ose z (POZOR: neosetreno umisteni svitidel nad strop):
                 mez.zS = 2;
 %Pocet bodu na stenach v ose x:
-                rov.Nx = 20;
+                rov.Nx = 50;
 %Pocet bodu na stenach v ose y:
                 rov.Ny = 10;
 %Pocet bodu na stenach v ose z:
-                rov.Nz = 4;
+                rov.Nz = 10;
 %Pocatecni fitness
-                fitness = zeros(1, 100);
+                fitness = zeros(1, pop.gen);
 
 %--------------------------------------------------------------------------
 %PARAMETRY STEN
@@ -132,7 +132,7 @@ clear stenaV;
 clear stenaZ;
 
 %--------------------------------------------------------------------------
-%GENEROVANI DNA POCEATECNICH POPULACI
+%GENEROVANI DNA POCATECNICH POPULACI
 %DNA: liche pozice x, sude pozice y
 %Pocatecni populace je nahodna:
 pop.dna = zeros(pop.N,2*svt.N);
@@ -296,13 +296,12 @@ for generace = 1:1:pop.gen
     %Vyneseni fitness funkce
     figure(2)
     subplot(2,2,1)
-    fitness = [fitness(2:100), pop.Essq(IDX)];
+    fitness(generace:end) = pop.Essq(IDX);
     plot(fitness);
     title('Fitness nejlepsich jedincu');
     xlabel('historie (n)');
     ylabel('sum((E-E_{avg})^2)');
     grid on;
-
     
     %Zobrazeni nejlepsiho vysledku teto generace
     subplot(2,2,2)
@@ -316,15 +315,8 @@ for generace = 1:1:pop.gen
     
     subplot(2,2,3)
     %figure(3)
-    %bod.ME = vec2mat(bod.E(IDX,1:bod.podIDX),rov.Nx);
-    bod.ME = zeros(rov.Ny,rov.Nx);
-    for i= 1:1:bod.podIDX/rov.Nx
-        bod.ME(i, :)= bod.E(IDX,(1+(i-1)*rov.Nx):(i*rov.Nx));
-    end
+    bod.ME = vec2mat(bod.E(IDX,1:bod.podIDX),rov.Nx);
     surf(rov.bx,rov.by,bod.ME);
-    xlim([mez.x0 mez.x1]);
-    ylim([mez.y0 mez.y1]);
-    colorbar;
     xlabel('x (m)');
     ylabel('y (m)');
     zlabel('E (lx)');
@@ -335,15 +327,20 @@ for generace = 1:1:pop.gen
     xlabel('x (m)');
     ylabel('y (m)');
     %======================================================================
-    
+   
     %Pokud se nejedna o posledni generaci, tak najit potomky
     if generace < pop.gen
+        pop.dnaP = zeros(pop.N,2*svt.N);
+        %------------------------------------------------------------------
+        %ELITISMUS - vyber nejlepsiho clena populace na prvni misto
+        %------------------------------------------------------------------
+        pop.dnaP(1,:) = pop.dna(IDX,:); %tento clen nebude mutovat
+        pop.dnaP(2,:) = pop.dna(IDX,:); %tento clen muze mutovat
         %------------------------------------------------------------------
         %KRIZENI - vyber rodicu a vytvareni potomku
         %------------------------------------------------------------------
-        pop.dnaP = zeros(pop.N,2*svt.N);
         %opakovat hledani dokud nebude vytvorena nova populace velikosti N
-        for clen = 1:1:pop.N
+        for clen = 3:2:pop.N
             %nahodne: vyber rodice1, vyber rodice2, index krizeni
             pravdepodobnost = rand(1,3);
             %Index prvniho rodice
@@ -380,7 +377,7 @@ for generace = 1:1:pop.gen
         %------------------------------------------------------------------
         pravdepodobnost= rand(pop.N,2*svt.N);
         for i= 1:2:(2*svt.N-1)
-            for clen= 1:1:pop.N
+            for clen= 2:1:pop.N
                 if pravdepodobnost(clen, i) <= pop.mut
                     pop.dnaP(clen, i)= mez.x0 + (mez.x1-mez.x0)*rand();
                 end
