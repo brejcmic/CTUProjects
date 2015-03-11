@@ -1,33 +1,34 @@
 clear;
 clc;
 close;
-%Reseni rozmisteni svetel pomoci genetickeho algoritmu. Na zacatku se zvoli
-%pocet svitidel a jejich vyzarovaci charakteristika.
-%DNA: x, y, x, y, x, y,... zavisi na poctu svitidel
+%Reseni vyzarovaci char. pomoci genetickeho algoritmu. Na zacatku se zvoli
+%pocet svitidel a jejich rozmisteni.
+%DNA: vyjadruje koeficienty goniometrickeho polynomu. Koeficient s nultou
+%mocninou je nejvice v pravo.
 %Krizeni: jednobodove (udat pravdepodobnost)
                 pop.kriz = 0.9;
 %Mutace (pomerna hodnota):
                 pop.mut = 0.05;
 %Pocet generací:
-                pop.gen = 200;
+                pop.gen = 400;
 %Velikost populace:
                 pop.N = 100;
 %Meze parametru (dany rozmery mistnosti v m):
                 mez.x0 = 0;
                 mez.x1 = 10;
                 mez.y0 = 0;
-                mez.y1 = 2;
+                mez.y1 = 5;
 %Vyska mistnosti (m):
                 mez.z0 = 0;
-                mez.z1 = 2;
+                mez.z1 = 3;
 %Umisteni svitidel v ose z (POZOR: neosetreno umisteni svitidel nad strop):
                 mez.zS = 2;
 %Pocet bodu na stenach v ose x:
-                rov.Nx = 50;
+                rov.Nx = 20;
 %Pocet bodu na stenach v ose y:
                 rov.Ny = 10;
 %Pocet bodu na stenach v ose z:
-                rov.Nz = 10;
+                rov.Nz = 4;
 %Pocatecni fitness
                 fitness = zeros(1, pop.gen);
 
@@ -44,18 +45,17 @@ close;
                 
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDEL
+%Souradnice svitidel:
+                svt.x = [2.5, 5, 7.5, 2.5, 5, 7.5];
+                svt.y = [4, 4, 4, 1, 1, 1];
+                svt.z = [mez.zS, mez.zS, mez.zS, mez.zS, mez.zS, mez.zS];
 %Pocet svitidel:
-                svt.N = 8;
+                svt.N = length(svt.x);
 %Svitivost s nulovym uhlem
                 svt.I0 = 100;
-%Koeficienty charakteristicke funkce svitivosti (nejvyssi mocnina je vlevo)
-                svt.fc =[0, 0, 1, 0];
-%Vyneseni polarniho grafu
-figure(1)
-svt.theta = -pi:pi/500:pi;
-svt.I= svt.I0*(polyval(svt.fc, cos(svt.theta)));
-set(polar(svt.theta,svt.I),'color','r','linewidth',2)
-view([90, 90]);
+%Pocet podu na krivce svitivosti v intervalu 0 az pi/2
+                svt.Nf = 30;
+                svt.theta = 0:pi/(svt.Nf-1)/2:pi/2;
 %%
 %--------------------------------------------------------------------------
 %GENEROVANI BODU JEDNOTLIVYCH STEN
@@ -133,10 +133,8 @@ clear stenaZ;
 %GENEROVANI DNA POCATECNICH POPULACI
 %DNA: liche pozice x, sude pozice y
 %Pocatecni populace je nahodna:
-pop.dna = zeros(pop.N,2*svt.N);
-pop.dna(:,1:2:((2*svt.N)-1)) = mez.x0 + (mez.x1-mez.x0).*rand(pop.N,svt.N);
-pop.dna(:,2:2:(2*svt.N)) = mez.y0 + (mez.y1-mez.y0).*rand(pop.N,svt.N);
-%pop.dna=[0.5 0.5 2 2 0.5 2 2 0.5]
+pop.dna = rand(pop.N,svt.Nf); %koeficienty jsou v intervalu 0 az 1
+
 %--------------------------------------------------------------------------
 %SMYCKA GENETICKEHO ALGORITMU
 %--------------------------------------------------------------------------
@@ -155,9 +153,9 @@ for generace = 1:1:pop.gen
         %Vsechna svitidla tohoto clena populace vuci vsem bodum
         %------------------------------------------------------------------
   
-            x= pop.dna(clen, 1:2:((2*svt.N)-1))'*ones(1, bod.stVIDX);
-            y= pop.dna(clen, 2:2:(2*svt.N))'*ones(1, bod.stVIDX);
-            z= mez.zS'*ones(svt.N, bod.stVIDX);
+            x= svt.x'*ones(1, bod.stVIDX);
+            y= svt.y'*ones(1, bod.stVIDX);
+            z= svt.z'*ones(1, bod.stVIDX);
             %kvadrat vzdalenosti bodu od svitidla
             lsq= ((x-ones(svt.N, 1)*bod.x).^2 + (y-ones(svt.N, 1)*bod.y).^2 + (z-ones(svt.N, 1)*bod.z).^2)+eps;
             %cosiny a siny uhlu od normaly svitidla
@@ -165,14 +163,28 @@ for generace = 1:1:pop.gen
             cosTh = (z-ones(svt.N, 1)*bod.z)./(lsq.^0.5);
             sinTh = (1 - cosTh.^2).^0.5;
             
+            Theta = acos(cosTh);
+            %Zjisteni svitivosti v danych uhlech
+            I= zeros(length(svt.x), bod.stVIDX);
+            index = 1 + floor(Theta*2*svt.Nf/pi);%pouze spodni polorovina
+            for j = 1:1:length(svt.x)
+                for k = 1:1:bod.stVIDX
+                    if(index(j,k) <= svt.Nf)
+                        I(j,k)= pop.dna(clen,index(j,k));
+                    else
+                        I(j,k)= 0;
+                    end
+                end
+            end
+            
             %Vypocet osvetleni na podlaze a strope od svitidel
             %Nasobeni cosinem je nahrazeno rozsirenim charakteristicke
             %funkce
-            bod.E(clen,1:bod.strIDX)= sum(svt.I0 .* polyval([svt.fc 0], cosTh(:, 1:bod.strIDX))./ lsq(:, 1:bod.strIDX));
+            bod.E(clen,1:bod.strIDX)= sum(svt.I0 .* I(:, 1:bod.strIDX) .* cosTh(:, 1:bod.strIDX)./ lsq(:, 1:bod.strIDX));
             
             %Vypocet osvetleni na stenach od svitidel
             %Tady se nasobi sinem uhlu theta
-            bod.E(clen,(bod.strIDX+1):end)= sum(svt.I0 .* polyval(svt.fc, cosTh(:, (bod.strIDX+1):end)) .* sinTh(:, (bod.strIDX+1):end) ./ lsq(:, (bod.strIDX+1):end));
+            bod.E(clen,(bod.strIDX+1):end)= sum(svt.I0 .* I(:, (bod.strIDX+1):end) .* sinTh(:, (bod.strIDX+1):end) ./ lsq(:, (bod.strIDX+1):end));
      
         %------------------------------------------------------------------
         %Vsechny svitici body tohoto clena populace vuci vsem bodum
@@ -279,7 +291,7 @@ for generace = 1:1:pop.gen
     %Urceni fitness funkce clenu populace
     %------------------------------------------------------------------
     %Prumerna hodnota osvetlenosti na podlaze
-    pop.Eavg = sum(bod.E(:,1:bod.podIDX), 2) * ones(1, rov.Nx*rov.Ny)./rov.Nx ./rov.Ny;
+    pop.Eavg = sum(bod.E(:,1:bod.podIDX), 2) * ones(1, bod.podIDX)./bod.podIDX;
     %Prumerny soucet ctvercu odchylek od prumerne osvetlenosti
     pop.Essq = sum((bod.E(:,1:bod.podIDX) - pop.Eavg).^2, 2)/bod.podIDX;
     
@@ -287,7 +299,7 @@ for generace = 1:1:pop.gen
     pop.prVyb =1./ sum(1./pop.Essq) ./ pop.Essq;
     
     %======================================================================
-    %MEZIVYSEDKY - zobrazeni
+    %MEZIVYSLEDKY - zobrazeni
     %======================================================================
     %nejlepsi vysledek generace
     [PRAV, IDX]= max(pop.prVyb);
@@ -297,19 +309,17 @@ for generace = 1:1:pop.gen
     fitness(generace:end) = pop.Essq(IDX);
     plot(fitness);
     title('Fitness nejlepsich jedincu');
-    xlabel('historie (n)');
+    xlabel('historie (n)')
     ylabel('sum((E-E_{avg})^2)');
     grid on;
     
     %Zobrazeni nejlepsiho vysledku teto generace
     subplot(2,2,2)
-    %figure(2);
-    plot(pop.dna(IDX,1:2:((2*svt.N)-1)), pop.dna(IDX,2:2:(2*svt.N)), 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'b');
+    %Vyneseni polarniho grafu
+    set(polar(svt.theta,svt.I0 * pop.dna(IDX,:)),'color','r','linewidth',2)
+    view([90, 90]);
     title(sprintf('Nejlepsi jedinec, generace = %i, P_{vyberu}= %3.2f %%', generace, pop.prVyb(IDX)*100));
     grid on;
-    axis([mez.x0 mez.x1 mez.y0 mez.y1]);
-    xlabel('x (m)');
-    ylabel('y (m)');
     
     subplot(2,2,3)
     %figure(3)
@@ -321,14 +331,19 @@ for generace = 1:1:pop.gen
     
     subplot(2,2,4)
     %figure(4)
+    plot(svt.x, svt.y, 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'y', 'MarkerEdgeColor', 'k');
+    hold on;
     pcolor(rov.bx,rov.by,bod.ME);
     xlabel('x (m)');
     ylabel('y (m)');
+    hold off;
+    
+    drawnow;
     %======================================================================
    
     %Pokud se nejedna o posledni generaci, tak najit potomky
     if generace < pop.gen
-        pop.dnaP = zeros(pop.N,2*svt.N);
+        pop.dnaP = zeros(pop.N,svt.Nf);
         %------------------------------------------------------------------
         %ELITISMUS - vyber nejlepsiho clena populace na prvni misto
         %------------------------------------------------------------------
@@ -360,28 +375,24 @@ for generace = 1:1:pop.gen
             end
 
             %Krizeni - podle indexu a dle pravdepodobnosti krizeni
-            pop.i(3)= ceil(2*svt.N*pravdepodobnost(3)/pop.kriz);
-            if pop.i(3) >= 2*svt.N %zde nekrizit
+            pop.i(3)= ceil(svt.Nf*pravdepodobnost(3)/pop.kriz);
+            if pop.i(3) >= svt.Nf %zde nekrizit
                 pop.dnaP(clen, :) = pop.dna(pop.i(1), :);
                 pop.dnaP(clen+1, :) = pop.dna(pop.i(2), :);
             else %zde krizit
-                pop.dnaP(clen, :) = [pop.dna(pop.i(1), (1:pop.i(3))), pop.dna(pop.i(2), (pop.i(3)+1):2*svt.N)];
-                pop.dnaP(clen+1, :) = [pop.dna(pop.i(2), (1:pop.i(3))), pop.dna(pop.i(1), (pop.i(3)+1):2*svt.N)];
+                pop.dnaP(clen, :) = [pop.dna(pop.i(1), (1:pop.i(3))), pop.dna(pop.i(2), (pop.i(3)+1):svt.Nf)];
+                pop.dnaP(clen+1, :) = [pop.dna(pop.i(2), (1:pop.i(3))), pop.dna(pop.i(1), (pop.i(3)+1):svt.Nf)];
             end
         end
 
         %------------------------------------------------------------------
         %MUTACE potomku
         %------------------------------------------------------------------
-        pravdepodobnost= rand(pop.N,2*svt.N);
-        for i= 1:2:(2*svt.N-1)
+        pravdepodobnost= rand(pop.N,svt.Nf);
+        for i= 1:1:(svt.Nf)
             for clen= 2:1:pop.N
                 if pravdepodobnost(clen, i) <= pop.mut
-                    pop.dnaP(clen, i)= mez.x0 + (mez.x1-mez.x0)*rand();
-                end
-
-                if pravdepodobnost(clen, i+1) <= pop.mut
-                    pop.dnaP(clen, i+1)= mez.y0 + (mez.y1-mez.y0)*rand();
+                    pop.dnaP(clen, i)= rand();
                 end
             end
         end
@@ -389,6 +400,7 @@ for generace = 1:1:pop.gen
         %NOVA GENERACE
         %------------------------------------------------------------------
         pop.dna = pop.dnaP;
+        pop.dna(:, svt.Nf)=0;
     end
 end
 
