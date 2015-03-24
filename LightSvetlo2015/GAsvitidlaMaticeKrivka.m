@@ -46,8 +46,6 @@ close;
                 svt.z = [3.5, 3.5];
 %Pocet svitidel:
                 svt.N = length(svt.x);
-%Svitivost s nulovym uhlem
-                svt.I0 = 1000;
 
 %%
 %--------------------------------------------------------------------------
@@ -124,15 +122,15 @@ clear stenaZ;
 
 %--------------------------------------------------------------------------
 %GENEROVANI DNA POCATECNICH POPULACI
-%DNA: prvnich pet jsou koeficienty cos, posledni dva jsou koeficient sinu a
-%exponent:
-% [A5, A4, A3, A2, A1, B, E]
-% A... <-1, 1>
-% B... <0, 1>
-% E... <0, 5> maximalni exponent stejny jako u cosinu
+%DNA:
+% [A2, A1, EA, B2, B1, EB, I0]
+% A1,B1... <1, 2>
+% A2,B2... <-1, 1>
+% EA,EB... <1, 3> maximalni exponent stejny jako u cosinu
+% I0... <10, 10000>
 %Pocatecni populace je nahodna:
-pop.dna = [-0.5 + rand(pop.N, 2), 1 + rand(pop.N, 1), 2*rand(pop.N, 1), 3*rand(pop.N, 1)];
-pop.DNAlength = 5;
+pop.dna = [-1 + 2*rand(pop.N, 1), 1 + rand(pop.N, 1), 1 + 2*rand(pop.N, 1), 1 + 2*rand(pop.N, 1), 1 + rand(pop.N, 1), 1 + 2*rand(pop.N, 1), 10 + 99990*rand(pop.N, 1)];
+pop.DNAlength = length(pop.dna(1,:));
 %--------------------------------------------------------------------------
 %SMYCKA GENETICKEHO ALGORITMU
 %--------------------------------------------------------------------------
@@ -166,7 +164,7 @@ for generace = 1:1:pop.gen
             %smazat zaporne cosiny (uhel > 90)
             %vsechny zaporne hodnoty jsou rovny nule
             cosfi = cosTh .* (cosTh > 0);
-            bod.I = svt.I0 .* (abs(polyval([pop.dna(clen, 1:3) 0], cosfi))+pop.dna(clen, 4)*sinTh.^pop.dna(clen, 5));
+            bod.I = pop.dna(clen, 7) .* (polyval([pop.dna(clen, 1:2) 0], cosfi).^pop.dna(clen, 3) + polyval([pop.dna(clen, 4:5) 0], sinTh).^pop.dna(clen, 6));
             
             %Vypocet osvetleni na podlaze a strope od svitidel
             %Pri nasobeni cosinem muze vyjit zaporna hodnota!! Nicmene
@@ -304,7 +302,7 @@ for generace = 1:1:pop.gen
         %smazat zaporne cosiny (uhel > 90)
         %vsechny zaporne hodnoty jsou rovny nule
         cosfi = cosTh .* (cosTh > 0);
-        bod.I = svt.I0 .* (abs(polyval([pop.dna(clen, 1:3) 0], cosfi))+pop.dna(clen, 4)*sinTh.^pop.dna(clen, 5));
+        bod.I = pop.dna(clen, 7) .* (polyval([pop.dna(clen, 1:2) 0], cosfi).^pop.dna(clen, 3) + polyval([pop.dna(clen, 4:5) 0], sinTh).^pop.dna(clen, 6));
 
         %Vypocet osvetleni na srovnavaci rovine
         bod.E(clen,1:bod.podIDX)= sum(bod.I(:, 1:bod.podIDX) .* abs(cosTh(:, 1:bod.podIDX)) ./ lSB(:, 1:bod.podIDX).^2, 1);
@@ -372,7 +370,7 @@ for generace = 1:1:pop.gen
     %Prumerny soucet ctvercu odchylek od prumerne osvetlenosti
     pop.Essq = sum((bod.E(:,1:bod.podIDX) - pop.Eavg).^2, 2)/bod.podIDX;
     
-    pop.FIT = pop.Eavg(:, 1) ./pop.Essq;
+    pop.FIT = 1./((pop.Eavg(:, 1)-500).^2 + pop.dna(:, 7));
     
     %Pravdepodobnosti vyberu clena populace jako rodice
     pop.prVyb =pop.FIT/ sum(pop.FIT);
@@ -399,7 +397,7 @@ for generace = 1:1:pop.gen
     svt.theta = acos(cosTh);
     sinTh = (1 - cosTh.^2).^0.5;
     cosTh = cosTh .* (cosTh > 0);
-    svt.I= svt.I0 .* (abs(polyval([pop.dna(IDX, 1:3) 0], cosTh))+pop.dna(IDX, 4)*sinTh.^pop.dna(IDX, 5));
+    svt.I = pop.dna(IDX, 7) .* (polyval([pop.dna(IDX, 1:2) 0], cosTh).^pop.dna(IDX, 3) + polyval([pop.dna(IDX, 4:5) 0], sinTh).^pop.dna(IDX, 6));
     set(polar(svt.theta,svt.I),'color','r','linewidth',2)
     view([90, 90]);
     title(sprintf('Nejlepsi jedinec, generace = %i, P_{vyberu}= %3.2f %%', generace, pop.prVyb(IDX)*100));
@@ -473,21 +471,11 @@ for generace = 1:1:pop.gen
         %MUTACE potomku
         %------------------------------------------------------------------
         pravdepodobnost= rand(pop.N,pop.DNAlength);
-        for i= 1:1:(pop.DNAlength)
-            for clen= 2:1:pop.N
-                if pravdepodobnost(clen, i) <= pop.mut
-                    if i < 3
-                        pop.dnaP(clen, i)= -0.5 + rand();
-                    elseif i < 4
-                        pop.dnaP(clen, i)= 1 + rand();
-                    elseif i < 5
-                        pop.dnaP(clen, i)= 2*rand();
-                    else
-                        pop.dnaP(clen, i)= 3*rand();
-                    end
-                end
-            end
-        end
+        pop.mutace = [-1 + 2*rand(pop.N, 1), 1 + rand(pop.N, 1), 1 + 2*rand(pop.N, 1), 1 + 2*rand(pop.N, 1), 1 + rand(pop.N, 1), 1 + 2*rand(pop.N, 1), 10 + 99990*rand(pop.N, 1)];
+        
+        pop.mutace = pop.mutace .* (pravdepodobnost <= pop.mut);
+        pop.dnaP = pop.dnaP .* (pravdepodobnost > pop.mut);
+        pop.dnaP = pop.dnaP + pop.mutace;
         %------------------------------------------------------------------
         %NOVA GENERACE
         %------------------------------------------------------------------
