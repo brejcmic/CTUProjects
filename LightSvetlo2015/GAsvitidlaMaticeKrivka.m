@@ -43,7 +43,7 @@ close;
 %Souradnice svitidel (poyor, at nejsou svitidla mimo prostor mistnosti):
                 svt.x = [3.3, 6.7];
                 svt.y = [2.5, 2.5];
-                svt.z = [3.8, 3.8];
+                svt.z = [3.5, 3.5];
 %Pocet svitidel:
                 svt.N = length(svt.x);
 %Svitivost s nulovym uhlem
@@ -279,6 +279,43 @@ for generace = 1:1:pop.gen
             bod.Eo = bod.Ev;
         end
     end
+    %------------------------------------------------------------------
+    %Urceni Osvetlenosti bodu ve srovnavaci rovine
+    %------------------------------------------------------------------
+    %0) nastaveni pocatecnich podminek
+    %pocatecni osvetlenost vsech sten
+    bod.Eo = bod.E(clen,:);
+    %vynulovani osvetlenosti pod urovni sledovane roviny (0.85 m)
+    bod.Eo = bod.Eo .* (bod.z > 0.85);
+    
+    %A) osvetlenost srovnavaci roviny od svitidel
+    x= svt.x'*ones(1, bod.stVIDX);
+    y= svt.y'*ones(1, bod.stVIDX);
+    z= (svt.z-0.85)'*ones(1, bod.stVIDX);
+    %A1) kvadrat vzdalenosti bodu od svitidla
+    lSB = (((x-ones(svt.N, 1)*bod.x).^2 + (y-ones(svt.N, 1)*bod.y).^2 + (z-ones(svt.N, 1)*bod.z).^2)).^0.5+eps;
+
+    %A2) cosiny a siny uhlu od normaly svitidla
+    %jen tady lze pocitat cosinus bez absolutni hodnoty
+    cosTh = (z-ones(svt.N, 1)*bod.z)./lSB;
+    sinTh = (1 - cosTh.^2).^0.5;
+
+    %A3) urceni svitivosti v jednotlivych uhlech
+    %smazat zaporne cosiny (uhel > 90)
+    %vsechny zaporne hodnoty jsou rovny nule
+    cosfi = cosTh .* (cosTh > 0);
+    bod.I = svt.I0 .* (abs(polyval([pop.dna(clen, 1:3) 0], cosfi))+pop.dna(clen, 4)*sinTh.^pop.dna(clen, 5));
+
+    %Vypocet osvetleni na podlaze a strope od svitidel
+    %Pri nasobeni cosinem muze vyjit zaporna hodnota!! Nicmene
+    %odchylka od kolmice je stejna jak pro strop tak pro podlahu.
+    %Proto je tu pouzita absolutni hodnota.
+    bod.E(clen,1:bod.strIDX)= sum(bod.I(:, 1:bod.strIDX) .* abs(cosTh(:, 1:bod.strIDX)) ./ lSB(:, 1:bod.strIDX).^2, 1);
+
+    %Vypocet osvetleni na stenach od svitidel
+    %Tady se nasobi sinem uhlu theta
+    bod.E(clen,(bod.strIDX+1):end)= sum(bod.I(:, (bod.strIDX+1):end) .* sinTh(:, (bod.strIDX+1):end) ./ lSB(:, (bod.strIDX+1):end).^2, 1);
+    
     %------------------------------------------------------------------
     %Urceni fitness funkce clenu populace
     %------------------------------------------------------------------
