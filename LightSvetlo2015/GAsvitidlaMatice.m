@@ -19,15 +19,15 @@ close;
                 mez.y1 = 2;
 %Vyska mistnosti (m):
                 mez.z0 = 0;
-                mez.z1 = 2;
+                mez.z1 = 4;
 %Umisteni svitidel v ose z (POZOR: neosetreno umisteni svitidel nad strop):
-                mez.zS = 2;
+                mez.zS = 3.5;
 %Pocet bodu na stenach v ose x:
-                rov.Nx = 50;
+                rov.Nx = 20;
 %Pocet bodu na stenach v ose y:
                 rov.Ny = 10;
 %Pocet bodu na stenach v ose z:
-                rov.Nz = 10;
+                rov.Nz = 8;
 %Pocatecni fitness
                 fitness = zeros(1, pop.gen);
 
@@ -45,7 +45,7 @@ close;
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDEL
 %Pocet svitidel:
-                svt.N = 8;
+                svt.N = 4;
 %Svitivost s nulovym uhlem
                 svt.I0 = 100;
 %Koeficienty charakteristicke funkce svitivosti (nejvyssi mocnina je vlevo)
@@ -321,9 +321,15 @@ for generace = 1:1:pop.gen
     
     subplot(2,2,4)
     %figure(4)
-    pcolor(rov.bx,rov.by,bod.ME);
+    %pcolor(rov.bx,rov.by,bod.ME);
+    plot(pop.dna(IDX,1:2:((2*svt.N)-1)), pop.dna(IDX,2:2:(2*svt.N)));
+    hold on;
+    image(rov.bx,rov.by,bod.ME,'CDataMapping','scaled');
     xlabel('x (m)');
     ylabel('y (m)');
+    hold off;
+    
+    drawnow; %Vykreslit grafy behem cyklu
     %======================================================================
    
     %Pokud se nejedna o posledni generaci, tak najit potomky
