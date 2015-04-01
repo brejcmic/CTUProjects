@@ -8,7 +8,7 @@ close;
 %Krizeni: jednobodove (udat pravdepodobnost)
                 pop.kriz = 0.9;
 %Mutace (pomerna hodnota):
-                pop.mut = 0.1;
+                pop.mut = 0.15;
 %Pocet generací:
                 pop.gen = 100;
 %Velikost populace:
@@ -54,6 +54,8 @@ close;
                 svt.N = 4;
 %Koeficienty charakteristicke funkce svitivosti (nejvyssi mocnina je vlevo)
                 svt.fc =[-0.5, 1, 1, 0, 0, 1];
+                svt.I0max = svt.I0max/((svt.fc(1)+ svt.fc(2)).^svt.fc(3));
+                svt.I0min = svt.I0min/((svt.fc(1)+ svt.fc(2)).^svt.fc(3));
 %Vyneseni polarniho grafu
 svt.theta = pi:-pi/359:0;
 cosTh = cos([svt.theta,(svt.theta+pi)]);
@@ -382,7 +384,7 @@ for generace = 1:1:pop.gen
     pop.Uo = min(bod.E(:,1:bod.podIDX),[],2)./pop.Eavg;
     
     %Vysledna fitness
-    pop.FIT = 10.^(10*(0.6-pop.Uo)) + (0.1*abs(pop.Eavg-500)).^2;
+    pop.FIT = 10.^((0.6-pop.Uo)) + (0.1*abs(pop.Eavg-500)).^2;
      
     %Pravdepodobnosti vyberu clena populace jako rodice
     pop.prVyb =1./pop.FIT./ sum(1./pop.FIT);
@@ -476,13 +478,35 @@ for generace = 1:1:pop.gen
         %POZOR: prvni clen nesmi mutovat
         pravdepodobnost= rand(pop.N-1,2*svt.N+1);
         pop.mutace = zeros(pop.N-1,2*svt.N+1);
-        pop.mutace(:,1:2:((2*svt.N)-1)) = mstn.x.*rand(pop.N-1,svt.N);
-        pop.mutace(:,2:2:(2*svt.N)) = mstn.y.*rand(pop.N-1,svt.N);
-        pop.mutace(:,2*svt.N+1) = svt.I0min + (svt.I0max-svt.I0min)*rand(pop.N-1, 1);
+%         pop.mutace(:,1:2:((2*svt.N)-1)) = mstn.x.*rand(pop.N-1,svt.N);
+%         pop.mutace(:,2:2:(2*svt.N)) = mstn.y.*rand(pop.N-1,svt.N);
+%         pop.mutace(:,2*svt.N+1) = svt.I0min + (svt.I0max-svt.I0min)*rand(pop.N-1, 1);
+        
+        pop.mutace(:,1:1:(2*svt.N)) = randn(pop.N-1,2*svt.N);
+        pop.mutace(:,svt.N+1) = 100*randn(pop.N-1, 1);
 
         pop.mutace = pop.mutace .* (pravdepodobnost <= pop.mut);
-        pop.dnaP(2:end, :) = pop.dnaP(2:end, :) .* (pravdepodobnost > pop.mut);
+%         pop.dnaP(2:end, :) = pop.dnaP(2:end, :) .* (pravdepodobnost > pop.mut);
         pop.dnaP(2:end, :) = pop.dnaP(2:end, :) + pop.mutace;
+        
+        pop.dnaP(2:end, :) = pop.dnaP(2:end, :) .* (pop.dnaP(2:end, :) >= 0);
+        
+        pop.mutace = mstn.x * (pop.dnaP(2:end, 1:2:((2*svt.N)-1)) > mstn.x);
+        pop.dnaP(2:end, 1:2:((2*svt.N)-1)) = pop.dnaP(2:end, 1:2:((2*svt.N)-1)) .* (pop.dnaP(2:end, 1:2:((2*svt.N)-1)) <= mstn.x);
+        pop.dnaP(2:end, 1:2:((2*svt.N)-1)) = pop.dnaP(2:end, 1:2:((2*svt.N)-1)) + pop.mutace;
+        
+        pop.mutace = mstn.y * (pop.dnaP(2:end, 2:2:(2*svt.N)) > mstn.y);
+        pop.dnaP(2:end, 2:2:(2*svt.N)) = pop.dnaP(2:end, 2:2:(2*svt.N)) .* (pop.dnaP(2:end, 2:2:(2*svt.N)) <= mstn.y);
+        pop.dnaP(2:end, 2:2:(2*svt.N)) = pop.dnaP(2:end, 2:2:(2*svt.N)) + pop.mutace;
+        
+        pop.mutace = svt.I0max * (pop.dnaP(2:end, (2*svt.N)+1) > svt.I0max);
+        pop.dnaP(2:end, (2*svt.N)+1) = pop.dnaP(2:end, (2*svt.N)+1) .* (pop.dnaP(2:end, (2*svt.N)+1) <= svt.I0max);
+        pop.dnaP(2:end, (2*svt.N)+1) = pop.dnaP(2:end, (2*svt.N)+1) + pop.mutace;
+        
+        pop.mutace = svt.I0min * (pop.dnaP(2:end, (2*svt.N)+1) < svt.I0min);
+        pop.dnaP(2:end, (2*svt.N)+1) = pop.dnaP(2:end, (2*svt.N)+1) .* (pop.dnaP(2:end, (2*svt.N)+1) >= svt.I0min);
+        pop.dnaP(2:end, (2*svt.N)+1) = pop.dnaP(2:end, (2*svt.N)+1) + pop.mutace;
+        
         %------------------------------------------------------------------
         %NOVA GENERACE
         %------------------------------------------------------------------
