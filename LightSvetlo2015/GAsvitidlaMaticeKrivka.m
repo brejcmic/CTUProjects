@@ -3,8 +3,7 @@ clc;
 close;
 %Reseni vyzarovaci char. pomoci genetickeho algoritmu. Na zacatku se zvoli
 %pocet svitidel a jejich rozmisteni.
-%DNA: vyjadruje koeficienty goniometrickeho polynomu. Koeficient s nultou
-%mocninou je nejvice v pravo.
+%DNA: vyjadruje koeficienty goniometrickeho polynomu a exponent.
 %Krizeni: jednobodove (udat pravdepodobnost)
                 pop.kriz = 0.9;
 %Mutace (pomerna hodnota):
@@ -12,7 +11,7 @@ close;
 %Pocet generací:
                 pop.gen = 50;
 %Velikost populace:
-                pop.N = 100;
+                pop.N = 200;
 %Royerz mistnosti v m:
                 mstn.x = 10;
                 mstn.y = 5;
@@ -37,15 +36,18 @@ close;
                 mstn.COpod = 0.2;
 %Uvazovany pocet odrazu:
                 mstn.Nodr = 3;
+%Vyska srovnavaci roviny:
+                mstn.sRov = 0.8;
                 
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDEL
 %Souradnice svitidel (poyor, at nejsou svitidla mimo prostor mistnosti):
-                svt.x = [1, 9, 1];
-                svt.y = [1, 2, 2];
-                svt.z = [3.5, 3.5, 3.5];
+                svt.x = [1, 9];
+                svt.y = [1, 4];
+                svt.z = [3.5, 3.5,];
 %Pocet svitidel:
                 svt.N = length(svt.x);
+                svt.theta = pi:-pi/359:0;
 
 %%
 %--------------------------------------------------------------------------
@@ -140,8 +142,9 @@ pop.Essq = zeros(1,pop.N);
 pop.prVyb = zeros(1,pop.N);
 %opakovat tolikrat, kolik je pozadovano generaci
 for generace = 1:1:pop.gen
-    %pocatecni osvetlenost je nulova
+    %pocatecni osvetlenost a tok jsou nulovi
     bod.E = zeros(pop.N,bod.stVIDX);
+    svt.Fi= zeros(pop.N,1);
     %----------------------------------------------------------------------
     %Vypocet osvetleni vsech bodu pro kazdeho clena populace
     for clen = 1:1:pop.N
@@ -283,19 +286,19 @@ for generace = 1:1:pop.gen
         %0) nastaveni pocatecnich podminek
         %pocatecni osvetlenost vsech sten
         bod.Eo = bod.E(clen,:);
-        %vynulovani osvetlenosti pod urovni sledovane roviny (0.85 m)
-        bod.Eo = bod.Eo .* (bod.z > 0.85);
+        %vynulovani osvetlenosti pod urovni sledovane roviny (mstn.sRov v m)
+        bod.Eo = bod.Eo .* (bod.z > mstn.sRov);
 
         %1) osvetlenost srovnavaci roviny od svitidel
         x= svt.x'*ones(1, bod.podIDX);
         y= svt.y'*ones(1, bod.podIDX);
         z= svt.z'*ones(1, bod.podIDX);
         %kvadrat vzdalenosti bodu od svitidla
-        lSB = (((x-ones(svt.N, 1)*bod.x(1:bod.podIDX)).^2 + (y-ones(svt.N, 1)*bod.y(1:bod.podIDX)).^2 + (z-ones(svt.N, 1)*(bod.z(1:bod.podIDX)-0.85)).^2)).^0.5+eps;
+        lSB = (((x-ones(svt.N, 1)*bod.x(1:bod.podIDX)).^2 + (y-ones(svt.N, 1)*bod.y(1:bod.podIDX)).^2 + (z-ones(svt.N, 1)*(bod.z(1:bod.podIDX)-mstn.sRov)).^2)).^0.5+eps;
 
         %2) cosiny a siny uhlu od normaly svitidla
         %jen tady lze pocitat cosinus bez absolutni hodnoty
-        cosTh = (z-ones(svt.N, 1)*(bod.z(1:bod.podIDX)-0.85))./lSB;
+        cosTh = (z-ones(svt.N, 1)*(bod.z(1:bod.podIDX)-mstn.sRov))./lSB;
         sinTh = (1 - cosTh.^2).^0.5;
 
         %3) urceni svitivosti v jednotlivych uhlech
@@ -304,73 +307,83 @@ for generace = 1:1:pop.gen
         cosfi = cosTh .* (cosTh > 0);
         bod.I = pop.dna(clen, 7) .* (polyval([pop.dna(clen, 1:2) 0], cosfi).^pop.dna(clen, 3) + polyval([pop.dna(clen, 4:5) 0], sinTh).^pop.dna(clen, 6));
 
-        %Vypocet osvetleni na srovnavaci rovine
+        %Vypocet osvetleni na srovnavaci rovine nahrazuje osvetleni na
+        %podlaze
         bod.E(clen,1:bod.podIDX)= sum(bod.I(:, 1:bod.podIDX) .* abs(cosTh(:, 1:bod.podIDX)) ./ lSB(:, 1:bod.podIDX).^2, 1);
 
         %------------------------------------------------------------------
-        %Urceni Osvetlenosti bodu ve srovnavaci rovine od sten
+        %Urceni osvetlenosti bodu ve srovnavaci rovine od sten
         %------------------------------------------------------------------
 
         %1) svitici body na strope
-
-            %kvadrat vzdalenosti sviticiho a osvetlovaneho bodu
-            %pouziva se jako jmenovatel, promenna eps zamezi deleni
-            %nulou
-            lsq= ((bod.x(bod.podIDX+1:bod.strIDX)'*ones(1, bod.podIDX)-ones(mstn.Nx*mstn.Ny, 1)*bod.x(1:bod.podIDX)).^2 + (bod.y(bod.podIDX+1:bod.strIDX)'*ones(1, bod.podIDX)-ones(mstn.Nx*mstn.Ny, 1)*bod.y(1:bod.podIDX)).^2 + (bod.z(bod.podIDX+1:bod.strIDX)'*ones(1, bod.podIDX)-ones(mstn.Nx*mstn.Ny, 1)*(bod.z(1:bod.podIDX)-0.85)).^2)+eps;
-            %kosiny a siny uhlu od normaly sviticiho bodu
-            cosTh = abs(bod.z(bod.podIDX+1:bod.strIDX)'*ones(1, bod.podIDX)-ones(mstn.Nx*mstn.Ny, 1)*(bod.z(1:bod.podIDX)-0.85))./(lsq.^0.5);
-            %Svitivost bodu v nulovem uhlu
-            I0 = (bod.Eo(bod.podIDX+1:bod.strIDX) .* mstn.COstr .* bod.A(bod.podIDX+1:bod.strIDX)./ pi)'*ones(1, bod.podIDX);
-            %Vypocet osveteni na srovnavaci rovine
-            %Predpokladaji se difuzni steny, stena je rovnobezna, odtud
-            %nasobeni kosinem
-            bod.Ev= sum((I0 .* cosTh.^2) ./ lsq);
+        %kvadrat vzdalenosti sviticiho a osvetlovaneho bodu
+        %pouziva se jako jmenovatel, promenna eps zamezi deleni
+        %nulou
+        lsq= ((bod.x(bod.podIDX+1:bod.strIDX)'*ones(1, bod.podIDX)-ones(mstn.Nx*mstn.Ny, 1)*bod.x(1:bod.podIDX)).^2 + (bod.y(bod.podIDX+1:bod.strIDX)'*ones(1, bod.podIDX)-ones(mstn.Nx*mstn.Ny, 1)*bod.y(1:bod.podIDX)).^2 + (bod.z(bod.podIDX+1:bod.strIDX)'*ones(1, bod.podIDX)-ones(mstn.Nx*mstn.Ny, 1)*(bod.z(1:bod.podIDX)-mstn.sRov)).^2)+eps;
+        %kosiny a siny uhlu od normaly sviticiho bodu
+        cosTh = abs(bod.z(bod.podIDX+1:bod.strIDX)'*ones(1, bod.podIDX)-ones(mstn.Nx*mstn.Ny, 1)*(bod.z(1:bod.podIDX)-mstn.sRov))./(lsq.^0.5);
+        %Svitivost bodu v nulovem uhlu
+        I0 = (bod.Eo(bod.podIDX+1:bod.strIDX) .* mstn.COstr .* bod.A(bod.podIDX+1:bod.strIDX)./ pi)'*ones(1, bod.podIDX);
+        %Vypocet osveteni na srovnavaci rovine
+        %Predpokladaji se difuzni steny, stena je rovnobezna, odtud
+        %nasobeni kosinem
+        bod.Ev= sum((I0 .* cosTh.^2) ./ lsq);
 
         %2) svitici body na stenach JIH a SEVER
-
-            %kvadrat vzdalenosti sviticiho a osvetlovaneho bodu
-            %pouziva se jako jmenovatel, promenna eps zamezi deleni
-            %nulou
-            lsq= ((bod.x(bod.strIDX+1:bod.stSIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Nx*mstn.Nz, 1)*bod.x(1:bod.podIDX)).^2 + (bod.y(bod.strIDX+1:bod.stSIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Nx*mstn.Nz, 1)*bod.y(1:bod.podIDX)).^2 + (bod.z(bod.strIDX+1:bod.stSIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Nx*mstn.Nz, 1)*(bod.z(1:bod.podIDX)-0.85)).^2)+eps;
-            %kosiny a siny uhlu od normaly sviticiho bodu
-            cosTh = abs(bod.y(bod.strIDX+1:bod.stSIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Nx*mstn.Nz, 1)*bod.y(1:bod.podIDX))./(lsq.^0.5);
-            sinTh = (1 - cosTh.^2).^0.5;
-            %Svitivost bodu v nulovem uhlu (vynulovany ty body, ktere jsou pod z= 0.85 m)
-            I0 = (bod.Eo(bod.strIDX+1:bod.stSIDX) .* mstn.COste .* bod.A(bod.strIDX+1:bod.stSIDX)./ pi)'*ones(1, bod.podIDX);
-            %Vypocet osveteni na srovnavaci rovine
-            %Predpokladaji se difuzni steny, stena je kolma, odtud
-            %nasobeni sinem
-            bod.Ev = bod.Ev + sum(I0 .* cosTh .* sinTh ./ lsq);
+        %kvadrat vzdalenosti sviticiho a osvetlovaneho bodu
+        %pouziva se jako jmenovatel, promenna eps zamezi deleni
+        %nulou
+        lsq= ((bod.x(bod.strIDX+1:bod.stSIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Nx*mstn.Nz, 1)*bod.x(1:bod.podIDX)).^2 + (bod.y(bod.strIDX+1:bod.stSIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Nx*mstn.Nz, 1)*bod.y(1:bod.podIDX)).^2 + (bod.z(bod.strIDX+1:bod.stSIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Nx*mstn.Nz, 1)*(bod.z(1:bod.podIDX)-mstn.sRov)).^2)+eps;
+        %kosiny a siny uhlu od normaly sviticiho bodu
+        cosTh = abs(bod.y(bod.strIDX+1:bod.stSIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Nx*mstn.Nz, 1)*bod.y(1:bod.podIDX))./(lsq.^0.5);
+        sinTh = (1 - cosTh.^2).^0.5;
+        %Svitivost bodu v nulovem uhlu (uz jsou vynulovany ty body, ktere jsou pod mstn.sRov)
+        I0 = (bod.Eo(bod.strIDX+1:bod.stSIDX) .* mstn.COste .* bod.A(bod.strIDX+1:bod.stSIDX)./ pi)'*ones(1, bod.podIDX);
+        %Vypocet osvetleni na srovnavaci rovine
+        %Predpokladaji se difuzni steny, stena je kolma, odtud
+        %nasobeni sinem
+        bod.Ev = bod.Ev + sum(I0 .* cosTh .* sinTh ./ lsq);
 
         %3) svitici body na stenach ZAPAD a VYCHOD
-
-            %kvadrat vzdalenosti sviticiho a osvetlovaneho bodu
-            %pouziva se jako jmenovatel, promenna eps zamezi deleni
-            %nulou
-            lsq= ((bod.x(bod.stSIDX+1:1:bod.stVIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Ny*mstn.Nz, 1)*bod.x(1:bod.podIDX)).^2 + (bod.y(bod.stSIDX+1:1:bod.stVIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Ny*mstn.Nz, 1)*bod.y(1:bod.podIDX)).^2 + (bod.z(bod.stSIDX+1:1:bod.stVIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Ny*mstn.Nz, 1)*(bod.z(1:bod.podIDX)-0.85)).^2)+eps;
-            %kosiny a siny uhlu od normaly sviticiho bodu
-            cosTh = abs(bod.x(bod.stSIDX+1:1:bod.stVIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Ny*mstn.Nz, 1)*bod.x(1:bod.podIDX))./(lsq.^0.5);
-            sinTh = (1 - cosTh.^2).^0.5;
-            %Svitivost bodu v nulovem uhlu (vynulovany ty body, ktere jsou pod z= 0.85 m)
-            I0 = (bod.Eo(bod.stSIDX+1:1:bod.stVIDX) .* mstn.COste .* bod.A(bod.stSIDX+1:1:bod.stVIDX)./ pi)'*ones(1, bod.podIDX);
-            %Vypocet osveteni na podlaze, strope a stenach JIH a SEVER
-            %Predpokladaji se difuzni steny, stena je kolma, odtud
-            %nasobeni sinem
-            bod.Ev = bod.Ev + sum(I0 .* cosTh .* sinTh ./ lsq);
+        %kvadrat vzdalenosti sviticiho a osvetlovaneho bodu
+        %pouziva se jako jmenovatel, promenna eps zamezi deleni
+        %nulou
+        lsq= ((bod.x(bod.stSIDX+1:1:bod.stVIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Ny*mstn.Nz, 1)*bod.x(1:bod.podIDX)).^2 + (bod.y(bod.stSIDX+1:1:bod.stVIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Ny*mstn.Nz, 1)*bod.y(1:bod.podIDX)).^2 + (bod.z(bod.stSIDX+1:1:bod.stVIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Ny*mstn.Nz, 1)*(bod.z(1:bod.podIDX)-mstn.sRov)).^2)+eps;
+        %kosiny a siny uhlu od normaly sviticiho bodu
+        cosTh = abs(bod.x(bod.stSIDX+1:1:bod.stVIDX)'*ones(1, bod.podIDX)-ones(2*mstn.Ny*mstn.Nz, 1)*bod.x(1:bod.podIDX))./(lsq.^0.5);
+        sinTh = (1 - cosTh.^2).^0.5;
+        %Svitivost bodu v nulovem uhlu (vynulovany ty body, ktere jsou pod z= mstn.sRov)
+        I0 = (bod.Eo(bod.stSIDX+1:1:bod.stVIDX) .* mstn.COste .* bod.A(bod.stSIDX+1:1:bod.stVIDX)./ pi)'*ones(1, bod.podIDX);
+        %Vypocet osveteni na podlaze, strope a stenach JIH a SEVER
+        %Predpokladaji se difuzni steny, stena je kolma, odtud
+        %nasobeni sinem
+        bod.Ev = bod.Ev + sum(I0 .* cosTh .* sinTh ./ lsq);
 
         %Pricteni prirustku k celkove osvetlenosti
         bod.E(clen,1:bod.podIDX) = bod.E(clen,1:bod.podIDX) + bod.Ev;
+        
+        %------------------------------------------------------------------
+        %Urceni toku
+        %------------------------------------------------------------------
+        cosTh = cos(svt.theta);
+        sinTh = (1 - cosTh.^2).^0.5;
+        cosTh = cosTh .* (cosTh > 0);
+        svt.I = pop.dna(clen, 7) .* (polyval([pop.dna(clen, 1:2) 0], cosTh).^pop.dna(clen, 3) + polyval([pop.dna(clen, 4:5) 0], sinTh).^pop.dna(clen, 6));
+        svt.OmegaTh= 4*pi*pi*sinTh/360;
+        svt.Fi(clen)= sum(svt.I.*svt.OmegaTh);
     end
     
     %------------------------------------------------------------------
     %Urceni fitness funkce clenu populace
     %------------------------------------------------------------------
     %Prumerna hodnota osvetlenosti na podlaze
-    pop.Eavg = sum(bod.E(:,1:bod.podIDX), 2) * ones(1, mstn.Nx*mstn.Ny)./mstn.Nx ./mstn.Ny;
-    %Prumerny soucet ctvercu odchylek od prumerne osvetlenosti
-    pop.Essq = sum((bod.E(:,1:bod.podIDX) - pop.Eavg).^2, 2)/bod.podIDX;
+    pop.Eavg = sum(bod.E(:,1:bod.podIDX), 2)./bod.podIDX;
+
+    %Rovnomernost
+    pop.Uo = min(bod.E(:,1:bod.podIDX),[],2)./pop.Eavg;
     
-    pop.FIT = abs(pop.Eavg(:, 1)-500) + (pop.dna(:, 7)/10000) + pop.Essq./pop.Eavg(:, 1);
+    %Vysledna fitness
+    pop.FIT = (0.01*exp(5*(0.6-pop.Uo).*(pop.Uo < 0.6)) + (abs(pop.Eavg-500)).^2) .* svt.Fi;
      
     %Pravdepodobnosti vyberu clena populace jako rodice
     pop.prVyb =1./pop.FIT./ sum(1./pop.FIT);
@@ -383,7 +396,7 @@ for generace = 1:1:pop.gen
     %Vyneseni fitness funkce
     figure(2)
     subplot(2,2,1)
-    pop.fitness(generace:end) = pop.FIT(IDX);
+    pop.fitness(generace:end) = log(pop.FIT(IDX));
     plot(pop.fitness);
     title('Fitness nejlepsich jedincu');
     xlabel('historie (n)')
@@ -393,12 +406,11 @@ for generace = 1:1:pop.gen
     %Zobrazeni nejlepsiho vysledku teto generace
     subplot(2,2,2)
     %Vyneseni polarniho grafu
-    cosTh = -1:1/500:1;
-    svt.theta = acos(cosTh);
+    cosTh = cos([svt.theta,(svt.theta+pi)]);
     sinTh = (1 - cosTh.^2).^0.5;
     cosTh = cosTh .* (cosTh > 0);
     svt.I = pop.dna(IDX, 7) .* (polyval([pop.dna(IDX, 1:2) 0], cosTh).^pop.dna(IDX, 3) + polyval([pop.dna(IDX, 4:5) 0], sinTh).^pop.dna(IDX, 6));
-    set(polar(svt.theta,svt.I),'color','r','linewidth',2)
+    set(polar([svt.theta,(svt.theta+pi)],svt.I),'color','r','linewidth',2)
     view([90, 90]);
     title(sprintf('Nejlepsi jedinec, generace = %i, P_{vyberu}= %3.2f %%', generace, pop.prVyb(IDX)*100));
     grid on;
