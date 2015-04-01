@@ -485,13 +485,13 @@ for generace = 1:1:pop.gen
         %------------------------------------------------------------------
         %MUTACE potomku
         %------------------------------------------------------------------
-        %POZOR: prvni dva clenove nesmi mutovat
-        pravdepodobnost= rand(pop.N-2,pop.DNAlength);
-        pop.mutace = [-1 + 2*rand(pop.N-2, 1), 1 + rand(pop.N-2, 1), 1 + 2*rand(pop.N-2, 1), -1 + 2*rand(pop.N-2, 1), 1 + rand(pop.N-2, 1), 1 + 2*rand(pop.N-2, 1), 10 + 99990*rand(pop.N-2, 1)];
+        %POZOR: prvni clen nesmi mutovat
+        pravdepodobnost= rand(pop.N-1,pop.DNAlength);
+        pop.mutace = [-1 + 2*rand(pop.N-1, 1), 1 + rand(pop.N-1, 1), 1 + 2*rand(pop.N-1, 1), -1 + 2*rand(pop.N-1, 1), 1 + rand(pop.N-1, 1), 1 + 2*rand(pop.N-1, 1), 10 + 99990*rand(pop.N-1, 1)];
         
         pop.mutace = pop.mutace .* (pravdepodobnost <= pop.mut);
-        pop.dnaP(3:end, :) = pop.dnaP(3:end, :) .* (pravdepodobnost > pop.mut);
-        pop.dnaP(3:end, :) = pop.dnaP(3:end, :) + pop.mutace;
+        pop.dnaP(2:end, :) = pop.dnaP(2:end, :) .* (pravdepodobnost > pop.mut);
+        pop.dnaP(2:end, :) = pop.dnaP(2:end, :) + pop.mutace;
         %------------------------------------------------------------------
         %NOVA GENERACE
         %------------------------------------------------------------------

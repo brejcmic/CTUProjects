@@ -13,6 +13,8 @@ close;
                 pop.gen = 100;
 %Velikost populace:
                 pop.N = 200;
+%Pocet jedincu v turnaji:
+                pop.N_turnament = 3;
 %Royerz mistnosti v m:
                 mstn.x = 10;
                 mstn.y = 5;
@@ -380,7 +382,7 @@ for generace = 1:1:pop.gen
     pop.Uo = min(bod.E(:,1:bod.podIDX),[],2)./pop.Eavg;
     
     %Vysledna fitness
-    pop.FIT = (10.^(10*(0.6-pop.Uo)) + 0.1*(abs(pop.Eavg-500)).^2);
+    pop.FIT = 10.^(10*(0.6-pop.Uo)) + (0.1*abs(pop.Eavg-500)).^2;
      
     %Pravdepodobnosti vyberu clena populace jako rodice
     pop.prVyb =1./pop.FIT./ sum(1./pop.FIT);
@@ -393,7 +395,7 @@ for generace = 1:1:pop.gen
     %Vyneseni fitness funkce
     figure(1)
     subplot(2,2,1)
-    pop.fitness(generace:end) = log(pop.FIT(IDX));
+    pop.fitness(generace:end) = log10(pop.FIT(IDX));
     plot(pop.fitness);
     title(sprintf('E_{avg} = %0.0f lx, U_{o}= %0.2f', pop.Eavg(IDX), pop.Uo(IDX)));
     xlabel('historie (n)')
@@ -443,29 +445,22 @@ for generace = 1:1:pop.gen
         %KRIZENI - vyber rodicu a vytvareni potomku
         %------------------------------------------------------------------
         %opakovat hledani dokud nebude vytvorena nova populace velikosti N
+        pop.i= zeros(1,3);
+        pop.p= zeros(1,2);
         for clen = 3:2:pop.N
-            %nahodne: vyber rodice1, vyber rodice2, index krizeni
-            pravdepodobnost = rand(1,3);
+            %Turnajovy vyber rodicu
             %Index prvniho rodice
-            for i= 1:1:pop.N
-                if pravdepodobnost(1) > 0
-                    pop.i(1) = i;
-                end
-                pravdepodobnost(1)= pravdepodobnost(1)- pop.prVyb(i);
-            end
+            pravdepodobnost = ceil(pop.N*rand(1,pop.N_turnament)+eps);
+            [pop.p(1), pop.i(1)]= max(pop.prVyb(pravdepodobnost));
+            pop.i(1)= pravdepodobnost(pop.i(1));
 
             %Index druheho rodice
-            for i= 1:1:pop.N
-                if i~= pop.i(1)
-                    if pravdepodobnost(2) > 0
-                        pop.i(2) = i;
-                    end
-                    pravdepodobnost(2)= pravdepodobnost(2)- pop.prVyb(i);
-                end
-            end
+            pravdepodobnost = ceil(pop.N*rand(1,pop.N_turnament)+eps);
+            [pop.p(2), pop.i(2)]= max(pop.prVyb(pravdepodobnost));
+            pop.i(2)= pravdepodobnost(pop.i(2));
 
             %Krizeni - podle indexu a dle pravdepodobnosti krizeni
-            pop.i(3)= ceil((2*svt.N+1)*pravdepodobnost(3)/pop.kriz);
+            pop.i(3)= ceil((2*svt.N+1)*rand(1,1)/pop.kriz + eps);
             if pop.i(3) >= (2*svt.N+1) %zde nekrizit
                 pop.dnaP(clen, :) = pop.dna(pop.i(1), :);
                 pop.dnaP(clen+1, :) = pop.dna(pop.i(2), :);
@@ -478,16 +473,16 @@ for generace = 1:1:pop.gen
         %------------------------------------------------------------------
         %MUTACE potomku
         %------------------------------------------------------------------
-        %POZOR: prvni dva clenove nesmi mutovat
-        pravdepodobnost= rand(pop.N-2,2*svt.N+1);
-        pop.mutace = zeros(pop.N-2,2*svt.N+1);
-        pop.mutace(:,1:2:((2*svt.N)-1)) = mstn.x.*rand(pop.N-2,svt.N);
-        pop.mutace(:,2:2:(2*svt.N)) = mstn.y.*rand(pop.N-2,svt.N);
-        pop.mutace(:,2*svt.N+1) = svt.I0min + (svt.I0max-svt.I0min)*rand(pop.N-2, 1);
+        %POZOR: prvni clen nesmi mutovat
+        pravdepodobnost= rand(pop.N-1,2*svt.N+1);
+        pop.mutace = zeros(pop.N-1,2*svt.N+1);
+        pop.mutace(:,1:2:((2*svt.N)-1)) = mstn.x.*rand(pop.N-1,svt.N);
+        pop.mutace(:,2:2:(2*svt.N)) = mstn.y.*rand(pop.N-1,svt.N);
+        pop.mutace(:,2*svt.N+1) = svt.I0min + (svt.I0max-svt.I0min)*rand(pop.N-1, 1);
 
         pop.mutace = pop.mutace .* (pravdepodobnost <= pop.mut);
-        pop.dnaP(3:end, :) = pop.dnaP(3:end, :) .* (pravdepodobnost > pop.mut);
-        pop.dnaP(3:end, :) = pop.dnaP(3:end, :) + pop.mutace;
+        pop.dnaP(2:end, :) = pop.dnaP(2:end, :) .* (pravdepodobnost > pop.mut);
+        pop.dnaP(2:end, :) = pop.dnaP(2:end, :) + pop.mutace;
         %------------------------------------------------------------------
         %NOVA GENERACE
         %------------------------------------------------------------------
