@@ -44,7 +44,7 @@ close;
 %Souradnice svitidel (poyor, at nejsou svitidla mimo prostor mistnosti):
                 svt.x = [1, 9];
                 svt.y = [1, 4];
-                svt.z = [3.5, 3.5,];
+                svt.z = [3.5, 3.5];
 %Pocet svitidel:
                 svt.N = length(svt.x);
                 svt.theta = pi:-pi/359:0;
@@ -432,6 +432,7 @@ for generace = 1:1:pop.gen
     plot(svt.x, svt.y, 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'y', 'MarkerEdgeColor', 'k');
     xlabel('x (m)');
     ylabel('y (m)');
+    axis([0 mstn.x 0 mstn.y]);
     hold off;
     
     drawnow; %Vykreslit grafy behem cyklu
