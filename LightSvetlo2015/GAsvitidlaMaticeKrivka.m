@@ -12,6 +12,12 @@ close;
                 pop.gen = 50;
 %Velikost populace:
                 pop.N = 200;
+%Pocet jedincu v turnaji:
+                pop.N_turnament = 3;
+%krok pozice:
+                pop.stepPar = 0.1;
+%krok svitivosti:
+                pop.stepI0 = 100;
 %Royerz mistnosti v m:
                 mstn.x = 10;
                 mstn.y = 5;
@@ -25,7 +31,13 @@ close;
                 mstn.Nz = 8;
 %Pocatecni fitness
                 pop.fitness = zeros(1, pop.gen);
-
+%--------------------------------------------------------------------------
+%Fenotyp - cilove paramety
+%Pocet bodu na stenach v ose z:
+                target.Eavg = 500;
+%Pocatecni fitness
+                target.Uo = 0.6;
+%Navic minimalizujeme celkovy tok svitidla
 %--------------------------------------------------------------------------
 %PARAMETRY STEN
 %Cinitel odrazu stropu:
@@ -131,6 +143,8 @@ clear stenaZ;
 % EA,EB... <1, 3> maximalni exponent stejny jako u cosinu
 % I0... <10, 10000>
 %Pocatecni populace je nahodna:
+pop.dnaMax = [1 2 3 1 2 3 10000];
+pop.dnaMin = [-1 1 1 -1 1 1 10];
 pop.dna = [-1 + 2*rand(pop.N, 1), 1 + rand(pop.N, 1), 1 + 2*rand(pop.N, 1), -1 + 2*rand(pop.N, 1), 1 + rand(pop.N, 1), 1 + 2*rand(pop.N, 1), 10 + 99990*rand(pop.N, 1)];
 pop.DNAlength = length(pop.dna(1,:));
 %--------------------------------------------------------------------------
@@ -383,7 +397,7 @@ for generace = 1:1:pop.gen
     pop.Uo = min(bod.E(:,1:bod.podIDX),[],2)./pop.Eavg;
     
     %Vysledna fitness
-    pop.FIT = (0.01*exp(5*(0.6-pop.Uo).*(pop.Uo < 0.6)) + (abs(pop.Eavg-500)).^2) .* svt.Fi;
+    pop.FIT = (10.^((target.Uo-pop.Uo).*(pop.Uo < target.Uo)) + 0.1*(pop.Eavg-target.Eavg).^2).*svt.Fi;
      
     %Pravdepodobnosti vyberu clena populace jako rodice
     pop.prVyb =1./pop.FIT./ sum(1./pop.FIT);
@@ -398,7 +412,7 @@ for generace = 1:1:pop.gen
     subplot(2,2,1)
     pop.fitness(generace:end) = log(pop.FIT(IDX));
     plot(pop.fitness);
-    title('Fitness nejlepsich jedincu');
+    title(sprintf('E_{avg} = %0.0f lx, U_{o}= %0.2f', pop.Eavg(IDX), pop.Uo(IDX)));
     xlabel('historie (n)')
     ylabel('Fitness');
     grid on;
@@ -450,30 +464,23 @@ for generace = 1:1:pop.gen
         %KRIZENI - vyber rodicu a vytvareni potomku
         %------------------------------------------------------------------
         %opakovat hledani dokud nebude vytvorena nova populace velikosti N
+        pop.i= zeros(1,3);
+        pop.p= zeros(1,2);
         for clen = 3:2:pop.N
-            %nahodne: vyber rodice1, vyber rodice2, index krizeni
-            pravdepodobnost = rand(1,3);
+            %Turnajovy vyber rodicu
             %Index prvniho rodice
-            for i= 1:1:pop.N
-                if pravdepodobnost(1) > 0
-                    pop.i(1) = i;
-                end
-                pravdepodobnost(1)= pravdepodobnost(1)- pop.prVyb(i);
-            end
+            pravdepodobnost = ceil(pop.N*rand(1,pop.N_turnament)+eps);
+            [pop.p(1), pop.i(1)]= max(pop.prVyb(pravdepodobnost));
+            pop.i(1)= pravdepodobnost(pop.i(1));
 
             %Index druheho rodice
-            for i= 1:1:pop.N
-                if i~= pop.i(1)
-                    if pravdepodobnost(2) > 0
-                        pop.i(2) = i;
-                    end
-                    pravdepodobnost(2)= pravdepodobnost(2)- pop.prVyb(i);
-                end
-            end
+            pravdepodobnost = ceil(pop.N*rand(1,pop.N_turnament)+eps);
+            [pop.p(2), pop.i(2)]= max(pop.prVyb(pravdepodobnost));
+            pop.i(2)= pravdepodobnost(pop.i(2));
 
             %Krizeni - podle indexu a dle pravdepodobnosti krizeni
-            pop.i(3)= ceil(pop.DNAlength*pravdepodobnost(3)/pop.kriz);
-            if pop.i(3) >= pop.DNAlength %zde nekrizit
+            pop.i(3)= ceil(pop.DNAlength*rand(1,1)/pop.kriz + eps);
+            if pop.i(3) >= (pop.DNAlength) %zde nekrizit
                 pop.dnaP(clen, :) = pop.dna(pop.i(1), :);
                 pop.dnaP(clen+1, :) = pop.dna(pop.i(2), :);
             else %zde krizit
@@ -487,11 +494,21 @@ for generace = 1:1:pop.gen
         %------------------------------------------------------------------
         %POZOR: prvni clen nesmi mutovat
         pravdepodobnost= rand(pop.N-1,pop.DNAlength);
-        pop.mutace = [-1 + 2*rand(pop.N-1, 1), 1 + rand(pop.N-1, 1), 1 + 2*rand(pop.N-1, 1), -1 + 2*rand(pop.N-1, 1), 1 + rand(pop.N-1, 1), 1 + 2*rand(pop.N-1, 1), 10 + 99990*rand(pop.N-1, 1)];
-        
+        pop.mutace = zeros(pop.N-1,7);
+        pop.mutace(:,1:1:6) = pop.stepPar .* randn(pop.N-1,6);
+        pop.mutace(:,7) = pop.stepI0 .* randn(pop.N-1, 1);
+        %zvyseni hodnoty
         pop.mutace = pop.mutace .* (pravdepodobnost <= pop.mut);
-        pop.dnaP(2:end, :) = pop.dnaP(2:end, :) .* (pravdepodobnost > pop.mut);
         pop.dnaP(2:end, :) = pop.dnaP(2:end, :) + pop.mutace;
+        %omezeni zdola
+        pop.mutace = (ones(pop.N-1,1)*pop.dnaMin) .* (pop.dnaP(2:end,:) < (ones(pop.N-1,1)*pop.dnaMin));
+        pop.dnaP(2:end,:) = pop.dnaP(2:end,:) .* (pop.dnaP(2:end,:) >= (ones(pop.N-1,1)*pop.dnaMin));
+        pop.dnaP(2:end,:) = pop.dnaP(2:end,:) + pop.mutace;
+        %omezeni shora
+        pop.mutace = (ones(pop.N-1,1)*pop.dnaMax) .* (pop.dnaP(2:end,:) > (ones(pop.N-1,1)*pop.dnaMax));
+        pop.dnaP(2:end,:) = pop.dnaP(2:end,:) .* (pop.dnaP(2:end,:) <= (ones(pop.N-1,1)*pop.dnaMax));
+        pop.dnaP(2:end,:) = pop.dnaP(2:end,:) + pop.mutace;
+        
         %------------------------------------------------------------------
         %NOVA GENERACE
         %------------------------------------------------------------------
