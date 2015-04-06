@@ -13,7 +13,7 @@ close;
 %Velikost populace:
                 pop.N = 200;
 %Pocet jedincu v turnaji:
-                pop.N_turnament = 3;
+                pop.N_turnament = 4;
 %krok pozice:
                 pop.stepPar = 0.1;
 %krok svitivosti:
@@ -53,10 +53,10 @@ close;
                 
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDEL
-%Souradnice svitidel (poyor, at nejsou svitidla mimo prostor mistnosti):
-                svt.x = [1, 9];
-                svt.y = [1, 4];
-                svt.z = [3.5, 3.5];
+%Souradnice svitidel (pozor, at nejsou svitidla mimo prostor mistnosti):
+                svt.x = [1, 5, 9, 1, 5, 9];
+                svt.y = [1, 1, 1, 4, 4, 4];
+                svt.z = [3.5, 3.5, 3.5, 3.5, 3.5, 3.5];
 %Pocet svitidel:
                 svt.N = length(svt.x);
                 svt.theta = pi:-pi/359:0;
@@ -395,9 +395,12 @@ for generace = 1:1:pop.gen
 
     %Rovnomernost
     pop.Uo = min(bod.E(:,1:bod.podIDX),[],2)./pop.Eavg;
+    pop.var = sum((bod.E(:,1:bod.podIDX) - pop.Eavg*ones(1,bod.podIDX)).^2, 2)./bod.podIDX;
+    pop.var = (pop.var.^0.5)./pop.Eavg;
     
     %Vysledna fitness
-    pop.FIT = (10.^((target.Uo-pop.Uo).*(pop.Uo < target.Uo)) + 0.1*(pop.Eavg-target.Eavg).^2).*svt.Fi;
+%     pop.FIT = (1 + ((10*(target.Uo-pop.Uo)).^2).*(pop.Uo < target.Uo) + (0.1*(pop.Eavg-target.Eavg)).^2).*svt.Fi;
+    pop.FIT = (pop.var.^2 + (0.1*(pop.Eavg-target.Eavg)).^2).*svt.Fi;
      
     %Pravdepodobnosti vyberu clena populace jako rodice
     pop.prVyb =1./pop.FIT./ sum(1./pop.FIT);
@@ -412,7 +415,7 @@ for generace = 1:1:pop.gen
     subplot(2,2,1)
     pop.fitness(generace:end) = log(pop.FIT(IDX));
     plot(pop.fitness);
-    title(sprintf('E_{avg} = %0.0f lx, U_{o}= %0.2f', pop.Eavg(IDX), pop.Uo(IDX)));
+    title(sprintf('E_{avg} = %0.0f lx, U_{o}= %0.2f, Flux = %0.0f lm', pop.Eavg(IDX), pop.Uo(IDX), svt.Fi(IDX)));
     xlabel('historie (n)')
     ylabel('Fitness');
     grid on;
