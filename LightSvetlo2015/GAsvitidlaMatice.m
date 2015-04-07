@@ -14,7 +14,11 @@ close;
 %Velikost populace:
                 pop.N = 200;
 %Pocet jedincu v turnaji:
-                pop.N_turnament = 3;
+                pop.N_turnament = 4;
+%krok pozice:
+                pop.stepXY = 1;
+%krok svitivosti:
+                pop.stepI0 = 100;
 %Royerz mistnosti v m:
                 mstn.x = 10;
                 mstn.y = 5;
@@ -28,7 +32,14 @@ close;
                 mstn.Nz = 8;
 %Pocatecni fitness
                 pop.fitness = zeros(1, pop.gen);
-                
+%--------------------------------------------------------------------------
+%Fenotyp - cilove paramety
+%Pocet bodu na stenach v ose z:
+                target.Eavg = 500;
+%Pocatecni fitness
+                target.Uo = 0.6;
+%Navic minimalizujeme svitivost ve smeru 0°
+
 %--------------------------------------------------------------------------
 %PARAMETRY STEN
 %Cinitel odrazu stropu:
@@ -51,9 +62,9 @@ close;
 %Vyska svitidel:
                 svt.z = 3.5;
 %Pocet svitidel:
-                svt.N = 4;
+                svt.N = 6;
 %Koeficienty charakteristicke funkce svitivosti (nejvyssi mocnina je vlevo)
-                svt.fc =[-0.5, 1, 1, 0, 0, 1];
+                svt.fc =[-0.74, 1.89, 2.82, -0.83, 1.1, 2.77];
                 svt.I0max = svt.I0max/((svt.fc(1)+ svt.fc(2)).^svt.fc(3));
                 svt.I0min = svt.I0min/((svt.fc(1)+ svt.fc(2)).^svt.fc(3));
 %Vyneseni polarniho grafu
@@ -178,7 +189,7 @@ for generace = 1:1:pop.gen
             %smazat zaporne cosiny (uhel > 90)
             %vsechny zaporne hodnoty jsou rovny nule
             cosfi = cosTh .* (cosTh > 0);
-            bod.I = pop.dna(clen, 2*svt.N+1) * polyval([svt.fc(1:2) 0], cosfi).^svt.fc(3) + polyval([svt.fc(4:5) 0], sinTh).^svt.fc(6);
+            bod.I = pop.dna(clen, 2*svt.N+1) * (polyval([svt.fc(1:2) 0], cosfi).^svt.fc(3) + polyval([svt.fc(4:5) 0], sinTh).^svt.fc(6));
             
             %Vypocet osvetleni na podlaze a strope od svitidel
             %Pri nasobeni cosinem muze vyjit zaporna hodnota!! Nicmene
@@ -317,7 +328,7 @@ for generace = 1:1:pop.gen
         %smazat zaporne cosiny (uhel > 90)
         %vsechny zaporne hodnoty jsou rovny nule
         cosfi = cosTh .* (cosTh > 0);
-        bod.I = pop.dna(clen, 2*svt.N+1) * polyval([svt.fc(1:2) 0], cosfi).^svt.fc(3) + polyval([svt.fc(4:5) 0], sinTh).^svt.fc(6);
+        bod.I = pop.dna(clen, 2*svt.N+1) * (polyval([svt.fc(1:2) 0], cosfi).^svt.fc(3) + polyval([svt.fc(4:5) 0], sinTh).^svt.fc(6));
 
         %Vypocet osvetleni na srovnavaci rovine nahrazuje osvetleni na
         %podlaze
@@ -382,11 +393,15 @@ for generace = 1:1:pop.gen
 
     %Rovnomernost
     pop.Uo = min(bod.E(:,1:bod.podIDX),[],2)./pop.Eavg;
+    pop.UM = max(bod.E(:,1:bod.podIDX),[],2)./pop.Eavg;
+    pop.var = sum((bod.E(:,1:bod.podIDX) - pop.Eavg*ones(1,bod.podIDX)).^2, 2)./bod.podIDX;
+    pop.var = (pop.var.^0.5)./pop.Eavg;
     
     %Vysledna fitness
-    pop.FIT = 10.^((0.6-pop.Uo)) + (0.1*abs(pop.Eavg-500)).^2;
-     
-    %Pravdepodobnosti vyberu clena populace jako rodice
+    %pop.FIT = (((10*(target.Uo-pop.Uo)).^2).*(pop.Uo < target.Uo) + pop.var + (0.1*(pop.Eavg-target.Eavg)).^2).*pop.dna(:,(2*svt.N)+1);
+    pop.FIT = (pop.var.^2 + (0.1*(pop.Eavg-target.Eavg)).^2).*pop.dna(:,(2*svt.N)+1);
+    
+    %Pravdepodobnosti vyberu clena populace  jako rodice
     pop.prVyb =1./pop.FIT./ sum(1./pop.FIT);
     
     %======================================================================
@@ -430,6 +445,7 @@ for generace = 1:1:pop.gen
     xlabel('x (m)');
     ylabel('y (m)');
     axis([0 mstn.x 0 mstn.y]);
+    %colorbar;
     hold off;
     
     drawnow; %Vykreslit grafy behem cyklu
@@ -478,31 +494,26 @@ for generace = 1:1:pop.gen
         %POZOR: prvni clen nesmi mutovat
         pravdepodobnost= rand(pop.N-1,2*svt.N+1);
         pop.mutace = zeros(pop.N-1,2*svt.N+1);
-%         pop.mutace(:,1:2:((2*svt.N)-1)) = mstn.x.*rand(pop.N-1,svt.N);
-%         pop.mutace(:,2:2:(2*svt.N)) = mstn.y.*rand(pop.N-1,svt.N);
-%         pop.mutace(:,2*svt.N+1) = svt.I0min + (svt.I0max-svt.I0min)*rand(pop.N-1, 1);
-        
-        pop.mutace(:,1:1:(2*svt.N)) = randn(pop.N-1,2*svt.N);
-        pop.mutace(:,svt.N+1) = 100*randn(pop.N-1, 1);
-
+        pop.mutace(:,1:1:(2*svt.N)) = pop.stepXY .* randn(pop.N-1,2*svt.N);
+        pop.mutace(:,svt.N+1) = pop.stepI0 .* randn(pop.N-1, 1);
+        %zvyseni hodnoty
         pop.mutace = pop.mutace .* (pravdepodobnost <= pop.mut);
-%         pop.dnaP(2:end, :) = pop.dnaP(2:end, :) .* (pravdepodobnost > pop.mut);
         pop.dnaP(2:end, :) = pop.dnaP(2:end, :) + pop.mutace;
-        
+        %omezeni zdola
         pop.dnaP(2:end, :) = pop.dnaP(2:end, :) .* (pop.dnaP(2:end, :) >= 0);
-        
+        %omezeni shora pro souradnici x
         pop.mutace = mstn.x * (pop.dnaP(2:end, 1:2:((2*svt.N)-1)) > mstn.x);
         pop.dnaP(2:end, 1:2:((2*svt.N)-1)) = pop.dnaP(2:end, 1:2:((2*svt.N)-1)) .* (pop.dnaP(2:end, 1:2:((2*svt.N)-1)) <= mstn.x);
         pop.dnaP(2:end, 1:2:((2*svt.N)-1)) = pop.dnaP(2:end, 1:2:((2*svt.N)-1)) + pop.mutace;
-        
+        %omezeni shora pro souradnici y
         pop.mutace = mstn.y * (pop.dnaP(2:end, 2:2:(2*svt.N)) > mstn.y);
         pop.dnaP(2:end, 2:2:(2*svt.N)) = pop.dnaP(2:end, 2:2:(2*svt.N)) .* (pop.dnaP(2:end, 2:2:(2*svt.N)) <= mstn.y);
         pop.dnaP(2:end, 2:2:(2*svt.N)) = pop.dnaP(2:end, 2:2:(2*svt.N)) + pop.mutace;
-        
+        %omezeni shora pro I0
         pop.mutace = svt.I0max * (pop.dnaP(2:end, (2*svt.N)+1) > svt.I0max);
         pop.dnaP(2:end, (2*svt.N)+1) = pop.dnaP(2:end, (2*svt.N)+1) .* (pop.dnaP(2:end, (2*svt.N)+1) <= svt.I0max);
         pop.dnaP(2:end, (2*svt.N)+1) = pop.dnaP(2:end, (2*svt.N)+1) + pop.mutace;
-        
+        %omezeni zdola pro I0
         pop.mutace = svt.I0min * (pop.dnaP(2:end, (2*svt.N)+1) < svt.I0min);
         pop.dnaP(2:end, (2*svt.N)+1) = pop.dnaP(2:end, (2*svt.N)+1) .* (pop.dnaP(2:end, (2*svt.N)+1) >= svt.I0min);
         pop.dnaP(2:end, (2*svt.N)+1) = pop.dnaP(2:end, (2*svt.N)+1) + pop.mutace;
