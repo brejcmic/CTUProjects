@@ -56,7 +56,7 @@ close;
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDEL
 %Maximalni svitivost I0:
-                svt.I0max = 5000;
+                svt.I0max = 10000;
 %Minimalni svitivost I0:
                 svt.I0min = 1000;
 %Vyska svitidel:
@@ -64,7 +64,7 @@ close;
 %Pocet svitidel:
                 svt.N = 6;
 %Koeficienty charakteristicke funkce svitivosti (nejvyssi mocnina je vlevo)
-                svt.fc =[-0.74, 1.89, 2.82, -0.83, 1.1, 2.77];
+                svt.fc =[1, 0, 3, 0, 0, 2];
                 svt.I0max = svt.I0max/((svt.fc(1)+ svt.fc(2)).^svt.fc(3));
                 svt.I0min = svt.I0min/((svt.fc(1)+ svt.fc(2)).^svt.fc(3));
 %Vyneseni polarniho grafu
@@ -396,10 +396,11 @@ for generace = 1:1:pop.gen
     pop.UM = max(bod.E(:,1:bod.podIDX),[],2)./pop.Eavg;
     pop.var = sum((bod.E(:,1:bod.podIDX) - pop.Eavg*ones(1,bod.podIDX)).^2, 2)./bod.podIDX;
     pop.var = (pop.var.^0.5)./pop.Eavg;
+    pop.sym = (sum((bod.E(:,1:bod.podIDX/2) - bod.E(:,bod.podIDX:-1:(bod.podIDX/2+1))).^2, 2).^0.5)./pop.Eavg;
     
     %Vysledna fitness
-    %pop.FIT = (((10*(target.Uo-pop.Uo)).^2).*(pop.Uo < target.Uo) + pop.var + (0.1*(pop.Eavg-target.Eavg)).^2).*pop.dna(:,(2*svt.N)+1);
-    pop.FIT = (pop.var.^2 + (0.1*(pop.Eavg-target.Eavg)).^2).*pop.dna(:,(2*svt.N)+1);
+    pop.FIT = (1 + ((10*(target.Uo-pop.Uo)).^2) + pop.sym + (0.1*(pop.Eavg-target.Eavg)).^2).*pop.dna(:,(2*svt.N)+1);
+    %pop.FIT = (1 + pop.var + (0.1*(pop.Eavg-target.Eavg)).^2).*pop.dna(:,(2*svt.N)+1).^2;
     
     %Pravdepodobnosti vyberu clena populace  jako rodice
     pop.prVyb =1./pop.FIT./ sum(1./pop.FIT);
