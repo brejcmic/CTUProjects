@@ -415,7 +415,7 @@ for generace = 1:1:pop.gen
     subplot(2,2,1)
     pop.fitness(generace:end) = log10(pop.FIT(IDX));
     plot(pop.fitness);
-    title(sprintf('E_{avg} = %0.0f lx, U_{o}= %0.2f', pop.Eavg(IDX), pop.Uo(IDX)));
+    title(sprintf('E_{avg} = %0.0f lx, U_{o}= %0.2f, I_0 = %0.0f lm', pop.Eavg(IDX), pop.Uo(IDX), pop.dna(IDX,(2*svt.N)+1)));
     xlabel('historie (n)')
     ylabel('Fitness');
     grid on;
@@ -425,7 +425,7 @@ for generace = 1:1:pop.gen
     %Vyneseni polarniho grafu
     set(polar([svt.theta,(svt.theta+pi)],pop.dna(IDX, 2*svt.N+1)*svt.I),'color','r','linewidth',2)
     view([90, 90]);
-    title(sprintf('Nejlepsi jedinec, generace = %i, P_{vyberu}= %3.2f %%', generace, pop.prVyb(IDX)*100));
+    %title(sprintf('Nejlepsi jedinec, generace = %i, P_{vyberu}= %3.2f %%', generace, pop.prVyb(IDX)*100));
     grid on;
     
     subplot(2,2,3)
