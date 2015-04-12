@@ -64,7 +64,7 @@ close;
 %Pocet svitidel:
                 svt.N = 6;
 %Koeficienty charakteristicke funkce svitivosti (nejvyssi mocnina je vlevo)
-                svt.fc =[1, 0, 3, 0, 0, 2];
+                svt.fc =[1, 0, 1, 0.5, 0, 1];
                 svt.I0max = svt.I0max/((svt.fc(1)+ svt.fc(2)).^svt.fc(3));
                 svt.I0min = svt.I0min/((svt.fc(1)+ svt.fc(2)).^svt.fc(3));
 %Vyneseni polarniho grafu
@@ -419,7 +419,7 @@ for generace = 1:1:pop.gen
     pop.sym = (sum((bod.E(:,1:bod.podIDX/2) - bod.E(:,bod.podIDX:-1:(bod.podIDX/2+1))).^2, 2).^0.5)./pop.Eavg;
     
     %Vysledna fitness
-    pop.FIT = (1 + ((10*(target.Uo-pop.Uo)).^2) + pop.var + pop.sym + (0.1*(pop.Eavg-target.Eavg)).^2).*pop.dna(:,(2*svt.N)+1);
+    pop.FIT = (((10*(target.Uo-pop.Uo)).^2) + pop.var + (0.1*(pop.Eavg-target.Eavg)).^2);
     %pop.FIT = (1 + pop.var + (0.1*(pop.Eavg-target.Eavg)).^2).*pop.dna(:,(2*svt.N)+1).^2;
     
     %Pravdepodobnosti vyberu clena populace  jako rodice
@@ -435,7 +435,7 @@ for generace = 1:1:pop.gen
     subplot(2,2,1)
     pop.fitness(generace:end) = log10(pop.FIT(IDX));
     plot(pop.fitness);
-    title(sprintf('E_{avg} = %0.0f lx, U_{o}= %0.2f, I_0 = %0.0f lm', pop.Eavg(IDX), pop.Uo(IDX), pop.dna(IDX,(2*svt.N)+1)));
+    title(sprintf('E_{avg} = %0.0f lx, U_{o}= %0.2f, I_0 = %0.0f cd', pop.Eavg(IDX), pop.Uo(IDX), pop.dna(IDX,(2*svt.N)+1)));
     xlabel('historie (n)')
     ylabel('Fitness');
     grid on;
