@@ -55,7 +55,7 @@ close;
 %PARAMETRY SVITIDEL
 %Souradnice svitidel (pozor, at nejsou svitidla mimo prostor mistnosti):
                 svt.x = [1, 5, 9, 1, 5, 9];
-                svt.y = [1, 1, 1, 4, 4, 4];
+                svt.y = [2, 2, 2, 3, 3, 3];
                 svt.z = [3.5, 3.5, 3.5, 3.5, 3.5, 3.5];
 %Pocet svitidel:
                 svt.N = length(svt.x);
@@ -421,8 +421,9 @@ for generace = 1:1:pop.gen
     pop.var = (pop.var.^0.5)./pop.Eavg;
     
     %Vysledna fitness
-%     pop.FIT = (1 + ((10*(target.Uo-pop.Uo)).^2).*(pop.Uo < target.Uo) + (0.1*(pop.Eavg-target.Eavg)).^2).*svt.Fi;
-    pop.FIT = (pop.var.^2 + (0.1*(pop.Eavg-target.Eavg)).^2).*svt.Fi;
+    pop.FIT = (0.01 + ((10*(target.Uo-pop.Uo)).^2).*(pop.Uo < target.Uo) + (0.1*(pop.Eavg-target.Eavg)).^2).*svt.Fi;
+%     pop.FIT = (1 + ((10*(target.Uo-pop.Uo)).^2) + (0.1*(pop.Eavg-target.Eavg)).^2).*svt.Fi;
+%     pop.FIT = (pop.var.^2 + (0.1*(pop.Eavg-target.Eavg)).^2).*svt.Fi;
      
     %Pravdepodobnosti vyberu clena populace jako rodice
     pop.prVyb =1./pop.FIT./ sum(1./pop.FIT);
