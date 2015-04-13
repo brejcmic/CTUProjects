@@ -62,9 +62,9 @@ close;
 %Vyska svitidel:
                 svt.z = 3.5;
 %Pocet svitidel:
-                svt.N = 6;
+                svt.N = 4;
 %Koeficienty charakteristicke funkce svitivosti (nejvyssi mocnina je vlevo)
-                svt.fc =[1, 0, 1, 0.5, 0, 1];
+                svt.fc =[-0.205, 1.717, 2.248, -0.241, 1.89, 2.071];
                 svt.I0max = svt.I0max/((svt.fc(1)+ svt.fc(2)).^svt.fc(3));
                 svt.I0min = svt.I0min/((svt.fc(1)+ svt.fc(2)).^svt.fc(3));
 %Vyneseni polarniho grafu
