@@ -55,6 +55,8 @@
 !*.sch
 !*.brd
 
+!*.pdf
+
 #--------------------------------------
 #ignored files - special specifications
 #--------------------------------------
@@ -65,3 +67,5 @@ makefile
 #office temporary files
 ~$*.docx
 ~$*.xlsx
+~$*.doc
+~$*.xls
