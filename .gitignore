@@ -45,6 +45,7 @@
 !*.xlsx
 !*.xlsm
 !*.xls
+!*.rtf
 
 #matlab files
 !*.m
@@ -69,3 +70,4 @@ makefile
 ~$*.xlsx
 ~$*.doc
 ~$*.xls
+~$*.rtf
