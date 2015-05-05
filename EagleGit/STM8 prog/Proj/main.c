@@ -4,18 +4,14 @@
  */
 
 #include <iostm8s105.h>
-#include <mikeleos.h>
+#include "mikeleOS.h"
 
 void func(void);
 
 main()
 {
 	osInit();
-	int *j;
-	j = (int*)(0x7FF - 0x40);
-	//j = osContextSwitch(j);
-	//j = osContextSwitch(j);
-	for(;*j < 0; *j-- );
+
 	while (1);
 }
 

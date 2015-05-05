@@ -9,7 +9,7 @@
 //Navratova hodnota je adresa stacku s inicializovnym 
 //obsahem
 extern int* osInitTask(osTaskHandler handler, 
-				int stackOffset);
+				unsigned int stackOffset);
 //prehozeni dvou SP s inicializovanym obsahem
 //1. parametr je novy ukayatel na stack (novy obsah)
 //Navratova hodnota je dosavadni ukazatel na stack
@@ -27,9 +27,9 @@ os_task taskArray[OS_TASKCOUNTMAX +1];
 //promenne v RAM
 struct{
 	int stackOffset;//zbyvajici offset v pameti
-	int taskLeft;	//zbyvajici ukoly
-	int currTask;	//momentalne bezici ukol
-	int tskIdx; 	//poctadlo
+	char taskLeft;	//zbyvajici ukoly
+	char currTask;	//momentalne bezici ukol
+	char tskIdx; 	//poctadlo
 }osSysVar;
 
 void osInit(void)
@@ -41,7 +41,7 @@ void osInit(void)
 }
 
 //prioritu tasku urcuje poradi inicializace
-int osNewTask(osTaskHandler handler, int memorySize)
+int osNewTask(osTaskHandler handler, unsigned int memorySize)
 {	
 	//kontrola, zda je mozne ukol vytvorit
 	if(osSysVar.taskLeft <= 0) return 0;

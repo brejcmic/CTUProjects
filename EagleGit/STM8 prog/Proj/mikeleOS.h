@@ -3,7 +3,7 @@
  */
  
 //maximalni pocet vlaken
-#define OS_TASKCOUNTMAX				3
+#define OS_TASKCOUNTMAX					3
 
 //---------------------------------------------------------
 //vrchol pameti STACK +
@@ -33,4 +33,4 @@ typedef @near void (*osTaskHandler)(void);
 //Deklarace
 //---------------------------------------------------------
 void osInit(void);
-int osNewTask(osTaskHandler handler, int memorySize);
+int osNewTask(osTaskHandler handler, unsigned int memorySize);
