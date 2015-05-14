@@ -346,12 +346,18 @@
 \usepackage[cp1250]{inputenc} % for win1250
 \usepackage{graphicx}
 \usepackage{cases}
+\usepackage{fancyhdr} %/ for footer
+
+\fancyhf{}
+\fancyfoot[L]{978-1-4673-6788-2/15/\$31.00 (C)2015 IEEE}
+
 
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
-
+\pagestyle{empty}
 \begin{document}
+
 \selectlanguage{english}
 %
 % paper title
@@ -417,7 +423,6 @@ Email: brejcmic@fel.cvut.cz}
 % make the title area
 \maketitle
 
-
 \begin{abstract}
 %\boldmath
 The paper deals with lighting road design. The demands on illuminance are defined in standard~\v{C}SN~EN~13201 in case of Czech Republic. There are several parameters that a designer can change to get the optimal solution to fulfill the standard. The distance between pillars, their heights, the lamp overlap and tilt have to be defined. Such number of parameters make the optimization difficult. This paper solves the optimization via genetic algorithm. The fitness function that is convergent to good solutions is a vital point for this type of algorithms. The paper shows that solutions found by the genetic algorithm fulfill the demands and it also shows the way, how the fitness function can be created.
@@ -430,10 +435,8 @@ The paper deals with lighting road design. The demands on illuminance are define
 % of the abstract to achieve this. Many IEEE journals/conferences frown on
 % math in the abstract anyway.
 
-% no keywords
-
-
-
+\textbf{\textit{Keywords - genetic, algorithm, lighting, design, iluminance}}
+\thispagestyle{fancy}
 
 % For peer review papers, you can put extra information on the cover
 % page as needed:
@@ -538,7 +541,7 @@ The paper deals with lighting road design. The demands on illuminance are define
 \section{Conclusion}
 Authors presented results of road lightening design using genetic algorithm in the paper. The results were compared with outputs of common used software DIALux. It was proved that found solutions satisfies all demands defined in standards.
 
-Even the algorithm found the solutions in only 60 generations, the calculation last approximately 10~minutes. The reason was lot of calculated points ($8000+6000$) and relatively large population (200) in each generation. The standards recommend much thinner points concentrations and they do not deal with lighting out of the sidewalk. The algorithm lasted only 2~minutes in case of recommended count of points.
+Even the algorithm found the solutions in only 60\break \newpage \noindent generations, the calculation last approximately 10~minutes. The reason was lot of calculated points ($8000+6000$) and relatively large population (200) in each generation. The standards recommend much thinner points concentrations and they do not deal with lighting out of the sidewalk. The algorithm lasted only 2~minutes in case of recommended count of points.
 
 The genetic algorithm can help the designer to find good design even if he is limited by some constraints. These constraints are simply included to limitations of each searched parameter or are taken into account in the fitness function. The fact, that the lighting out of the sidewalk can be taken into account is also very helpful. 
 
@@ -612,7 +615,6 @@ Eulumdat. \textit{Helios32} [online]. 1999-2014 [cit. 2015-02-19]. Available at:
 SCHREDER GULF - Products - ATOS. \textit{SCHREDER GULF} [online]. 2015 [cit. 2015-02-19]. Available at: \url{http://www.schreder.com/en-aes/Products/Pages/ATOS.aspx}
 
 \end{thebibliography}
-
 
 
 
