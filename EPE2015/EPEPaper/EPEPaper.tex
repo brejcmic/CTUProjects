@@ -125,7 +125,7 @@
 
 % *** GRAPHICS RELATED PACKAGES ***
 %
-\ifCLASSINFOpdf
+\ifCLASSINFOpdf 
   % \usepackage[pdftex]{graphicx}
   % declare the path(s) where your graphic files are
   % \graphicspath{{../pdf/}{../jpeg/}}
@@ -349,7 +349,8 @@
 \usepackage{fancyhdr} %/ for footer
 
 \fancyhf{}
-\fancyfoot[L]{978-1-4673-6788-2/15/\$31.00 (C)2015 IEEE}
+\fancyfoot[L]{978-1-4673-6788-2/15/\$31.00 \copyright 2015 IEEE}
+\renewcommand{\headrulewidth}{0pt}
 
 
 % correct bad hyphenation here
@@ -435,8 +436,9 @@ The paper deals with lighting road design. The demands on illuminance are define
 % of the abstract to achieve this. Many IEEE journals/conferences frown on
 % math in the abstract anyway.
 
-\textbf{\textit{Keywords - genetic, algorithm, lighting, design, iluminance}}
+\textbf{\textit{Keywords - genetic algorithm, lighting, design, illuminance}}
 \thispagestyle{fancy}
+\let\thefootnote\relax\footnotetext{Research sponsored by SGS13/197/OHK3/3T/13}
 
 % For peer review papers, you can put extra information on the cover
 % page as needed:
