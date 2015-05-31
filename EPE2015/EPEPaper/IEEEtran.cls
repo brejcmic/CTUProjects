@@ -3240,7 +3240,7 @@ between column types.}%
 \def\@IEEEauthorblockconfadjspace{-0.25em}
 % compsoc conferences need more space here
 \@IEEEcompsocconfonly{\def\@IEEEauthorblockconfadjspace{0.75\@IEEEnormalsizeunitybaselineskip}}
-\ifCLASSOPTIONconference\def\@IEEEauthorblockconfadjspace{20pt}\fi
+\ifCLASSOPTIONconference\def\@IEEEauthorblockconfadjspace{0pt}\fi
 
 % spacing between name and affiliation blocks (confmode)
 % This can be negative.
