@@ -22,6 +22,7 @@ typedef struct{
 }os_task;
 
 //pole vlaken, 0 index je vzhrazen pro hlavni smycku
+//oocet tasku tak musi byt o 1 vyssi
 os_task taskArray[OS_TASKCOUNTMAX +1];
 
 //promenne v RAM
@@ -53,7 +54,7 @@ int osNewTask(osTaskHandler handler, unsigned int memorySize)
 	}
 	
 	//vytvoreni noveho ukolu na indexu j, ktery je posunut 
-	//o 1 tj. o ukol hlavni smycky
+	//o 1 tj. o ukol hlavni smycky, ktery ma index 0
 	osSysVar.taskLeft--;
 	osSysVar.tskIdx = OS_TASKCOUNTMAX - osSysVar.taskLeft;
 	taskArray[osSysVar.tskIdx].state = idle;
