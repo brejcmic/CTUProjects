@@ -46,6 +46,8 @@
 !*.xlsm
 !*.xls
 !*.rtf
+!*.pptx
+!*.odp
 
 #matlab files
 !*.m
