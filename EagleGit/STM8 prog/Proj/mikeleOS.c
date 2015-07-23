@@ -11,7 +11,7 @@
 extern int* osInitTask(osTaskHandler handler, 
 				unsigned int stackOffset);
 //prehozeni dvou SP s inicializovanym obsahem
-//1. parametr je novy ukayatel na stack (novy obsah)
+//1. parametr je novy ukazatel na stack (novy obsah)
 //Navratova hodnota je dosavadni ukazatel na stack
 extern int* osContextSwitch(int *newContext);
 
@@ -30,7 +30,7 @@ struct{
 	int stackOffset;//zbyvajici offset v pameti
 	char taskLeft;	//zbyvajici ukoly
 	char currTask;	//momentalne bezici ukol
-	char tskIdx; 	//poctadlo
+	char tskIdx; 	//pocitadlo
 }osSysVar;
 
 void osInit(void)
@@ -50,10 +50,11 @@ int osNewTask(osTaskHandler handler, unsigned int memorySize)
 	{
 		//priradit zbyvajici pamet
 		memorySize = osSysVar.stackOffset - OS_STACKADDRESSMIN;
+		//pokud jiz neni zadna pamet
 		if(memorySize <= 0) return 0;
 	}
 	
-	//vytvoreni noveho ukolu na indexu j, ktery je posunut 
+	//vytvoreni noveho ukolu na indexu idx, ktery je posunut 
 	//o 1 tj. o ukol hlavni smycky, ktery ma index 0
 	osSysVar.taskLeft--;
 	osSysVar.tskIdx = OS_TASKCOUNTMAX - osSysVar.taskLeft;
@@ -64,6 +65,16 @@ int osNewTask(osTaskHandler handler, unsigned int memorySize)
 	osSysVar.stackOffset -= memorySize;
 	
 	return 1;
+}
+
+void osSetIdle(void)
+{
+	taskArray[osSysVar.currTask].state = idle;
+}
+
+void osSetRun(char idx)
+{
+	taskArray[idx].state = run;
 }
 
 @far @interrupt void osScheduler (void)

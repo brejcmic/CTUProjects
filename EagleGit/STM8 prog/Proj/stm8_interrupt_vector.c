@@ -17,11 +17,13 @@ struct interrupt_vector {
 	return;
 }
 
+extern @far @interrupt void osScheduler (void);
+
 extern void _stext();     /* startup routine */
 
 struct interrupt_vector const _vectab[] = {
 	{0x82, (interrupt_handler_t)_stext}, /* reset */
-	{0x82, NonHandledInterrupt}, /* trap  */
+	{0x82, osScheduler}, 		 /* trap  */
 	{0x82, NonHandledInterrupt}, /* irq0  */
 	{0x82, NonHandledInterrupt}, /* irq1  */
 	{0x82, NonHandledInterrupt}, /* irq2  */
@@ -35,7 +37,7 @@ struct interrupt_vector const _vectab[] = {
 	{0x82, NonHandledInterrupt}, /* irq10 */
 	{0x82, NonHandledInterrupt}, /* irq11 */
 	{0x82, NonHandledInterrupt}, /* irq12 */
-	{0x82, NonHandledInterrupt}, /* irq13 */
+	{0x82, osScheduler}, 		 /* TIM2 UPDATE */
 	{0x82, NonHandledInterrupt}, /* irq14 */
 	{0x82, NonHandledInterrupt}, /* irq15 */
 	{0x82, NonHandledInterrupt}, /* irq16 */

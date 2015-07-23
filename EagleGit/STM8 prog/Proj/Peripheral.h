@@ -14,3 +14,5 @@
  #define	P_B5		0x20
  #define	P_B6		0x40
  #define	P_B7		0x80
+ 
+ void InitPeripherals(void);

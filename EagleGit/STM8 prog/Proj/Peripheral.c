@@ -39,7 +39,7 @@ void InitPeripherals(void)
 	I2C_CR2 = 0x00;
 	I2C_FREQR = 0x10;//16MHz
 	I2C_OARL = 0x00;
-	I2C_OARM = 0x00;
+	I2C_OARH = 0x00;
 	I2C_ITR = 0x00;
 	
 	I2C_CCRL = 0x0D;//400 kHz
@@ -47,15 +47,25 @@ void InitPeripherals(void)
 	I2C_TRISER = 0x02;
 //---------------------------------------------------------
 //nastaveni UART
-	UART_BRR2 = 0x00;
-	UART_CR1 = 0x00;
-	UART_CR2 = 0x00;
-	UART_CR3 = 0x00;
-	UART_CR4 = 0x00;
-	UART_CR5 = 0x00;
-	UART_CR6 = 0x00;
-	UART_GTR = 0x00;
-	UART_PSCR = 0x00;
+	UART2_BRR2 = 0x00;
+	UART2_CR1 = 0x00;
+	UART2_CR2 = 0x00;
+	UART2_CR3 = 0x00;
+	UART2_CR4 = 0x00;
+	UART2_CR6 = 0x00;
+	UART2_GTR = 0x00;
+	UART2_PSCR = 0x00;
+//---------------------------------------------------------
+//nastaveni TIM2 CLK = 16 MHz
+	TIM2_IER = P_B0;
+	TIM2_SR1 &= ~P_B0;
+	TIM2_EGR = 0x00;
+	TIM2_PSCR = 0x04; //1MHz
+	TIM2_ARRH = 0x02;
+	TIM2_ARRL = 0x00;
+	TIM2_CR1 = P_B7 | P_B0;
+	
+	_asm("rim");
 }
 
 void setOutput(char val)
