@@ -4,13 +4,13 @@
  */
 
 #include <iostm8s105.h>
-#include "mikeleOS.h"
+#include "osKernel.h"
 #include "Peripheral.h"
 
 void func1(void);
 void func2(void);
 
-main()
+void main(void)
 {
 	int i, j;
 	

@@ -16,3 +16,5 @@
  #define	P_B7		0x80
  
  void InitPeripherals(void);
+ void setOutput(char val);
+ char readInput(void);

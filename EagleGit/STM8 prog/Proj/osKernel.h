@@ -1,5 +1,5 @@
-/*	MikeleOS.h
- *
+/*	osKernel.h
+ *	Compiler:	COSMIC C, ASM
  */
  
 //maximalni pocet vlaken

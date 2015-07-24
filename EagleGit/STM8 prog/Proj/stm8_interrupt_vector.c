@@ -26,7 +26,7 @@ struct interrupt_vector const _vectab[] = {
 	{0x82, osScheduler}, 		 /* trap  */
 	{0x82, NonHandledInterrupt}, /* irq0  */
 	{0x82, NonHandledInterrupt}, /* irq1  */
-	{0x82, NonHandledInterrupt}, /* irq2  */
+	{0x82, NonHandledInterrupt}, /* irq2  CLK*/
 	{0x82, NonHandledInterrupt}, /* irq3  */
 	{0x82, NonHandledInterrupt}, /* irq4  */
 	{0x82, NonHandledInterrupt}, /* irq5  */
@@ -37,16 +37,16 @@ struct interrupt_vector const _vectab[] = {
 	{0x82, NonHandledInterrupt}, /* irq10 */
 	{0x82, NonHandledInterrupt}, /* irq11 */
 	{0x82, NonHandledInterrupt}, /* irq12 */
-	{0x82, osScheduler}, 		 /* TIM2 UPDATE */
+	{0x82, osScheduler}, 		 /* irq13 TIM2 UPDATE*/
 	{0x82, NonHandledInterrupt}, /* irq14 */
 	{0x82, NonHandledInterrupt}, /* irq15 */
 	{0x82, NonHandledInterrupt}, /* irq16 */
 	{0x82, NonHandledInterrupt}, /* irq17 */
 	{0x82, NonHandledInterrupt}, /* irq18 */
-	{0x82, NonHandledInterrupt}, /* irq19 */
-	{0x82, NonHandledInterrupt}, /* irq20 */
-	{0x82, NonHandledInterrupt}, /* irq21 */
-	{0x82, NonHandledInterrupt}, /* irq22 */
+	{0x82, NonHandledInterrupt}, /* irq19 I2C*/
+	{0x82, NonHandledInterrupt}, /* irq20 UART2 Tx comlete*/
+	{0x82, NonHandledInterrupt}, /* irq21 UART2 Rx full*/
+	{0x82, NonHandledInterrupt}, /* irq22 ADC1*/
 	{0x82, NonHandledInterrupt}, /* irq23 */
 	{0x82, NonHandledInterrupt}, /* irq24 */
 	{0x82, NonHandledInterrupt}, /* irq25 */

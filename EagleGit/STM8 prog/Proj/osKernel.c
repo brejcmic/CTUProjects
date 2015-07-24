@@ -1,7 +1,7 @@
-/*	MikeleOS.c
+/*	osKernel.c
  *	Compiler:	COSMIC C, ASM
  */
-#include "mikeleOS.h"
+#include "osKernel.h"
 
 //inicializace SP pro dany ukol
 //1. parametr je handler funkce tasku
@@ -23,10 +23,10 @@ typedef struct{
 
 //pole vlaken, 0 index je vzhrazen pro hlavni smycku
 //oocet tasku tak musi byt o 1 vyssi
-os_task taskArray[OS_TASKCOUNTMAX +1];
+static os_task taskArray[OS_TASKCOUNTMAX +1];
 
 //promenne v RAM
-struct{
+static struct{
 	int stackOffset;//zbyvajici offset v pameti
 	char taskLeft;	//zbyvajici ukoly
 	char currTask;	//momentalne bezici ukol

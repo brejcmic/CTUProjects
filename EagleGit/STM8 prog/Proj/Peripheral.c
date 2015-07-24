@@ -17,10 +17,10 @@ void InitPeripherals(void)
 	PA_ODR |= P_B4; //SCL je aktivni v nule
 	
 	//PB - analogove vstupy
-	PB_DDR = 0x00;
-	PB_CR1 = 0x00;
-	PB_CR2 = 0x00;
-	ADC_TDRL = 0xFF;
+	PB_DDR = 	0x00;
+	PB_CR1 = 	0x00;
+	PB_CR2 = 	0x00;
+	ADC_TDRL = 	0xFF;
 	
 	//PC - nepouzivat
 	
@@ -35,15 +35,15 @@ void InitPeripherals(void)
 	
 //---------------------------------------------------------
 //nastaveni I2C
-	I2C_CR1 = 0x00;
-	I2C_CR2 = 0x00;
+	I2C_CR1 = 	0x01;//enable
+	I2C_CR2 = 	0x00;
 	I2C_FREQR = 0x10;//16MHz
-	I2C_OARL = 0x00;
-	I2C_OARH = 0x00;
-	I2C_ITR = 0x00;
+	I2C_OARL = 	0x00;
+	I2C_OARH = 	0x40;
+	I2C_ITR = 	0x00;
 	
-	I2C_CCRL = 0x0D;//400 kHz
-	I2C_CCRH = 0x80;//fast mode
+	I2C_CCRL = 	0x0D;//400 kHz
+	I2C_CCRH = 	0x80;//fast mode
 	I2C_TRISER = 0x02;
 //---------------------------------------------------------
 //nastaveni UART
@@ -57,21 +57,21 @@ void InitPeripherals(void)
 	UART2_PSCR = 0x00;
 //---------------------------------------------------------
 //nastaveni TIM2 CLK = 16 MHz
-	TIM2_IER = P_B0;
-	TIM2_SR1 &= ~P_B0;
-	TIM2_EGR = 0x00;
+	TIM2_IER = 	0x01;
+	TIM2_SR1 = 	0x00;
+	TIM2_EGR = 	0x00;
 	TIM2_PSCR = 0x04; //1MHz
 	TIM2_ARRH = 0x02;
 	TIM2_ARRL = 0x00;
-	TIM2_CR1 = P_B7 | P_B0;
+	TIM2_CR1 = 	0x81;
 	
 	_asm("rim");
 }
 
 void setOutput(char val)
 {
-	int i; 	//pocitadlo
-	char vyst; //vystupni hodnota
+	char i; 	//pocitadlo
+	char vyst; 	//vystupni hodnota
 	
 	PA_ODR &= ~P_B5; //RCK dolu
 	
@@ -90,8 +90,8 @@ void setOutput(char val)
 
 char readInput(void)
 {
-	int i; 	//pocitadlo
-	char vst; //vystupni hodnota
+	char i; 	//pocitadlo
+	char vst; 	//vystupni hodnota
 	
 	//paralelni load
 	PE_ODR &= ~P_B7; //SLD dolu - load
@@ -103,7 +103,7 @@ char readInput(void)
 	{
 		vst = vst << 1; //tady kvuli prodleve
 		PE_ODR &= ~P_B3; //SRCK dolu
-		vst = (PE_IDR & P_B5) >> 5; //ser. vstup
+		vst |= (PE_IDR & P_B5) >> 5; //ser. vstup
 		PE_ODR |= P_B3; //SRCK nahoru
 	}
 	//zobrazeni vystupu pomoci RCK
