@@ -167,20 +167,28 @@ for generace = 1:1:pop.gen
         yb= ones(svt.N, 1)*podlaha.y;
         zb= ones(svt.N, 1)*podlaha.z;
             
-        %1) vzdalenost bodu od svitidla
+        %Funkce E = svitidloXY([xs; ys; zs] [xb; yb; zb] n0 n1)
+        %1) vzdalenost bodu od svitidla, +eps zamezuje deleni nulou
         lSB = (((xs-xb).^2 + (ys-yb).^2 + (zs-zb).^2)).^0.5+eps;
             
         %2) cosiny
+        %od normaly svitidla
         lVect = [(xs-xb), (ys-yb), (zs-zb)];
         nVectS = [0,0,-1];
         nVectB = [0,0,1];
-        %od normaly svitidla
-        cosTh = -lVect*nVectS'./lSB;
+        cosTh = -lVect*nVectS'./lSB; %pomoci skalarniho soucinu
+        Theta = acos(cosTh);
+        %v souradnicich B-beta
+        sinB = (xs-xb)./lSB;
+        sinBt = (ys-yb)./lSB;
+        B = asin(sinB);
+        Bt= asin(sinBt);
         %od normaly plosky
         cosDl = lVect*nVectB'./lSB;
             
         %3) urceni svitivosti v jednotlivych uhlech
-        %dodelat pro knihovni symetricky prvek
+        %dodelat pro knihovni symetricky prvek, ktery bude soucasti teto
+        %funkce
             
         %4) vypocet osvetleni
         E= sum(I .* cosDl ./ lSB.^2, 1);
