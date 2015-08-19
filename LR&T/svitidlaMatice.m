@@ -11,9 +11,9 @@ close;
 %Mutace (pomerna hodnota):
                 pop.mut = 0.15;
 %Pocet generací:
-                pop.gen = 200;
+                pop.gen = 150;
 %Velikost populace:
-                pop.N = 150;
+                pop.N = 400;
 %Pocet jedincu v turnaji:
                 pop.N_turnament = 4;
 %krok pozice:
@@ -50,11 +50,11 @@ close;
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDEL
 %Krivka svitivosti
-                svt.I = [4000*cos(0:pi/200:(pi/2-pi/200)) zeros(1,100)];
+                svt.I = [1500*cos(0:pi/200:(pi/2-pi/200)) zeros(1,100)];
 %Vyska svitidel:
                 svt.z = 3.5;
 %Pocet svitidel:
-                svt.N = 6;
+                svt.N = 12;
 
 %%
 %--------------------------------------------------------------------------
@@ -454,11 +454,17 @@ for generace = 1:1:pop.gen
     pop.Eavg = sum(pop.E, 2)./ podlaha.N;
     %rovnomernost, kazdy radek jeden clen
     pop.Uo = min(pop.E,[],2)./pop.Eavg;
+    %smerodatna odchylka
+    pop.var = pop.E - pop.Eavg*ones(1,podlaha.N);
+    pop.var = pop.var.^2;
+    pop.var = sum(pop.var, 2);
+    pop.var = sqrt(pop.var);
     
     %fitness
     pop.fitness = 2 - exp(-pop.Eavg./ target.Eavg);
     pop.fitness = pop.fitness - exp(-pop.Uo./ target.Uo);
-    pop.fitness = pop.fitness./ 2;
+    pop.fitness = pop.fitness + exp(-pop.var);
+    pop.fitness = pop.fitness./ 3;
     %pravdepodobnost vyberu
     pop.pravdep = pop.fitness./ sum(pop.fitness, 1);
     
