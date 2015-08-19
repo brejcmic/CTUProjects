@@ -1,10 +1,23 @@
 /* Peripheral.c
- * Inicializace periferii pro STM8 discovery kit na desce
- * terarko.
+ * Provadi se zde inicializace periferii pro obsluhu desky
+ * terarko. Navic jsou zde funkce pro obsluhu techto
+ * periferii a inicializace a obsluha vlaken operacniho
+ * systemu
  */
 
 #include <iostm8s105.h>
+#include "osKernel.h"
 #include "Peripheral.h"
+
+static struct osSysTskIdx_st
+{
+	char uart;
+	char rtc;
+}osTskIdx;
+
+static void clrTIM2IntFlag(void);
+static void osUart(void);
+static void osRtc(void);
 
 void InitPeripherals(void)
 {
@@ -47,14 +60,15 @@ void InitPeripherals(void)
 	I2C_TRISER = 0x02;
 //---------------------------------------------------------
 //nastaveni UART
-	UART2_BRR2 = 0x00;
-	UART2_CR1 = 0x00;
-	UART2_CR2 = 0x00;
-	UART2_CR3 = 0x00;
-	UART2_CR4 = 0x00;
-	UART2_CR6 = 0x00;
-	UART2_GTR = 0x00;
-	UART2_PSCR = 0x00;
+	UART2_BRR2 = 0x0B;
+	UART2_BRR1 = 0x08;//115200
+	UART2_CR1 = 0x00;//no parity
+	UART2_CR2 = 0x0C;//tx, rx enable
+	UART2_CR3 = 0x08;//1 stopbit, 0 clock polarity,clock en
+	UART2_CR4 = 0x00;//nothing
+	UART2_CR6 = 0x00;//nothing
+	UART2_GTR = 0x00;//nothing
+	UART2_PSCR = 0x00;//nothing
 //---------------------------------------------------------
 //nastaveni TIM2 CLK = 16 MHz
 	TIM2_IER = 	0x01;
@@ -66,8 +80,30 @@ void InitPeripherals(void)
 	TIM2_CR1 = 	0x81;
 	
 	_asm("rim");
+//---------------------------------------------------------
+//inicializace operacniho systemu
+	osInit(&clrTIM2IntFlag);
+	osTskIdx.uart = osNewTask(&osUart, 64);
+	if(osTskIdx.uart == 0) 
+	{
+		while(1); //pri chybe nekonecna smycka
+	}
+	osTskIdx.rtc = osNewTask(&osRtc, 64);
+	if(osTskIdx.rtc == 0) 
+	{
+		while(1); //pri chybe nekonecna smycka
+	}
+	osSetRun(osTskIdx.uart);
+	osSetRun(osTskIdx.rtc);
 }
 
+//Funkce pro mazani vlajky preruseni scheduleru
+static void clrTIM2IntFlag(void)
+{
+	TIM2_SR1 = 	0x00;
+}
+
+//Funkce pro zapis hodnotz na digitalni vystup desky
 void setOutput(char val)
 {
 	char i; 	//pocitadlo
@@ -88,6 +124,7 @@ void setOutput(char val)
 	PA_ODR |= P_B5; //RCK nahoru
 }
 
+//Funkce pro cteni hodnoty z digitalniho vstupu desky
 char readInput(void)
 {
 	char i; 	//pocitadlo
@@ -110,4 +147,33 @@ char readInput(void)
 	PE_ODR &= ~P_B6; //RCK dolu
 	
 	return vst;
+}
+
+//---------------------------------------------------------
+//Vlakna operacniho systemu
+//---------------------------------------------------------
+static void osUart(void)
+{
+	int i;
+	while(1)
+	{
+		if(osDoesTaskRun())
+		{
+			for(i= 0; i < 100; i++);
+			osSetIdle();
+		}
+	}
+}
+
+static void osRtc(void)
+{
+	int i;
+	while(1)
+	{
+		if(osDoesTaskRun())
+		{
+			for(i= 0; i < 100; i++);
+			osSetIdle();
+		}
+	}
 }

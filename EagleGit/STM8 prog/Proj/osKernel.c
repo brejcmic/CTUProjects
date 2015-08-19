@@ -1,6 +1,8 @@
 /*	osKernel.c
  *	Compiler:	COSMIC C, ASM
  */
+
+#include <iostm8s105.h>
 #include "osKernel.h"
 
 //inicializace SP pro dany ukol
@@ -31,10 +33,14 @@ static struct{
 	char taskLeft;	//zbyvajici ukoly
 	char currTask;	//momentalne bezici ukol
 	char tskIdx; 	//pocitadlo
+	//ukazatel na funkci pro mazani vlajky preruseni
+	//scheduleru
+	osTaskHandler schedCIF;//clear Interrupt Flag
 }osSysVar;
 
-void osInit(void)
+void osInit(osTaskHandler schedCIF)
 {
+	osSysVar.schedCIF = schedCIF;
 	osSysVar.stackOffset = OS_STACKTASKBASE;
 	osSysVar.taskLeft = OS_TASKCOUNTMAX;
 	osSysVar.currTask = 0; //prvni je ukol s nejnizsi prioritou
@@ -42,7 +48,7 @@ void osInit(void)
 }
 
 //prioritu tasku urcuje poradi inicializace
-int osNewTask(osTaskHandler handler, unsigned int memorySize)
+char osNewTask(osTaskHandler handler, unsigned int memorySize)
 {	
 	//kontrola, zda je mozne ukol vytvorit
 	if(osSysVar.taskLeft <= 0) return 0;
@@ -64,7 +70,7 @@ int osNewTask(osTaskHandler handler, unsigned int memorySize)
 	//novy offset
 	osSysVar.stackOffset -= memorySize;
 	
-	return 1;
+	return osSysVar.tskIdx;
 }
 
 void osSetIdle(void)
@@ -75,6 +81,11 @@ void osSetIdle(void)
 void osSetRun(char idx)
 {
 	taskArray[idx].state = run;
+}
+
+char osDoesTaskRun(void)
+{
+	return (taskArray[osSysVar.currTask].state == run);
 }
 
 @far @interrupt void osScheduler (void)
@@ -94,6 +105,9 @@ void osSetRun(char idx)
 		taskArray[osSysVar.currTask].context = osContextSwitch(taskArray[osSysVar.tskIdx].context);
 		osSysVar.currTask = osSysVar.tskIdx;
 	}
+	
+	//smazani vlajky preruseni
+	osSysVar.schedCIF();
 	
 	return;
 }

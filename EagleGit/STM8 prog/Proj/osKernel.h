@@ -10,7 +10,7 @@
 //pocatek pameti STACK pro ukoly ve vlaknech
 #define OS_STACKBASE					0x7FF
 //offset pameti STACK v idle vlakne
-#define OS_STACKIDLEOFFSET				128
+#define OS_STACKIDLEOFFSET				256
 //pocatecni adresa prvniho vlakna ve stacku
 #define OS_STACKTASKBASE				(OS_STACKBASE-OS_STACKIDLEOFFSET)
 //maximalni velikost pameti STACK v bytech
@@ -32,7 +32,8 @@ typedef @near void (*osTaskHandler)(void);
 //---------------------------------------------------------
 //Deklarace
 //---------------------------------------------------------
-void osInit(void);
-int osNewTask(osTaskHandler handler, unsigned int memorySize);
+void osInit(osTaskHandler schedCIF);
+char osNewTask(osTaskHandler handler, unsigned int memorySize);
 void osSetIdle(void);
 void osSetRun(char idx);
+char osDoesTaskRun(void);
