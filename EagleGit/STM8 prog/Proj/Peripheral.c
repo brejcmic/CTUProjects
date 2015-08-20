@@ -15,9 +15,22 @@ static struct osSysTskIdx_st
 	char rtc;
 }osTskIdx;
 
+static struct uartRxBuf_st
+{
+	char buf[UART_BUF_LEN];
+	char idx;
+}uartRxBf;
+
+static struct uartRxBuf_st
+{
+	char *buf[UART_RX_BUF_LEN];
+	char idx;
+}uartTxBf;
+
 static void clrTIM2IntFlag(void);
 static void osUart(void);
 static void osRtc(void);
+static char strComp(const char *arr1, const char *arr2);
 
 void InitPeripherals(void)
 {
@@ -63,25 +76,25 @@ void InitPeripherals(void)
 	UART2_BRR2 = 0x0B;
 	UART2_BRR1 = 0x08;//115200
 	UART2_CR1 = 0x00;//no parity
-	UART2_CR2 = 0x0C;//tx, rx enable
-	UART2_CR3 = 0x08;//1 stopbit, 0 clock polarity,clock en
-	UART2_CR4 = 0x00;//nothing
-	UART2_CR6 = 0x00;//nothing
-	UART2_GTR = 0x00;//nothing
-	UART2_PSCR = 0x00;//nothing
+	UART2_CR2 = 0x6C;//tx, rx int + tx, rx enable
+	UART2_CR3 = 0x00;//1 stopbit, 0 clock polarity
+	UART2_CR4 = 0x00;//nic
+	UART2_CR6 = 0x00;//nic
+	UART2_GTR = 0x00;//nic
+	UART2_PSCR = 0x00;//nic
 //---------------------------------------------------------
 //nastaveni TIM2 CLK = 16 MHz
 	TIM2_IER = 	0x01;
 	TIM2_SR1 = 	0x00;
 	TIM2_EGR = 	0x00;
 	TIM2_PSCR = 0x04; //1MHz
-	TIM2_ARRH = 0x02;
+	TIM2_ARRH = 0x02; //1024 = 1 ms
 	TIM2_ARRL = 0x00;
 	TIM2_CR1 = 	0x81;
 	
 	_asm("rim");
 //---------------------------------------------------------
-//inicializace operacniho systemu
+//inicializace operacniho systemu a ulozeni indexu vlaken
 	osInit(&clrTIM2IntFlag);
 	osTskIdx.uart = osNewTask(&osUart, 64);
 	if(osTskIdx.uart == 0) 
@@ -93,8 +106,6 @@ void InitPeripherals(void)
 	{
 		while(1); //pri chybe nekonecna smycka
 	}
-	osSetRun(osTskIdx.uart);
-	osSetRun(osTskIdx.rtc);
 }
 
 //Funkce pro mazani vlajky preruseni scheduleru
@@ -154,12 +165,17 @@ char readInput(void)
 //---------------------------------------------------------
 static void osUart(void)
 {
-	int i;
+	int idx;
+	
 	while(1)
 	{
 		if(osDoesTaskRun())
 		{
-			for(i= 0; i < 100; i++);
+			idx = strComp(uartRxBf.buf, "Ahoj");
+			if(idx > 0)
+			{
+				
+			}
 			osSetIdle();
 		}
 	}
@@ -176,4 +192,63 @@ static void osRtc(void)
 			osSetIdle();
 		}
 	}
+}
+//---------------------------------------------------------
+//Pomocne funkce
+//---------------------------------------------------------
+static char strComp(const char *arr1, const char *arr2)
+{
+	char idx;
+	idx = 0;
+	
+	while(arr1[idx] == arr2[idx])
+	{
+		if(arr1[idx] == '\0' || arr1[idx] == ',')
+		{
+			return idx;
+		}
+		else
+		{
+			idx++;
+		}
+	}
+	return 0;
+}
+
+//---------------------------------------------------------
+//Preruseni UARTu
+//---------------------------------------------------------
+
+@far @interrupt void uartTx (void)
+{
+	
+	return;
+}
+
+@far @interrupt void uartRx (void)
+{
+	//cteni znaku a jeho uloyeni do pole,
+	//cteni datoveho registru by melo zaroven mazat vlajku
+	//preruseni
+	uartRxBf.buf[uartRxBf.idx] = UART2_DR;
+	//kontrola ridiciho znaku
+	switch(uartRxBf.buf[uartRxBf.idx])
+	{
+		case 0x0A://spustit vlakno a najet na zacatek pole
+			osSetRun(osTskIdx.uart);
+		case 0x0D://najet na zacatek pole
+			if(uartRxBf.idx != 0)
+			{
+				//pole je ukonceno znakem \0
+				uartRxBf.buf[uartRxBf.idx] = '\0';
+				uartRxBf.idx = 0;
+			}
+			break;
+		default://zvysit index a oriznout dle masky
+			uartRxBf.idx++;
+			uartRxBf.idx &= UART_BUF_IDX_MSK;
+			break;
+	}
+	
+	return;
 }
