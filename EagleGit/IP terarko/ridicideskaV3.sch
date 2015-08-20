@@ -16716,6 +16716,8 @@ Source: www.kingbright.com</description>
 <part name="C18" library="rcl" deviceset="C-EU" device="C0805" value="10n"/>
 <part name="C19" library="rcl" deviceset="C-EU" device="C0805" value="10n"/>
 <part name="C20" library="rcl" deviceset="C-EU" device="C0805" value="10n"/>
+<part name="R18" library="rcl" deviceset="R-EU_" device="0207/12" value="1k"/>
+<part name="R19" library="rcl" deviceset="R-EU_" device="0207/12" value="1k"/>
 </parts>
 <sheets>
 <sheet>
@@ -16801,6 +16803,8 @@ Source: www.kingbright.com</description>
 <instance part="C18" gate="G$1" x="-7.62" y="203.2"/>
 <instance part="C19" gate="G$1" x="2.54" y="203.2"/>
 <instance part="C20" gate="G$1" x="12.7" y="203.2"/>
+<instance part="R18" gate="G$1" x="195.58" y="-43.18" rot="R180"/>
+<instance part="R19" gate="G$1" x="195.58" y="-35.56" rot="R180"/>
 </instances>
 <busses>
 </busses>
@@ -17593,8 +17597,8 @@ Source: www.kingbright.com</description>
 <pinref part="IO1" gate="G$1" pin="PD5"/>
 <wire x1="116.84" y1="15.24" x2="182.88" y2="15.24" width="0.1524" layer="91"/>
 <wire x1="182.88" y1="15.24" x2="182.88" y2="-35.56" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="UARTRX"/>
-<wire x1="208.28" y1="-35.56" x2="182.88" y2="-35.56" width="0.1524" layer="91"/>
+<pinref part="R19" gate="G$1" pin="2"/>
+<wire x1="190.5" y1="-35.56" x2="182.88" y2="-35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$48" class="0">
@@ -17721,8 +17725,8 @@ Source: www.kingbright.com</description>
 <pinref part="IO1" gate="G$1" pin="PD4"/>
 <wire x1="116.84" y1="12.7" x2="180.34" y2="12.7" width="0.1524" layer="91"/>
 <wire x1="180.34" y1="12.7" x2="180.34" y2="-43.18" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="UARTCTS"/>
-<wire x1="180.34" y1="-43.18" x2="208.28" y2="-43.18" width="0.1524" layer="91"/>
+<wire x1="180.34" y1="-43.18" x2="190.5" y2="-43.18" width="0.1524" layer="91"/>
+<pinref part="R18" gate="G$1" pin="2"/>
 </segment>
 </net>
 <net name="N$64" class="0">
@@ -17831,6 +17835,20 @@ Source: www.kingbright.com</description>
 <pinref part="IC1" gate="A" pin="QA"/>
 <pinref part="CON2" gate="G$1" pin="15"/>
 <wire x1="182.88" y1="137.16" x2="205.74" y2="137.16" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$42" class="0">
+<segment>
+<pinref part="U$1" gate="G$1" pin="UARTRX"/>
+<wire x1="208.28" y1="-35.56" x2="200.66" y2="-35.56" width="0.1524" layer="91"/>
+<pinref part="R19" gate="G$1" pin="1"/>
+</segment>
+</net>
+<net name="N$65" class="0">
+<segment>
+<pinref part="U$1" gate="G$1" pin="UARTCTS"/>
+<pinref part="R18" gate="G$1" pin="1"/>
+<wire x1="200.66" y1="-43.18" x2="208.28" y2="-43.18" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
