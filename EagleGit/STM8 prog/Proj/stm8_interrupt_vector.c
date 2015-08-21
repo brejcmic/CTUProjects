@@ -18,6 +18,8 @@ struct interrupt_vector {
 }
 
 extern @far @interrupt void osScheduler (void);
+extern @far @interrupt void uartTx (void);
+extern @far @interrupt void uartRx (void);
 
 extern void _stext();     /* startup routine */
 
@@ -44,8 +46,8 @@ struct interrupt_vector const _vectab[] = {
 	{0x82, NonHandledInterrupt}, /* irq17 */
 	{0x82, NonHandledInterrupt}, /* irq18 */
 	{0x82, NonHandledInterrupt}, /* irq19 I2C*/
-	{0x82, NonHandledInterrupt}, /* irq20 UART2 Tx comlete*/
-	{0x82, NonHandledInterrupt}, /* irq21 UART2 Rx full*/
+	{0x82, uartTx}, 			 /* irq20 UART2 Tx comlete*/
+	{0x82, uartRx}, 			 /* irq21 UART2 Rx full*/
 	{0x82, NonHandledInterrupt}, /* irq22 ADC1*/
 	{0x82, NonHandledInterrupt}, /* irq23 */
 	{0x82, NonHandledInterrupt}, /* irq24 */

@@ -17,14 +17,17 @@ static struct osSysTskIdx_st
 
 static struct uartRxBuf_st
 {
-	char buf[UART_BUF_LEN];
+	char buf[UART_RX_BUF_LEN];
 	char idx;
 }uartRxBf;
 
-static struct uartRxBuf_st
+static struct uartTxBuf_st
 {
-	char *buf[UART_RX_BUF_LEN];
-	char idx;
+	char *buf[UART_TX_BUF_LEN];
+	char idxr;//cteni ukazatele
+	char idxw;//zapis ukazatele
+	char len;//pocet platnych ukazatelu v poli
+	char idxs;//cteni retezce
 }uartTxBf;
 
 static void clrTIM2IntFlag(void);
@@ -76,7 +79,7 @@ void InitPeripherals(void)
 	UART2_BRR2 = 0x0B;
 	UART2_BRR1 = 0x08;//115200
 	UART2_CR1 = 0x00;//no parity
-	UART2_CR2 = 0x6C;//tx, rx int + tx, rx enable
+	UART2_CR2 = 0x2C;//rx int + tx, rx enable
 	UART2_CR3 = 0x00;//1 stopbit, 0 clock polarity
 	UART2_CR4 = 0x00;//nic
 	UART2_CR6 = 0x00;//nic
@@ -93,6 +96,14 @@ void InitPeripherals(void)
 	TIM2_CR1 = 	0x81;
 	
 	_asm("rim");
+//---------------------------------------------------------
+//inicializace promennych pro UART
+	uartRxBf.idx = 0;
+	uartTxBf.idxw = 0;
+	uartTxBf.idxr = 0;
+	uartTxBf.idxs = 0;
+	uartTxBf.len = 0;
+
 //---------------------------------------------------------
 //inicializace operacniho systemu a ulozeni indexu vlaken
 	osInit(&clrTIM2IntFlag);
@@ -165,19 +176,17 @@ char readInput(void)
 //---------------------------------------------------------
 static void osUart(void)
 {
-	int idx;
+	char idx;
 	
 	while(1)
 	{
-		if(osDoesTaskRun())
+		idx = strComp(uartRxBf.buf, "Ahoj");
+		if(idx > 0)
 		{
-			idx = strComp(uartRxBf.buf, "Ahoj");
-			if(idx > 0)
-			{
-				
-			}
-			osSetIdle();
+			sendMsg("Tobe take ahoj\r\n");
 		}
+		osSetIdle();//nastaveni necinneho stavu
+		_asm("trap");//volani scheduleru
 	}
 }
 
@@ -186,11 +195,9 @@ static void osRtc(void)
 	int i;
 	while(1)
 	{
-		if(osDoesTaskRun())
-		{
-			for(i= 0; i < 100; i++);
-			osSetIdle();
-		}
+		for(i= 0; i < 100; i++);
+		osSetIdle();//nastaveni necinneho stavu
+		_asm("trap");//volani scheduleru
 	}
 }
 //---------------------------------------------------------
@@ -216,12 +223,47 @@ static char strComp(const char *arr1, const char *arr2)
 }
 
 //---------------------------------------------------------
-//Preruseni UARTu
+//UART
 //---------------------------------------------------------
+
+char sendMsg(char *message)
+{
+	//zjisteni poctu ulozenych hodnot
+	if(uartTxBf.len == UART_TX_BUF_LEN)
+	{
+		return 0;
+	}
+	//ulozeni nove zpravy do pole
+	uartTxBf.buf[uartTxBf.idxw] = message;
+	uartTxBf.idxw++;
+	uartTxBf.idxw &= UART_TX_BUF_IDX_MSK;
+	uartTxBf.len++;
+	//nastaveni priznaku pro odesilani
+	UART2_CR2 |= 0x80;//txe int enable
+}
 
 @far @interrupt void uartTx (void)
 {
+	while(uartTxBf.buf[uartTxBf.idxr][uartTxBf.idxs] == '\0' &&
+	      uartTxBf.len > 0)
+	{
+		//prejit na dalsi ukazatel
+		uartTxBf.idxr++;
+		uartTxBf.idxr &= UART_TX_BUF_IDX_MSK;
+		uartTxBf.len--;
+		uartTxBf.idxs = 0;
+	}
 	
+	if(uartTxBf.len > 0)
+	{
+		//zapis do registru zaroven maze vlajku preruseni
+		UART2_DR = uartTxBf.buf[uartTxBf.idxr][uartTxBf.idxs];
+		uartTxBf.idxs++;
+	}
+	else
+	{
+		UART2_CR2 &= ~(0x80);//txe int disable
+	}
 	return;
 }
 
@@ -246,7 +288,7 @@ static char strComp(const char *arr1, const char *arr2)
 			break;
 		default://zvysit index a oriznout dle masky
 			uartRxBf.idx++;
-			uartRxBf.idx &= UART_BUF_IDX_MSK;
+			uartRxBf.idx &= UART_RX_BUF_IDX_MSK;
 			break;
 	}
 	
