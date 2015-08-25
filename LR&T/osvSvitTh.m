@@ -25,7 +25,7 @@ function E = osvSvitTh(xs, ys, zs, xb, yb, zb, ns, nb, Is_theta)
     zb= ones(Ns, 1)*zb;
 
     %1) vzdalenost bodu od svitidla, +eps zamezuje deleni nulou
-    lSB = (((xs-xb).^2 + (ys-yb).^2 + (zs-zb).^2)).^0.5+eps;
+    lsb = ((xs-xb).^2 + (ys-yb).^2 + (zs-zb).^2).^0.5+eps;
     %pruvodic
     rx = (xs-xb);
     ry = (ys-yb);
@@ -37,13 +37,13 @@ function E = osvSvitTh(xs, ys, zs, xb, yb, zb, ns, nb, Is_theta)
     cosTh = ns(1)*rx;
     cosTh = cosTh + ns(2)*ry;
     cosTh = cosTh + ns(3)*rz;
-    cosTh = -cosTh./lSB;
+    cosTh = -cosTh./lsb;
     Th = acos(cosTh);
     %od normaly plosky nb
     cosDl = nb(1)*rx;
     cosDl = cosDl + nb(2)*ry;
     cosDl = cosDl + nb(3)*rz;
-    cosDl = cosDl./lSB;
+    cosDl = cosDl./lsb;
     
     %3) urceni svitivosti v jednotlivych uhlech
     index = 1+ floor((NI .* Th/pi) - eps);
@@ -54,5 +54,5 @@ function E = osvSvitTh(xs, ys, zs, xb, yb, zb, ns, nb, Is_theta)
         end
     end
     %4) vypocet osvetleni, vysledky jsou v radku stejne jako souradnice
-    E = sum(Is .* cosDl ./ lSB.^2, 1);
+    E = sum(Is .* cosDl ./ lsb.^2, 1);
 end
