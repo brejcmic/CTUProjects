@@ -6,11 +6,11 @@
 %xb... vektor x souradnic bodu
 %yb... vektor y souradnic bodu
 %zb... vektor z souradnic bodu
-%vax... jednotkovy smerovy vektor plochy svitidla - C0, C180
-%vrd... jednotkovy smerovy vektor plochy svitidla - C90, C270
+%vax... smerovy vektor plochy svitidla - C0, C180
+%vrd... smerovy vektor plochy svitidla - C90, C270
 %vax a vrd jsou dle definice na sebe kolme, jejich vektorovy soucin udava
 %osu svitidla pro gama = 0 (zde normalovy vektor plochy svitidla)
-%nb... jednotkovy normalovy vektor osvetlovanych plosek
+%nb... normalovy vektor osvetlovanych plosek
 %Oba vektory jsou ve formatu [x, y, z]
 %Is_cg... krivka svitivosti pro souradnice c-gama
 function E = osvSvitCGama(xs, ys, zs, xb, yb, zb, vax, vrd, nb, Is_cg)
@@ -27,6 +27,11 @@ function E = osvSvitCGama(xs, ys, zs, xb, yb, zb, vax, vrd, nb, Is_cg)
     yb = ones(Ns, 1)*yb;
     zb = ones(Ns, 1)*zb;
     
+    %prevedeni vsech vektoru na jednotkove
+    vax = vax./((vax*vax').^0.5);
+    vrd = vrd./((vrd*vrd').^0.5);
+    nb = nb./((nb*nb').^0.5);
+    
     %1) normalovy vektor svitidla
     ns = [0,0,0];
     ns(1) = vax(2)*vrd(3)-vax(3)*vrd(2);
@@ -36,13 +41,13 @@ function E = osvSvitCGama(xs, ys, zs, xb, yb, zb, vax, vrd, nb, Is_cg)
     %jednotkovy vektor!!!
     
     %2) vzdalenost bodu od svitidla, +eps zamezuje deleni nulou
-    lsb = ((xs-xb).^2 + (ys-yb).^2 + (zs-zb).^2).^0.5+eps;
     %pruvodic
     rx = xs - xb;
     ry = ys - yb;
     rz = zs - zb;
+    lsb = (rx.^2 + ry.^2 + rz.^2).^0.5+eps;
     
-    %2) Vypocet vektoru prumetu pruvodice do plochy svitidla
+    %3) Vypocet vektoru prumetu pruvodice do plochy svitidla
     %urceni nasobku jednotkoveho normaloveho vektoru (je to podobne vzpoctu
     %vydalenosti dvou rovin)
     t = ns(1)*xb + ns(2)*yb + ns(3)*zb;
@@ -53,12 +58,12 @@ function E = osvSvitCGama(xs, ys, zs, xb, yb, zb, vax, vrd, nb, Is_cg)
     yp = yb + t.*ns(2);
     zp = zb + t.*ns(3);
     %Prumet pruvodice - vektor
-    lp = ((xp-xb).^2 + (yp-yb).^2 + (zp-zb).^2).^0.5+eps;
     px = xp - xb;
     py = yp - yb;
     pz = zp - zb;
+    lp = (px.^2 + py.^2 + pz.^2).^0.5+eps;
     
-    %3) cosiny
+    %4) cosiny
     %pomoci skalarniho soucinu
     %od normaly svitidla ns
     cosGm = ns(1)*rx;
@@ -78,15 +83,16 @@ function E = osvSvitCGama(xs, ys, zs, xb, yb, zb, vax, vrd, nb, Is_cg)
     cosDl = cosDl + nb(3)*rz;
     cosDl = cosDl./lsb;
     
-    %3) urceni svitivosti v jednotlivych uhlech C-Gm
+    %5) urceni svitivosti v jednotlivych uhlech C-Gm
     %TODO: dodelat pro danou krivku svitivosti
-    index = 1+ floor((NI .* Th/pi) - eps);
+    idxi = 1+ floor((NI(1) .* C/pi) - eps);
+    idxj = 1+ floor((NI(2) .* Gm/pi) - eps);
     Is = zeros(Ns, Nb);
     for i = 1:1:Ns
         for j = 1:1:Nb
-            Is(i,j) = Is_theta(index(i,j));
+            Is(i,j) = Is_cg(idxi(i,j), idxj(i,j));
         end
     end
-    %4) vypocet osvetleni, vysledky jsou v radku stejne jako souradnice
-    E = sum(Is .* cosDl ./ lxy.^2, 1);
+    %6) vypocet osvetleni, vysledky jsou v radku stejne jako souradnice
+    E = sum(Is .* cosDl ./ lsb.^2, 1);
 end

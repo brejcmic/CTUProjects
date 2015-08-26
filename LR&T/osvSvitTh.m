@@ -6,8 +6,8 @@
 %xb... vektor x souradnic bodu
 %yb... vektor y souradnic bodu
 %zb... vektor z souradnic bodu
-%ns... jednotkovy normalovy vektor svitidla - vektor osy svitidla
-%nb... jednotkovy normalovy vektor osvetlovanych plosek
+%ns... normalovy vektor svitidla - vektor osy svitidla
+%nb... normalovy vektor osvetlovanych plosek
 %Oba vektory jsou ve formatu [x, y, z]
 %Is_theta... krivka svitivosti v intervalu uhlu (0 - 180)°
 function E = osvSvitTh(xs, ys, zs, xb, yb, zb, ns, nb, Is_theta)
@@ -23,13 +23,17 @@ function E = osvSvitTh(xs, ys, zs, xb, yb, zb, ns, nb, Is_theta)
     xb= ones(Ns, 1)*xb;
     yb= ones(Ns, 1)*yb;
     zb= ones(Ns, 1)*zb;
+    
+    %prevedeni vsech vektoru na jednotkove
+    ns = ns./((ns*ns').^0.5);
+    nb = nb./((nb*nb').^0.5);
 
-    %1) vzdalenost bodu od svitidla, +eps zamezuje deleni nulou
-    lsb = ((xs-xb).^2 + (ys-yb).^2 + (zs-zb).^2).^0.5+eps;
+    %1) vzdalenost bodu od sviticiho bodu, +eps zamezuje deleni nulou
     %pruvodic
-    rx = (xs-xb);
-    ry = (ys-yb);
-    rz = (zs-zb);
+    rx = xs - xb;
+    ry = ys - yb;
+    rz = zs - zb;
+    lsb = (rx.^2 + ry.^2 + rz.^2).^0.5+eps;
     
     %2) cosiny
     %pomoci skalarniho soucinu

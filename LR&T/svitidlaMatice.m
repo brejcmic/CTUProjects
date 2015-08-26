@@ -11,7 +11,7 @@ close;
 %Mutace (pomerna hodnota):
                 pop.mut = 0.15;
 %Pocet generací:
-                pop.gen = 150;
+                pop.gen = 50;
 %Velikost populace:
                 pop.N = 400;
 %Pocet jedincu v turnaji:
@@ -25,6 +25,8 @@ close;
                 mstn.y = 5;
 %Vyska mistnosti (m):
                 mstn.z = 4;
+%Vyska srovnavaci roviny (m):
+                mstn.zsr = 0.85;
 %Pocet bodu na stenach v ose x:
                 mstn.Nx = 20;
 %Pocet bodu na stenach v ose y:
@@ -50,11 +52,11 @@ close;
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDEL
 %Krivka svitivosti
-                svt.I = [1500*cos(0:pi/200:(pi/2-pi/200)) zeros(1,100)];
+                svt.I = [3000*cos(0:pi/200:(pi/2-pi/200)) zeros(1,100)];
 %Vyska svitidel:
                 svt.z = 3.5;
 %Pocet svitidel:
-                svt.N = 12;
+                svt.N = 4;
 
 %%
 %--------------------------------------------------------------------------
@@ -150,6 +152,19 @@ stenaV.E0 = 0;
 stenaV.Ep = 0;
 stenaV.co = 0.5;
 stenaV.nv = [-1 0 0];
+
+for idx= 1:1:mstn.Ny
+    srovina.x((((idx-1)*mstn.Nx)+1):(idx*mstn.Nx)) = mstn.bx;
+    srovina.y((((idx-1)*mstn.Nx)+1):(idx*mstn.Nx)) = ones(1, mstn.Nx).*mstn.by(idx);
+    srovina.z((((idx-1)*mstn.Nx)+1):(idx*mstn.Nx)) = ones(1, mstn.Nx).*mstn.zsr;
+end
+srovina.A = ones(1, mstn.Nx*mstn.Ny).* (mstn.x*mstn.y)/ mstn.Nx/ mstn.Ny;
+srovina.N = mstn.Nx*mstn.Ny;
+srovina.E = 0;
+srovina.E0 = 0;
+srovina.Ep = 0;
+srovina.co = 0;
+srovina.nv = [0 0 1];
 
 %--------------------------------------------------------------------------
 %GENEROVANI DNA POCATECNICH POPULACI
@@ -443,9 +458,78 @@ for generace = 1:1:pop.gen
             stenaV.E = stenaV.E + stenaV.Ep;
         end
         %------------------------------------------------------------------
+        %Vypocet osvetleni srovnavaci roviny
+        %------------------------------------------------------------------
+        srovina.E = 0;
+        
+        %Srovnavaci rovina + svitidla
+        x1 = pop.dna(clen, 1:2:((2*svt.N)-1));
+        y1 = pop.dna(clen, 2:2:(2*svt.N));
+        z1 = svt.z*ones(1, svt.N);
+        nv1 = [0 0 -1];
+        
+        x2 = srovina.x;
+        y2 = srovina.y;
+        z2 = srovina.z;
+        nv2 = srovina.nv;
+        srovina.E = osvSvitTh(x1,y1,z1,x2,y2,z2,nv1,nv2,svt.I);
+        
+        %Srovnavaci rovina + steny
+        x1 = srovina.x;
+        y1 = srovina.y;
+        z1 = srovina.z;
+        nv1 = srovina.nv;
+        fi01 = zeros(1, mstn.Nx*mstn.Ny);
+
+        x2 = strop.x;
+        y2 = strop.y;
+        z2 = strop.z;
+        nv2 = strop.nv;
+        fi02 = strop.E.* strop.co.* strop.A;
+        [Ep1, ~] = osvPlchPlch(x1,y1,z1,x2,y2,z2,nv1,nv2,fi01,fi02);
+        
+        srovina.E = srovina.E + Ep1;
+        
+        x2 = stenaJ.x;
+        y2 = stenaJ.y;
+        z2 = stenaJ.z;
+        nv2 = stenaJ.nv;
+        fi02 = stenaJ.E.* stenaJ.co.* stenaJ.A.* (stenaJ.z > mstn.zsr);
+        [Ep1, ~] = osvPlchPlch(x1,y1,z1,x2,y2,z2,nv1,nv2,fi01,fi02);
+
+        srovina.E = srovina.E + Ep1;
+
+        x2 = stenaS.x;
+        y2 = stenaS.y;
+        z2 = stenaS.z;
+        nv2 = stenaS.nv;
+        fi02 = stenaS.E.* stenaS.co.* stenaS.A.* (stenaS.z > mstn.zsr);
+        [Ep1, ~] = osvPlchPlch(x1,y1,z1,x2,y2,z2,nv1,nv2,fi01,fi02);
+
+        srovina.E = srovina.E + Ep1;
+
+        x2 = stenaZ.x;
+        y2 = stenaZ.y;
+        z2 = stenaZ.z;
+        nv2 = stenaZ.nv;
+        fi02 = stenaZ.E.* stenaZ.co.* stenaZ.A.* (stenaZ.z > mstn.zsr);
+        [Ep1, ~] = osvPlchPlch(x1,y1,z1,x2,y2,z2,nv1,nv2,fi01,fi02);
+
+        srovina.E = srovina.E + Ep1;
+
+        x2 = stenaV.x;
+        y2 = stenaV.y;
+        z2 = stenaV.z;
+        nv2 = stenaV.nv;
+        fi02 = stenaV.E.* stenaV.co.* stenaV.A.* (stenaV.z > mstn.zsr);
+        [Ep1, ~] = osvPlchPlch(x1,y1,z1,x2,y2,z2,nv1,nv2,fi01,fi02);
+
+        srovina.E = srovina.E + Ep1;
+        
+        %------------------------------------------------------------------
         %Ulozeni sledovanych parametru tohoto clena populace
         %------------------------------------------------------------------
-        pop.E(clen, :) = podlaha.E;
+        pop.E(clen, :) = srovina.E;
     end
     %----------------------------------------------------------------------
     %Urceni fitness
