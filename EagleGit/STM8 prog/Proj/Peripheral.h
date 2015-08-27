@@ -19,9 +19,9 @@
  #define	UART_RX_BUF_IDX_MSK		(UART_RX_BUF_LEN-1)
  
  #define	UART_TX_BUF_LEN			8 //musi byt mocnina 2
- #define	UART_TX_BUF_IDX_MSK		(UART_RX_BUF_LEN-1)
+ #define	UART_TX_BUF_IDX_MSK		(UART_TX_BUF_LEN-1)
  
  void InitPeripherals(void);
  void setOutput(char val);
  char readInput(void);
- char sendMsg(char *message);
+ char printMsg(char *message);

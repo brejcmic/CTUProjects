@@ -34,16 +34,28 @@ static void clrTIM2IntFlag(void);
 static void osUart(void);
 static void osRtc(void);
 static char strComp(const char *arr1, const char *arr2);
+static char num2Ascii(char num);
+static char ascii2Num(char ascii);
 
 void InitPeripherals(void)
 {
 //---------------------------------------------------------
+//nastaveni hodin
+	CLK_ECKCR = 0x01;		//povoleni externiho oscilatoru
+	while(!(CLK_ECKCR & 0x02));//cekani na stabilni hodinovy
+							//signal
+	CLK_SWCR |= 0x02;		//povoleni prepnuti hodin
+	CLK_SWR = 0xB4;			//ID externiho oscilatoru
+	while(CLK_SWCR & 0x01); //cekani na prepnuti hodin
+	CLK_SWCR &= ~0x02;		//zakazani prepnuti hodin
+
+//---------------------------------------------------------
 //nastaveni smeru bran
 	//PA - obvod 74HC595 
-	PA_DDR |= P_B3 | P_B4 | P_B5 | P_B6;
-	PA_CR1 |= P_B3 | P_B4 | P_B5 | P_B6;
-	PA_CR2 |= P_B3 | P_B4 | P_B5 | P_B6; //fast output
-	PA_ODR |= P_B4; //SCL je aktivni v nule
+	PA_DDR = P_B3 | P_B4 | P_B5 | P_B6;
+	PA_CR1 = P_B3 | P_B4 | P_B5 | P_B6;
+	PA_CR2 = P_B3 | P_B4 | P_B5 | P_B6; //fast output
+	PA_ODR = P_B4; //SCL je aktivni v nule
 	
 	//PB - analogove vstupy
 	PB_DDR = 	0x00;
@@ -54,6 +66,10 @@ void InitPeripherals(void)
 	//PC - nepouzivat
 	
 	//PD - UART
+	PD_DDR = P_B4 | P_B2; //CTS, RESET
+	PD_CR1 = P_B4 | P_B2;
+	PD_CR2 = P_B4 | P_B2;
+	PD_ODR = P_B2;//RESET disable
 	
 	//PE - obvod 74HC597 + I2C
 	PE_DDR |= P_B3 | P_B6 | P_B7;
@@ -79,12 +95,12 @@ void InitPeripherals(void)
 	UART2_BRR2 = 0x0B;
 	UART2_BRR1 = 0x08;//115200
 	UART2_CR1 = 0x00;//no parity
-	UART2_CR2 = 0x2C;//rx int + tx, rx enable
+	UART2_CR2 = 0x2C;//rx int, tx, rx enable
 	UART2_CR3 = 0x00;//1 stopbit, 0 clock polarity
 	UART2_CR4 = 0x00;//nic
 	UART2_CR6 = 0x00;//nic
 	UART2_GTR = 0x00;//nic
-	UART2_PSCR = 0x00;//nic
+	UART2_PSCR = 0x01;//nic, nema vliv
 //---------------------------------------------------------
 //nastaveni TIM2 CLK = 16 MHz
 	TIM2_IER = 	0x01;
@@ -125,7 +141,7 @@ static void clrTIM2IntFlag(void)
 	TIM2_SR1 = 	0x00;
 }
 
-//Funkce pro zapis hodnotz na digitalni vystup desky
+//Funkce pro zapis hodnoty na digitalni vystup desky
 void setOutput(char val)
 {
 	char i; 	//pocitadlo
@@ -136,7 +152,7 @@ void setOutput(char val)
 	for(i= 0; i < 8; i++)
 	{
 		vyst = val & 0x01;
-		PA_ODR = vyst << 3; //na PA3
+		PA_ODR = (vyst << 3) | P_B4;//na PA3, SCL stale v H
 		PA_ODR |= P_B6; //SCK nahoru
 		val = val >> 1; //kvuli zavedeni prodlevy posouvam 
 						//tady
@@ -176,14 +192,57 @@ char readInput(void)
 //---------------------------------------------------------
 static void osUart(void)
 {
-	char idx;
+	static char val;
+	static char strVal[5];
 	
 	while(1)
 	{
-		idx = strComp(uartRxBf.buf, "Ahoj");
-		if(idx > 0)
+		if(strComp(uartRxBf.buf, "rin"))
 		{
-			sendMsg("Tobe take ahoj\r\n");
+			printMsg("DIN = ");
+			val = readInput();
+			strVal[1] = val & 0x0F;
+			strVal[1] = num2Ascii(strVal[1]);
+			strVal[0] = val >> 4;
+			strVal[0] = num2Ascii(strVal[0]);
+			strVal[2] = '\r';
+			strVal[3] = '\n';
+			strVal[4] = '\0';
+			printMsg(strVal);
+		}
+		else if(strComp(uartRxBf.buf, "sout,"))
+		{
+			if(uartRxBf.buf[5] != '\0' &&
+			   uartRxBf.buf[6] != '\0')
+			{
+				val = ascii2Num(uartRxBf.buf[5]);
+				val <<= 4;
+				val |= ascii2Num(uartRxBf.buf[6]);
+				setOutput(val);
+				printMsg("DOUT nastaven\r\n");
+			}
+		}
+		else if(strComp(uartRxBf.buf, "id"))
+		{
+			printMsg("Testovaci pripravek pro podporu vyuky.\r\n");
+			printMsg("Bluetooth: RN-41\r\n");
+			printMsg("RTC:       PCF8563\r\n");
+			printMsg("Kit:       STM8 Discovery\r\n");
+			printMsg("Katedra:   Elektrotechnologie\r\n");
+		}
+		else if(strComp(uartRxBf.buf, "verze"))
+		{
+			printMsg("+nastaveni hodin CPU - 16 MHz\r\n");
+			printMsg("+funkcni vlakna\r\n");
+			printMsg("+komunikace bluetooth\r\n");
+			printMsg("+funkcni DIN, DOUT\r\n");
+		}
+		else if(strComp(uartRxBf.buf, "uart"))
+		{
+			printMsg("baud:     115200\r\n");
+			printMsg("data:     8 bit\r\n");
+			printMsg("parita:   zadna\r\n");
+			printMsg("stop bit: 1\r\n");
 		}
 		osSetIdle();//nastaveni necinneho stavu
 		_asm("trap");//volani scheduleru
@@ -222,11 +281,45 @@ static char strComp(const char *arr1, const char *arr2)
 	return 0;
 }
 
+static char num2Ascii(char num)
+{
+	if(num > 9)
+	{
+		num += 0x37;
+	}
+	else
+	{
+		num += 0x30;
+	}
+	return num;
+}
+
+static char ascii2Num(char ascii)
+{
+	if(ascii > 0x60 && ascii < 0x67)//mala pismena
+	{
+		ascii -= 0x57;
+	}
+	else if(ascii > 0x40 && ascii < 0x47)//velka pismena
+	{
+		ascii -= 0x37;
+	}
+	else if(ascii > 0x2f && ascii < 0x3a)//cisla
+	{
+		ascii -= 0x30;
+	}
+	else
+	{
+		ascii = 0;
+	}
+	return ascii;
+}
+
 //---------------------------------------------------------
 //UART
 //---------------------------------------------------------
 
-char sendMsg(char *message)
+char printMsg(char *message)
 {
 	//zjisteni poctu ulozenych hodnot
 	if(uartTxBf.len == UART_TX_BUF_LEN)
@@ -240,6 +333,7 @@ char sendMsg(char *message)
 	uartTxBf.len++;
 	//nastaveni priznaku pro odesilani
 	UART2_CR2 |= 0x80;//txe int enable
+	return 1;
 }
 
 @far @interrupt void uartTx (void)
@@ -269,12 +363,13 @@ char sendMsg(char *message)
 
 @far @interrupt void uartRx (void)
 {
-	//cteni znaku a jeho uloyeni do pole,
+	char inputChar;
+	//cteni znaku,
 	//cteni datoveho registru by melo zaroven mazat vlajku
 	//preruseni
-	uartRxBf.buf[uartRxBf.idx] = UART2_DR;
+	inputChar = UART2_DR;
 	//kontrola ridiciho znaku
-	switch(uartRxBf.buf[uartRxBf.idx])
+	switch(inputChar)
 	{
 		case 0x0A://spustit vlakno a najet na zacatek pole
 			osSetRun(osTskIdx.uart);
@@ -287,10 +382,10 @@ char sendMsg(char *message)
 			}
 			break;
 		default://zvysit index a oriznout dle masky
+			uartRxBf.buf[uartRxBf.idx] = inputChar;
 			uartRxBf.idx++;
 			uartRxBf.idx &= UART_RX_BUF_IDX_MSK;
 			break;
 	}
-	
 	return;
 }
