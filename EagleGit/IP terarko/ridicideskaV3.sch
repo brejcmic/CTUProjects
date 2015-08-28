@@ -16715,7 +16715,6 @@ Source: www.kingbright.com</description>
 <part name="C17" library="rcl" deviceset="C-EU" device="C0805" value="10n"/>
 <part name="C18" library="rcl" deviceset="C-EU" device="C0805" value="10n"/>
 <part name="C19" library="rcl" deviceset="C-EU" device="C0805" value="10n"/>
-<part name="C20" library="rcl" deviceset="C-EU" device="C0805" value="10n"/>
 <part name="R18" library="rcl" deviceset="R-EU_" device="0207/12" value="1k"/>
 <part name="R19" library="rcl" deviceset="R-EU_" device="0207/12" value="1k"/>
 </parts>
@@ -16802,7 +16801,6 @@ Source: www.kingbright.com</description>
 <instance part="C17" gate="G$1" x="-17.78" y="203.2"/>
 <instance part="C18" gate="G$1" x="-7.62" y="203.2"/>
 <instance part="C19" gate="G$1" x="2.54" y="203.2"/>
-<instance part="C20" gate="G$1" x="12.7" y="203.2"/>
 <instance part="R18" gate="G$1" x="195.58" y="-43.18" rot="R180"/>
 <instance part="R19" gate="G$1" x="195.58" y="-35.56" rot="R180"/>
 </instances>
@@ -17091,10 +17089,6 @@ Source: www.kingbright.com</description>
 <wire x1="-7.62" y1="195.58" x2="2.54" y2="195.58" width="0.1524" layer="91"/>
 <wire x1="2.54" y1="195.58" x2="2.54" y2="198.12" width="0.1524" layer="91"/>
 <junction x="-7.62" y="195.58"/>
-<pinref part="C20" gate="G$1" pin="2"/>
-<wire x1="12.7" y1="198.12" x2="12.7" y2="195.58" width="0.1524" layer="91"/>
-<wire x1="12.7" y1="195.58" x2="2.54" y2="195.58" width="0.1524" layer="91"/>
-<junction x="2.54" y="195.58"/>
 </segment>
 </net>
 <net name="VDD" class="0">
@@ -17375,12 +17369,9 @@ Source: www.kingbright.com</description>
 <net name="VDD_P" class="0">
 <segment>
 <wire x1="71.12" y1="48.26" x2="58.42" y2="48.26" width="0.1524" layer="91"/>
-<wire x1="71.12" y1="33.02" x2="58.42" y2="33.02" width="0.1524" layer="91"/>
-<wire x1="58.42" y1="33.02" x2="58.42" y2="38.1" width="0.1524" layer="91"/>
 <wire x1="58.42" y1="38.1" x2="58.42" y2="43.18" width="0.1524" layer="91"/>
 <wire x1="58.42" y1="43.18" x2="58.42" y2="48.26" width="0.1524" layer="91"/>
 <wire x1="71.12" y1="38.1" x2="58.42" y2="38.1" width="0.1524" layer="91"/>
-<junction x="58.42" y="38.1"/>
 <wire x1="71.12" y1="43.18" x2="58.42" y2="43.18" width="0.1524" layer="91"/>
 <junction x="58.42" y="43.18"/>
 <pinref part="SL4" gate="G$1" pin="1"/>
@@ -17394,7 +17385,6 @@ Source: www.kingbright.com</description>
 <pinref part="IO1" gate="G$1" pin="VDDIO_1"/>
 <pinref part="IO1" gate="G$1" pin="VDD"/>
 <pinref part="IO1" gate="G$1" pin="VDDIO_2"/>
-<pinref part="IO1" gate="G$1" pin="VDDA"/>
 <pinref part="C9" gate="G$1" pin="1"/>
 <wire x1="25.4" y1="43.18" x2="25.4" y2="48.26" width="0.1524" layer="91"/>
 <junction x="25.4" y="48.26"/>
@@ -17411,10 +17401,6 @@ Source: www.kingbright.com</description>
 <wire x1="-7.62" y1="208.28" x2="-7.62" y2="213.36" width="0.1524" layer="91"/>
 <junction x="-7.62" y="208.28"/>
 <label x="-7.62" y="213.36" size="1.778" layer="95" rot="R90"/>
-<wire x1="2.54" y1="208.28" x2="12.7" y2="208.28" width="0.1524" layer="91"/>
-<junction x="2.54" y="208.28"/>
-<pinref part="C20" gate="G$1" pin="1"/>
-<wire x1="12.7" y1="208.28" x2="12.7" y2="205.74" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$6" class="0">
