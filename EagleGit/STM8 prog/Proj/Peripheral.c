@@ -66,9 +66,9 @@ void InitPeripherals(void)
 	//PC - nepouzivat
 	
 	//PD - UART
-	PD_DDR = P_B4 | P_B2; //CTS, RESET
-	PD_CR1 = P_B4 | P_B2;
-	PD_CR2 = P_B4 | P_B2;
+	PD_DDR = P_B4 | P_B2 | P_B0; //CTS, RESET, LED
+	PD_CR1 = P_B4 | P_B2 | P_B0;
+	PD_CR2 = P_B4 | P_B2 | P_B0;
 	PD_ODR = P_B2;//RESET disable
 	
 	//PE - obvod 74HC597 + I2C

@@ -15,7 +15,15 @@ void main(void)
 
 	while (1)
 	{
-		i++;
-		j += i;
+		PD_ODR |= 0x01;
+		while(i < 15000)
+		{
+			i++;
+		}
+		PD_ODR &= 0xFE;
+		while(i > 0)
+		{
+			i--;
+		}
 	}
 }
