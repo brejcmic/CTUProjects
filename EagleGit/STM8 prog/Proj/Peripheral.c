@@ -30,6 +30,21 @@ static struct uartTxBuf_st
 	char idxs;//cteni retezce
 }uartTxBf;
 
+static struct i2cTime_st
+{
+	char seconds;
+	char minutes;
+	char hours;
+	char day;
+	char weekday;
+	char month;
+	char year;
+	enum timeState
+	{
+		free= 0, update, print, busy
+	}state;
+}i2cTime;
+
 static void clrTIM2IntFlag(void);
 static void osUart(void);
 static void osRtc(void);
@@ -81,15 +96,15 @@ void InitPeripherals(void)
 //---------------------------------------------------------
 //nastaveni I2C
 	I2C_CR1 = 	0x01;//enable
-	I2C_CR2 = 	0x00;
+	I2C_CR2 = 	0x04;//ACK
 	I2C_FREQR = 0x10;//16MHz
 	I2C_OARL = 	0x00;
 	I2C_OARH = 	0x40;
-	I2C_ITR = 	0x00;
+	I2C_ITR = 	0x02;//ITEVTEN
 	
 	I2C_CCRL = 	0x0D;//400 kHz
 	I2C_CCRH = 	0x80;//fast mode
-	I2C_TRISER = 0x02;
+	I2C_TRISER = 0x04;
 //---------------------------------------------------------
 //nastaveni UART
 	UART2_BRR2 = 0x0B;
@@ -254,8 +269,13 @@ static void osRtc(void)
 	int i;
 	while(1)
 	{
-		for(i= 0; i < 100; i++);
-		osSetIdle();//nastaveni necinneho stavu
+		if(!(i2cTime.state & I2C_ST_BUSY))
+		{
+			if(i2cTime.state & I2C_ST_UPDATE)
+			{
+				I2C_CR2 |= 0x01; //start condition
+			}
+		}
 		_asm("trap");//volani scheduleru
 	}
 }
@@ -388,4 +408,40 @@ char printMsg(char *message)
 			break;
 	}
 	return;
+}
+
+//---------------------------------------------------------
+//I2C
+//---------------------------------------------------------
+@far @interrupt void I2CRxTx(void)
+{
+	char val;
+	//cteni SR1
+	val = I2C_SR1;
+	
+	switch(i2cTime.state)
+	{
+		case start:
+			if(val & I2C_SR1_SB)
+			{
+				I2C_DR = I2C_ADDR_WRITE;
+				i2cTime.state = regaddr;
+			}
+			break;
+		case regaddr:
+			if(val & I2C_SR1_ADDR)
+			{
+				val = I2C_SR3;
+				I2C_DR = 0x02;
+				I2C_CR2 |= 0x02;//nastavuje stopku
+				i2cTime.state = stop;
+			}
+			break;
+		case stop:
+			if(val & I2C_SR1_STOPF)
+			{
+				I2C_CR2 &= ~0x02;//maze stopku
+			}
+			break;
+	}
 }
