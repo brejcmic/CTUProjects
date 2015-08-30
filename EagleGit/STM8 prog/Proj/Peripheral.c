@@ -441,6 +441,31 @@ char printMsg(char *message)
 			if(val & I2C_SR1_STOPF)
 			{
 				I2C_CR2 &= ~0x02;//maze stopku
+				I2C_CR2 |= 0x02;//nastavuje start
+				i2cTime.state = rStart;
+			}
+			break;
+		case rStart:
+			if(val & I2C_SR1_SB)
+			{
+				I2C_DR = I2C_ADDR_READ;
+				i2cTime.state = rAddr;
+			}
+			break;
+		case rAddr:
+			if(val & I2C_SR1_ADDR)
+			{
+				val = I2C_SR3;
+				I2C_CR2 |= 0x04;//nastavuje ACK
+				i2cTime.state = stop;
+			}
+			break;
+		case rSeconds:
+			if(val & I2C_SR1_BTF)
+			{
+				//cte sekundy
+				I2C_CR2 |= 0x04;//nastavuje ACK
+				i2cTime.state = stop;
 			}
 			break;
 	}
