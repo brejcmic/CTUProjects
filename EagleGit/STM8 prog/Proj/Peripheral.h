@@ -28,13 +28,16 @@
  #define	I2C_ADDR_READ			0xA3
  #define	I2C_ADDR_WRITE			0xA2
  
- #define	I2C_ST_INIT				0x10
- #define	I2C_ST_READ				0x20
- #define	I2C_ST_SET				0x40
+ #define	I2C_ST_BUSY				0x01
+ #define	I2C_ST_UPDATE			0x02
  #define	I2C_ST_PRINT			0x80
  
  #define	I2C_SR1_SB				0x01
  #define	I2C_SR1_ADDR			0x02
+ #define	I2C_SR1_BTF				0x04
+ #define	I2C_SR1_STOPF			0x10
+ #define	I2C_SR1_RXNE			0x40
+ #define	I2C_SR1_TXE			0x40
  
  void InitPeripherals(void);
  void setOutput(char val);

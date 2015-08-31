@@ -41,8 +41,17 @@ static struct i2cTime_st
 	char year;
 	enum timeState
 	{
-		free= 0, update, print, busy
+		start= 0, 
+		regaddr, 
+		stop, 
+		rStart, 
+		rAddr, 
+		rSeconds, 
+		rMinutes,
+		rHours,
+		finished
 	}state;
+	char request;
 }i2cTime;
 
 static void clrTIM2IntFlag(void);
@@ -51,6 +60,7 @@ static void osRtc(void);
 static char strComp(const char *arr1, const char *arr2);
 static char num2Ascii(char num);
 static char ascii2Num(char ascii);
+static void update(void);
 
 void InitPeripherals(void)
 {
@@ -95,12 +105,12 @@ void InitPeripherals(void)
 	
 //---------------------------------------------------------
 //nastaveni I2C
-	I2C_CR1 = 	0x01;//enable
+	I2C_CR1 = 	0x81;//enable
 	I2C_CR2 = 	0x04;//ACK
 	I2C_FREQR = 0x10;//16MHz
 	I2C_OARL = 	0x00;
 	I2C_OARH = 	0x40;
-	I2C_ITR = 	0x02;//ITEVTEN
+	I2C_ITR = 	0x06;//ITEVTEN a ITBUFEN
 	
 	I2C_CCRL = 	0x0D;//400 kHz
 	I2C_CCRH = 	0x80;//fast mode
@@ -237,6 +247,10 @@ static void osUart(void)
 				printMsg("DOUT nastaven\r\n");
 			}
 		}
+		else if(strComp(uartRxBf.buf, "time"))
+		{
+			update();
+		}
 		else if(strComp(uartRxBf.buf, "id"))
 		{
 			printMsg("Testovaci pripravek pro podporu vyuky.\r\n");
@@ -266,16 +280,22 @@ static void osUart(void)
 
 static void osRtc(void)
 {
-	int i;
 	while(1)
 	{
-		if(!(i2cTime.state & I2C_ST_BUSY))
+		if(!(i2cTime.request & I2C_ST_BUSY))
 		{
-			if(i2cTime.state & I2C_ST_UPDATE)
+			if(i2cTime.request & I2C_ST_UPDATE)
 			{
 				I2C_CR2 |= 0x01; //start condition
+				i2cTime.request |= I2C_ST_BUSY;
+			}
+			else if(i2cTime.request & I2C_ST_PRINT)
+			{
+				printMsg("OK\r\n");
+				i2cTime.request = 0x00;
 			}
 		}
+		osSetIdle();//nastaveni necinneho stavu
 		_asm("trap");//volani scheduleru
 	}
 }
@@ -413,6 +433,13 @@ char printMsg(char *message)
 //---------------------------------------------------------
 //I2C
 //---------------------------------------------------------
+
+static void update(void)
+{
+	i2cTime.request |= I2C_ST_UPDATE;
+	osSetRun(osTskIdx.rtc);
+}
+
 @far @interrupt void I2CRxTx(void)
 {
 	char val;
@@ -433,15 +460,7 @@ char printMsg(char *message)
 			{
 				val = I2C_SR3;
 				I2C_DR = 0x02;
-				I2C_CR2 |= 0x02;//nastavuje stopku
-				i2cTime.state = stop;
-			}
-			break;
-		case stop:
-			if(val & I2C_SR1_STOPF)
-			{
-				I2C_CR2 &= ~0x02;//maze stopku
-				I2C_CR2 |= 0x02;//nastavuje start
+				I2C_CR2 = 0x03;//nastavuje stop a start
 				i2cTime.state = rStart;
 			}
 			break;
@@ -456,17 +475,41 @@ char printMsg(char *message)
 			if(val & I2C_SR1_ADDR)
 			{
 				val = I2C_SR3;
-				I2C_CR2 |= 0x04;//nastavuje ACK
-				i2cTime.state = stop;
+				I2C_CR2 = 0x04;//nastavuje ACK
+				i2cTime.state = rSeconds;
 			}
 			break;
 		case rSeconds:
-			if(val & I2C_SR1_BTF)
+			if(val & I2C_SR1_RXNE)
 			{
 				//cte sekundy
-				I2C_CR2 |= 0x04;//nastavuje ACK
-				i2cTime.state = stop;
+				i2cTime.seconds = I2C_DR;
+				I2C_CR2 = 0x04;//nastavuje ACK
+				i2cTime.state = rMinutes;
 			}
 			break;
+		case rMinutes:
+			if(val & I2C_SR1_RXNE)
+			{
+				//cte minuty
+				i2cTime.minutes = I2C_DR;
+				I2C_CR2 = 0x02;//nastavuje stop bez ACK
+				i2cTime.state = rHours;
+			}
+			break;
+		case rHours:
+			if(val & I2C_SR1_RXNE)
+			{
+				//cte sekundy
+				i2cTime.hours = I2C_DR;
+				i2cTime.hours = I2C_DR;
+				I2C_CR2 = 0x00;//vsechno smazat
+				i2cTime.request = I2C_ST_PRINT;
+				osSetRun(osTskIdx.rtc);
+				i2cTime.state = start;
+			}
+			break;
+		default:
+			while(1);
 	}
 }
