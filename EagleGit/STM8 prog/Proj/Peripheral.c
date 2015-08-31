@@ -280,6 +280,9 @@ static void osUart(void)
 
 static void osRtc(void)
 {
+	static char val;
+	static char strVal[12];
+	
 	while(1)
 	{
 		if(!(i2cTime.request & I2C_ST_BUSY))
@@ -291,7 +294,25 @@ static void osRtc(void)
 			}
 			else if(i2cTime.request & I2C_ST_PRINT)
 			{
-				printMsg("OK\r\n");
+				val = (i2cTime.hours >> 4) & 0x03;
+				strVal[0] = num2Ascii(val);
+				val = i2cTime.hours & 0x0F;
+				strVal[1] = num2Ascii(val);
+				strVal[2] = ':';
+				val = (i2cTime.minutes >> 4) & 0x07;
+				strVal[3] = num2Ascii(val);
+				val = i2cTime.minutes & 0x0F;
+				strVal[4] = num2Ascii(val);
+				strVal[5] = ':';
+				val = (i2cTime.seconds >> 4) & 0x07;
+				strVal[6] = num2Ascii(val);
+				val = i2cTime.seconds & 0x0F;
+				strVal[7] = num2Ascii(val);
+				strVal[8] = '\r';
+				strVal[9] = '\n';
+				strVal[10] = '\0';
+				printMsg(strVal);
+				
 				i2cTime.request = 0x00;
 			}
 		}
@@ -500,8 +521,7 @@ static void update(void)
 		case rHours:
 			if(val & I2C_SR1_RXNE)
 			{
-				//cte sekundy
-				i2cTime.hours = I2C_DR;
+				//cte hodiny
 				i2cTime.hours = I2C_DR;
 				I2C_CR2 = 0x00;//vsechno smazat
 				i2cTime.request = I2C_ST_PRINT;
