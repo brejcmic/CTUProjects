@@ -30,6 +30,8 @@
 !*.c
 !*.h
 
+#ASM source files
+!*.asm
 
 #JAVA files
 !*.java
