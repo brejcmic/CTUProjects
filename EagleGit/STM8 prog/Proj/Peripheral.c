@@ -35,23 +35,29 @@ static struct i2cTime_st
 	char seconds;
 	char minutes;
 	char hours;
-	char day;
-	char weekday;
-	char month;
-	char year;
+	char days;
+	char weekdays;
+	char months;
+	char years;
 	enum timeState
 	{
-		start= 0, 
+		start, 
 		regaddr, 
 		stop, 
+		wStop,
 		rStart, 
 		rAddr, 
 		rSeconds, 
 		rMinutes,
 		rHours,
-		finished
+		rDays,
+		rWeekdays,
+		rMonths,
+		rYears
 	}state;
 	char request;
+	char writeAddr;
+	char writeVal;
 }i2cTime;
 
 static void clrTIM2IntFlag(void);
@@ -60,7 +66,6 @@ static void osRtc(void);
 static char strComp(const char *arr1, const char *arr2);
 static char num2Ascii(char num);
 static char ascii2Num(char ascii);
-static void update(void);
 
 void InitPeripherals(void)
 {
@@ -218,6 +223,7 @@ char readInput(void)
 static void osUart(void)
 {
 	static char val;
+	static char addr;
 	static char strVal[5];
 	
 	while(1)
@@ -235,7 +241,7 @@ static void osUart(void)
 			strVal[4] = '\0';
 			printMsg(strVal);
 		}
-		else if(strComp(uartRxBf.buf, "sout,"))
+		else if(strComp(uartRxBf.buf, "wout,"))
 		{
 			if(uartRxBf.buf[5] != '\0' &&
 			   uartRxBf.buf[6] != '\0')
@@ -247,9 +253,29 @@ static void osUart(void)
 				printMsg("DOUT nastaven\r\n");
 			}
 		}
-		else if(strComp(uartRxBf.buf, "time"))
+		else if(strComp(uartRxBf.buf, "rtcr"))
 		{
-			update();
+			rtcPrint();
+		}
+		else if(strComp(uartRxBf.buf, "rtcw,"))
+		{
+			if(uartRxBf.buf[5] != '\0' &&
+			   uartRxBf.buf[6] != '\0' &&
+			   uartRxBf.buf[7] == ',' &&
+			   uartRxBf.buf[8] != '\0' &&
+			   uartRxBf.buf[9] != '\0')
+			{
+				addr = ascii2Num(uartRxBf.buf[5]);
+				addr <<= 4;
+				addr |= ascii2Num(uartRxBf.buf[6]);
+				val = ascii2Num(uartRxBf.buf[8]);
+				val <<= 4;
+				val |= ascii2Num(uartRxBf.buf[9]);
+				if(rtcWrite(addr, val))
+				{
+					printMsg("Zapis hodnoty RTC registru\r\n");
+				}
+			}
 		}
 		else if(strComp(uartRxBf.buf, "id"))
 		{
@@ -259,7 +285,7 @@ static void osUart(void)
 			printMsg("Kit:       STM8 Discovery\r\n");
 			printMsg("Katedra:   Elektrotechnologie\r\n");
 		}
-		else if(strComp(uartRxBf.buf, "verze"))
+		else if(strComp(uartRxBf.buf, "ver"))
 		{
 			printMsg("+nastaveni hodin CPU - 16 MHz\r\n");
 			printMsg("+funkcni vlakna\r\n");
@@ -281,38 +307,120 @@ static void osUart(void)
 static void osRtc(void)
 {
 	static char val;
-	static char strVal[12];
+	static char strVal[24];
 	
 	while(1)
 	{
-		if(!(i2cTime.request & I2C_ST_BUSY))
+		while(!(i2cTime.request & I2C_ST_BUSYR) && 
+			  !(i2cTime.request & I2C_ST_BUSYW) && 
+			  i2cTime.request)
 		{
 			if(i2cTime.request & I2C_ST_UPDATE)
 			{
-				I2C_CR2 |= 0x01; //start condition
-				i2cTime.request |= I2C_ST_BUSY;
+				//nastaveni busy
+				i2cTime.request |= I2C_ST_BUSYR;
+				//smazani update
+				i2cTime.request &= ~I2C_ST_UPDATE;
+				//stav automatu na zacatek
+				i2cTime.state = start;
+				//zahajeni I2C prenosu
+				I2C_CR2 |= I2C_CR2_START;
+			}
+			else if(i2cTime.request & I2C_ST_WRITE)
+			{
+				//nastaveni busy
+				i2cTime.request |= I2C_ST_BUSYW;
+				//smazani update a write
+				i2cTime.request &= ~I2C_ST_WRITE;
+				//stav automatu na zacatek
+				i2cTime.state = start;
+				//zahajeni I2C prenosu
+				I2C_CR2 |= I2C_CR2_START;
+			}
+			else if(i2cTime.request & I2C_ST_BCDCUT)
+			{
+				//oriznuti nevyznamnych bitu bcd kodu
+				i2cTime.seconds &= 0x7F;
+				i2cTime.minutes &= 0x7F;
+				i2cTime.hours &= 0x3F;
+				i2cTime.days &= 0x3F;
+				i2cTime.weekdays &= 0x07;
+				i2cTime.months &= 0x1F;
+				i2cTime.request &= ~I2C_ST_BCDCUT;
 			}
 			else if(i2cTime.request & I2C_ST_PRINT)
 			{
-				val = (i2cTime.hours >> 4) & 0x03;
+				//vytisknuti casu na terminal
+				val = (i2cTime.hours >> 4);
 				strVal[0] = num2Ascii(val);
 				val = i2cTime.hours & 0x0F;
 				strVal[1] = num2Ascii(val);
 				strVal[2] = ':';
-				val = (i2cTime.minutes >> 4) & 0x07;
+				val = (i2cTime.minutes >> 4);
 				strVal[3] = num2Ascii(val);
 				val = i2cTime.minutes & 0x0F;
 				strVal[4] = num2Ascii(val);
 				strVal[5] = ':';
-				val = (i2cTime.seconds >> 4) & 0x07;
+				val = (i2cTime.seconds >> 4);
 				strVal[6] = num2Ascii(val);
 				val = i2cTime.seconds & 0x0F;
 				strVal[7] = num2Ascii(val);
 				strVal[8] = '\r';
-				strVal[9] = '\n';
-				strVal[10] = '\0';
-				printMsg(strVal);
+				strVal[9] = '\n';//cas vytisten
 				
+				switch(i2cTime.weekdays)
+				{
+					case 0:
+						strVal[10] = 'n';
+						strVal[11] = 'e';
+						break;
+					case 1:
+						strVal[10] = 'p';
+						strVal[11] = 'o';
+						break;
+					case 2:
+						strVal[10] = 'u';
+						strVal[11] = 't';
+						break;
+					case 3:
+						strVal[10] = 's';
+						strVal[11] = 't';
+						break;
+					case 4:
+						strVal[10] = 'c';
+						strVal[11] = 't';
+						break;
+					case 5:
+						strVal[10] = 'p';
+						strVal[11] = 'a';
+						break;
+					default:
+						strVal[10] = 's';
+						strVal[11] = 'o';
+				}
+				
+				strVal[12] = ' ';
+				val = (i2cTime.days >> 4);
+				strVal[13] = num2Ascii(val);
+				val = i2cTime.days & 0x0F;
+				strVal[14] = num2Ascii(val);
+				strVal[15] = '/';
+				val = (i2cTime.months >> 4);
+				strVal[16] = num2Ascii(val);
+				val = i2cTime.months & 0x0F;
+				strVal[17] = num2Ascii(val);
+				strVal[18] = '/';
+				val = (i2cTime.years >> 4);
+				strVal[19] = num2Ascii(val);
+				val = i2cTime.years & 0x0F;
+				strVal[20] = num2Ascii(val);
+				strVal[21] = '\r';
+				strVal[22] = '\n';
+				strVal[23] = '\0';
+				
+				printMsg(strVal); 
+				
+				//smazat vsechny pozadavky
 				i2cTime.request = 0x00;
 			}
 		}
@@ -323,6 +431,7 @@ static void osRtc(void)
 //---------------------------------------------------------
 //Pomocne funkce
 //---------------------------------------------------------
+//Porovnani dvou retezcu zakoncenych \0 nebo carkou
 static char strComp(const char *arr1, const char *arr2)
 {
 	char idx;
@@ -341,20 +450,24 @@ static char strComp(const char *arr1, const char *arr2)
 	}
 	return 0;
 }
-
+//Prevod 4 bit cisla do ASCII 
 static char num2Ascii(char num)
 {
 	if(num > 9)
 	{
 		num += 0x37;
 	}
-	else
+	else if(num < 16)
 	{
 		num += 0x30;
 	}
+	else
+	{
+		num = 0;
+	}
 	return num;
 }
-
+//Prevod ASCII do 4 bit cisla
 static char ascii2Num(char ascii)
 {
 	if(ascii > 0x60 && ascii < 0x67)//mala pismena
@@ -379,7 +492,7 @@ static char ascii2Num(char ascii)
 //---------------------------------------------------------
 //UART
 //---------------------------------------------------------
-
+//Pridani retezce do buffer pro odeslani na terminal
 char printMsg(char *message)
 {
 	//zjisteni poctu ulozenych hodnot
@@ -396,7 +509,7 @@ char printMsg(char *message)
 	UART2_CR2 |= 0x80;//txe int enable
 	return 1;
 }
-
+//Preruseni UART pro vysilani znaku retezce ulozenych v bufferu
 @far @interrupt void uartTx (void)
 {
 	while(uartTxBf.buf[uartTxBf.idxr][uartTxBf.idxs] == '\0' &&
@@ -421,7 +534,9 @@ char printMsg(char *message)
 	}
 	return;
 }
-
+//Preruseni UART pro prijem znaku a jeho ulozeni do 
+//prjimaciho buffer. Konec zpravz je treba ukoncit 
+//znakem \n.
 @far @interrupt void uartRx (void)
 {
 	char inputChar;
@@ -454,16 +569,45 @@ char printMsg(char *message)
 //---------------------------------------------------------
 //I2C
 //---------------------------------------------------------
-
-static void update(void)
+//Vytisteni aktualniho casu na terminal
+void rtcPrint(void)
 {
-	i2cTime.request |= I2C_ST_UPDATE;
-	osSetRun(osTskIdx.rtc);
+	if(i2cTime.request & I2C_ST_BUSYR)
+	{
+		//Zde uz update hodnoty bezi
+		i2cTime.request |= I2C_ST_PRINT;
+	}
+	else
+	{
+		i2cTime.request |= I2C_ST_UPDATE | I2C_ST_PRINT;
+		osSetRun(osTskIdx.rtc);
+	}
 }
 
+char rtcWrite(char addr, char val)
+{
+	if((i2cTime.request & I2C_ST_BUSYW) ||
+		addr > 15)
+	{
+		//Zapis zrovna bezi, nelze menit promenne,
+		//nebo je adresa neplatna
+		return 0;
+	}
+	else
+	{
+		i2cTime.writeAddr = addr;
+		i2cTime.writeVal = val;
+		i2cTime.request |= I2C_ST_WRITE;
+		osSetRun(osTskIdx.rtc);
+		return 1;
+	}
+}
+
+//Preruseni I2C, aktualizuje hodnoty promenych casu a
+//yapisuje do registru cipu RTC
 @far @interrupt void I2CRxTx(void)
 {
-	char val;
+	static char val;
 	//cteni SR1
 	val = I2C_SR1;
 	
@@ -479,10 +623,37 @@ static void update(void)
 		case regaddr:
 			if(val & I2C_SR1_ADDR)
 			{
+				//cteni SR3 maze vlajku preruseni
 				val = I2C_SR3;
-				I2C_DR = 0x02;
-				I2C_CR2 = 0x03;//nastavuje stop a start
-				i2cTime.state = rStart;
+				
+				if(i2cTime.request & I2C_ST_BUSYW)
+				{
+					//zadani adresy a hodnoty registru
+					I2C_DR = i2cTime.writeAddr;//ihned pryc
+					I2C_DR = i2cTime.writeVal;
+					//nic nenastavovat
+					I2C_CR2 = 0x00;
+					i2cTime.state = wStop;
+					
+				}
+				else //defaultne cteni
+				{
+					//zadani adresy registru na sekundy
+					I2C_DR = 0x02;
+					//nastavuje stop a start
+					I2C_CR2 = I2C_CR2_START | I2C_CR2_STOP;
+					i2cTime.state = rStart;
+				}
+			}
+			break;
+		case wStop:
+			if(val & I2C_SR1_TXE)
+			{
+				//nastavuje stop
+				I2C_CR2 = I2C_CR2_STOP;
+				//smazani vlajky busy
+				i2cTime.request &= ~I2C_ST_BUSYW;
+				i2cTime.state = start;
 			}
 			break;
 		case rStart:
@@ -496,7 +667,7 @@ static void update(void)
 			if(val & I2C_SR1_ADDR)
 			{
 				val = I2C_SR3;
-				I2C_CR2 = 0x04;//nastavuje ACK
+				I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
 				i2cTime.state = rSeconds;
 			}
 			break;
@@ -505,7 +676,7 @@ static void update(void)
 			{
 				//cte sekundy
 				i2cTime.seconds = I2C_DR;
-				I2C_CR2 = 0x04;//nastavuje ACK
+				I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
 				i2cTime.state = rMinutes;
 			}
 			break;
@@ -514,7 +685,7 @@ static void update(void)
 			{
 				//cte minuty
 				i2cTime.minutes = I2C_DR;
-				I2C_CR2 = 0x02;//nastavuje stop bez ACK
+				I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
 				i2cTime.state = rHours;
 			}
 			break;
@@ -523,8 +694,47 @@ static void update(void)
 			{
 				//cte hodiny
 				i2cTime.hours = I2C_DR;
+				I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
+				i2cTime.state = rDays;
+			}
+			break;
+		case rDays:
+			if(val & I2C_SR1_RXNE)
+			{
+				//cte dny
+				i2cTime.days = I2C_DR;
+				I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
+				i2cTime.state = rWeekdays;
+			}
+			break;
+		case rWeekdays:
+			if(val & I2C_SR1_RXNE)
+			{
+				//cte dny v tydnu
+				i2cTime.weekdays = I2C_DR;
+				I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
+				i2cTime.state = rMonths;
+			}
+			break;
+		case rMonths:
+			if(val & I2C_SR1_RXNE)
+			{
+				//cte mesice
+				i2cTime.months = I2C_DR;
+				I2C_CR2 = I2C_CR2_STOP;//nastavuje stop bez ACK
+				i2cTime.state = rYears;
+			}
+			break;
+		case rYears:
+			if(val & I2C_SR1_RXNE)
+			{
+				//cte roky
+				i2cTime.years = I2C_DR;
 				I2C_CR2 = 0x00;//vsechno smazat
-				i2cTime.request = I2C_ST_PRINT;
+				//pozadavek oriznuti nevyznamnych bitu
+				i2cTime.request |= I2C_ST_BCDCUT;
+				//smazani vlajky busy
+				i2cTime.request &= ~I2C_ST_BUSYR;
 				osSetRun(osTskIdx.rtc);
 				i2cTime.state = start;
 			}
