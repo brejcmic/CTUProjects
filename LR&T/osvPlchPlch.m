@@ -36,9 +36,9 @@ function [E1, E2] = osvPlchPlch(x1, y1, z1, x2, y2, z2, n1, n2, fi01, fi02)
 
     %1) vzdalenost bodu od sviticiho bodu, +eps zamezuje deleni nulou
     %pruvodic
-    rx = x1 - x2;
-    ry = y1 - y2;
-    rz = z1 - z2;
+    rx = x2 - x1;
+    ry = y2 - y1;
+    rz = z2 - z1;
     lsb = (rx.^2 + ry.^2 + rz.^2).^0.5+eps;
     
     %2) cosiny
@@ -47,12 +47,12 @@ function [E1, E2] = osvPlchPlch(x1, y1, z1, x2, y2, z2, n1, n2, fi01, fi02)
     cosTh1 = n1(1)*rx;
     cosTh1 = cosTh1 + n1(2)*ry;
     cosTh1 = cosTh1 + n1(3)*rz;
-    cosTh1 = -cosTh1./lsb;
-    
+    cosTh1 = cosTh1./lsb;
+    %zmenou znamenka obracim smysl pruvodice, aby cosinus vysel kladny
     cosTh2 = n2(1)*rx;
     cosTh2 = cosTh2 + n2(2)*ry;
     cosTh2 = cosTh2 + n2(3)*rz;
-    cosTh2 = cosTh2./lsb;
+    cosTh2 = -cosTh2./lsb;
     
     %3) urceni svitivosti v jednotlivych uhlech
     I1 = fi01.*cosTh1./pi;

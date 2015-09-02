@@ -36,57 +36,65 @@ function E = osvSvitCGama(xs, ys, zs, xb, yb, zb, vax, vrd, nb, Is_cg)
     ns = [0,0,0];
     ns(1) = vax(2)*vrd(3)-vax(3)*vrd(2);
     ns(2) = vax(3)*vrd(1)-vax(1)*vrd(3);
-    ns(1) = vax(1)*vrd(2)-vax(2)*vrd(1);
+    ns(3) = vax(1)*vrd(2)-vax(2)*vrd(1);
     %POZOR: nadale se predpoklada, ze vysledkem vektorovehosoucinu je opet
     %jednotkovy vektor!!!
     
     %2) vzdalenost bodu od svitidla, +eps zamezuje deleni nulou
     %pruvodic
-    rx = xs - xb;
-    ry = ys - yb;
-    rz = zs - zb;
+    rx = xb - xs;
+    ry = yb - ys;
+    rz = zb - zs;
     lsb = (rx.^2 + ry.^2 + rz.^2).^0.5+eps;
     
     %3) Vypocet vektoru prumetu pruvodice do plochy svitidla
-    %urceni nasobku jednotkoveho normaloveho vektoru (je to podobne vzpoctu
-    %vydalenosti dvou rovin)
-    t = ns(1)*xb + ns(2)*yb + ns(3)*zb;
-    t = t - ns(1)*xs + ns(2)*ys + ns(3)*zs;
+    %urceni nasobku jednotkoveho normaloveho vektoru (je to podobne vypoctu
+    %vzdalenosti dvou rovin)
+    t = ns(1)*xs + ns(2)*ys + ns(3)*zs;
+    t = t - ns(1)*xb + ns(2)*yb + ns(3)*zb;
     %Prusecik primky prochazejici bodem b (a ktera je kolma k rovine) s 
     %rovinou svitidla
     xp = xb + t.*ns(1);
     yp = yb + t.*ns(2);
     zp = zb + t.*ns(3);
-    %Prumet pruvodice - vektor
-    px = xp - xb;
-    py = yp - yb;
-    pz = zp - zb;
+    %Prumet pruvodice - vektor smerem k bodu
+    px = xp - xs;
+    py = yp - ys;
+    pz = zp - zs;
     lp = (px.^2 + py.^2 + pz.^2).^0.5+eps;
     
     %4) cosiny
-    %pomoci skalarniho soucinu
+    %pomoci skalarniho soucinu s pruvodicem ziskavam uhel
     %od normaly svitidla ns
     cosGm = ns(1)*rx;
     cosGm = cosGm + ns(2)*ry;
     cosGm = cosGm + ns(3)*rz;
-    cosGm = -cosGm./lsb;
+    cosGm = cosGm./lsb;
+    %rozsah 0° az 180°
     Gm = acos(cosGm);
     %mezi smerovym vektorem reprezentujicim C0 a prumetem pruvodice;
     cosC = vax(1)*px;
     cosC = cosC + vax(2)*py;
     cosC = cosC + vax(3)*pz;
-    cosC = cosC/lp;
+    cosC = cosC./lp;
     C = acos(cosC);
-    %od normaly plosky nb
+    %omezeni rozsahu na 0° az 90°
+    C = C - (C > pi/2)*pi;
+    C = abs(C);
+    %uhel mezi pruvodicem a normalou plosky nb, pomoci zmeny znamenka
+    %obracim smysl pruvodice. Ve vysledku totiz chci cosinus kladny, coz
+    %pri dane orientaci vektoru nevyjde. Pri rovnobeznych rovinach svitidla
+    %a plosky musi byt vysledek cosinu stejny jako pro cosGm.
     cosDl = nb(1)*rx;
     cosDl = cosDl + nb(2)*ry;
     cosDl = cosDl + nb(3)*rz;
-    cosDl = cosDl./lsb;
+    cosDl = -cosDl./lsb;
     
     %5) urceni svitivosti v jednotlivych uhlech C-Gm
-    %TODO: dodelat pro danou krivku svitivosti
-    idxi = 1+ floor((NI(1) .* C/pi) - eps);
-    idxj = 1+ floor((NI(2) .* Gm/pi) - eps);
+    %predpokladaji se vsechny hodnoty v intervalu <0°,90°> pro C a v
+    %intervalu <0°, 180°> pro Gm. Tabulka musi obsahovat i krajni body.
+    idxi = 1+ round((NI(1)-1) .* Gm/pi);
+    idxj = 1+ round((NI(2)-1) .* 2*C/pi);
     Is = zeros(Ns, Nb);
     for i = 1:1:Ns
         for j = 1:1:Nb

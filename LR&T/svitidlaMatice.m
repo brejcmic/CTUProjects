@@ -13,7 +13,7 @@ close;
 %Pocet generací:
                 pop.gen = 50;
 %Velikost populace:
-                pop.N = 400;
+                pop.N = 100;
 %Pocet jedincu v turnaji:
                 pop.N_turnament = 4;
 %krok pozice:
@@ -21,8 +21,8 @@ close;
 %krok svitivosti:
                 pop.stepI0 = 100;
 %Rozmery mistnosti v m:
-                mstn.x = 10;
-                mstn.y = 5;
+                mstn.x = 5;
+                mstn.y = 3;
 %Vyska mistnosti (m):
                 mstn.z = 4;
 %Vyska srovnavaci roviny (m):
@@ -30,7 +30,7 @@ close;
 %Pocet bodu na stenach v ose x:
                 mstn.Nx = 20;
 %Pocet bodu na stenach v ose y:
-                mstn.Ny = 10;
+                mstn.Ny = 12;
 %Pocet bodu na stenach v ose z:
                 mstn.Nz = 8;
 %Pocatecni fitness
@@ -38,7 +38,7 @@ close;
 %--------------------------------------------------------------------------
 %Fenotyp - cilove paramety
 %Prumerna hladina osvetlenosti:
-                target.Eavg = 500;
+                target.Eavg = 200;
 %Rovnomernost:
                 target.Uo = 0.6;
 
@@ -52,11 +52,14 @@ close;
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDEL
 %Krivka svitivosti
-                svt.I = [3000*cos(0:pi/200:(pi/2-pi/200)) zeros(1,100)];
+                svt.I = csvread('LUNCI13210A2028E.csv',1,1);
 %Vyska svitidel:
                 svt.z = 3.5;
 %Pocet svitidel:
-                svt.N = 4;
+                svt.N = 6;
+%Smerove vektory roviny os svitidla:
+                svt.vax = [0 1 0];
+                svt.vrd = [1 0 0];
 
 %%
 %--------------------------------------------------------------------------
@@ -192,49 +195,50 @@ for generace = 1:1:pop.gen
         x1 = pop.dna(clen, 1:2:((2*svt.N)-1));
         y1 = pop.dna(clen, 2:2:(2*svt.N));
         z1 = svt.z*ones(1, svt.N);
-        nv1 = [0 0 -1];
+        vax = svt.vax;
+        vrd = svt.vrd;
         
         %PODLAHA
         x2 = podlaha.x;
         y2 = podlaha.y;
         z2 = podlaha.z;
-        nv2 = podlaha.nv;
-        podlaha.E = osvSvitTh(x1,y1,z1,x2,y2,z2,nv1,nv2,svt.I);
+        nv = podlaha.nv;
+        podlaha.E = osvSvitCGama(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I);
         
         %STROP
         x2 = strop.x;
         y2 = strop.y;
         z2 = strop.z;
-        nv2 = strop.nv;
-        strop.E = osvSvitTh(x1,y1,z1,x2,y2,z2,nv1,nv2,svt.I);
+        nv = strop.nv;
+        strop.E = osvSvitCGama(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I);
         
         %STENA J
         x2 = stenaJ.x;
         y2 = stenaJ.y;
         z2 = stenaJ.z;
-        nv2 = stenaJ.nv;
-        stenaJ.E = osvSvitTh(x1,y1,z1,x2,y2,z2,nv1,nv2,svt.I);
+        nv = stenaJ.nv;
+        stenaJ.E = osvSvitCGama(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I);
         
         %STENA S
         x2 = stenaS.x;
         y2 = stenaS.y;
         z2 = stenaS.z;
-        nv2 = stenaS.nv;
-        stenaS.E = osvSvitTh(x1,y1,z1,x2,y2,z2,nv1,nv2,svt.I);
+        nv = stenaS.nv;
+        stenaS.E = osvSvitCGama(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I);
         
         %STENA Z
         x2 = stenaZ.x;
         y2 = stenaZ.y;
         z2 = stenaZ.z;
-        nv2 = stenaZ.nv;
-        stenaZ.E = osvSvitTh(x1,y1,z1,x2,y2,z2,nv1,nv2,svt.I);
+        nv = stenaZ.nv;
+        stenaZ.E = osvSvitCGama(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I);
         
         %STENA V
         x2 = stenaV.x;
         y2 = stenaV.y;
         z2 = stenaV.z;
-        nv2 = stenaV.nv;
-        stenaV.E = osvSvitTh(x1,y1,z1,x2,y2,z2,nv1,nv2,svt.I);
+        nv = stenaV.nv;
+        stenaV.E = osvSvitCGama(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I);
         
         %------------------------------------------------------------------
         %Vypocet odrazu mezi stenami
@@ -460,19 +464,18 @@ for generace = 1:1:pop.gen
         %------------------------------------------------------------------
         %Vypocet osvetleni srovnavaci roviny
         %------------------------------------------------------------------
-        srovina.E = 0;
-        
         %Srovnavaci rovina + svitidla
         x1 = pop.dna(clen, 1:2:((2*svt.N)-1));
         y1 = pop.dna(clen, 2:2:(2*svt.N));
         z1 = svt.z*ones(1, svt.N);
-        nv1 = [0 0 -1];
+        vax = svt.vax;
+        vrd = svt.vrd;
         
         x2 = srovina.x;
         y2 = srovina.y;
         z2 = srovina.z;
-        nv2 = srovina.nv;
-        srovina.E = osvSvitTh(x1,y1,z1,x2,y2,z2,nv1,nv2,svt.I);
+        nv = srovina.nv;
+        srovina.E = osvSvitCGama(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I);
         
         %Srovnavaci rovina + steny
         x1 = srovina.x;
@@ -541,14 +544,15 @@ for generace = 1:1:pop.gen
     %smerodatna odchylka
     pop.var = pop.E - pop.Eavg*ones(1,podlaha.N);
     pop.var = pop.var.^2;
-    pop.var = sum(pop.var, 2);
+    pop.var = sum(pop.var, 2)./podlaha.N;
     pop.var = sqrt(pop.var);
     
     %fitness
-    pop.fitness = 2 - exp(-pop.Eavg./ target.Eavg);
-    pop.fitness = pop.fitness - exp(-pop.Uo./ target.Uo);
-    pop.fitness = pop.fitness + exp(-pop.var);
-    pop.fitness = pop.fitness./ 3;
+    pop.fitness = zeros(pop.N, 1);
+    pop.fitness = pop.fitness + 1 - exp(-pop.Eavg./ target.Eavg);
+    %pop.fitness = pop.fitness + 1 - exp(-pop.Uo./ target.Uo);
+    pop.fitness = pop.fitness + exp(-pop.var./pop.Eavg);
+    pop.fitness = pop.fitness./ 2;
     %pravdepodobnost vyberu
     pop.pravdep = pop.fitness./ sum(pop.fitness, 1);
     
