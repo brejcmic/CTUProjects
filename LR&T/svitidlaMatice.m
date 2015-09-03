@@ -58,8 +58,8 @@ close;
 %Pocet svitidel:
                 svt.N = 6;
 %Smerove vektory roviny os svitidla:
-                svt.vax = [0 1 0];
-                svt.vrd = [1 0 0];
+                svt.vax = [0 1 0];%normala k C0 = osa svitidla
+                svt.vrd = [1 0 0];%normala k C90 = pricna osa svitidla
 
 %%
 %--------------------------------------------------------------------------

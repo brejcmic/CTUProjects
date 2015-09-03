@@ -73,9 +73,9 @@ function E = osvSvitCGama(xs, ys, zs, xb, yb, zb, vax, vrd, nb, Is_cg)
     %rozsah 0° az 180°
     Gm = acos(cosGm);
     %mezi smerovym vektorem reprezentujicim C0 a prumetem pruvodice;
-    cosC = vax(1)*px;
-    cosC = cosC + vax(2)*py;
-    cosC = cosC + vax(3)*pz;
+    cosC = vrd(1)*px;
+    cosC = cosC + vrd(2)*py;
+    cosC = cosC + vrd(3)*pz;
     cosC = cosC./lp;
     C = acos(cosC);
     %omezeni rozsahu na 0° az 90°
