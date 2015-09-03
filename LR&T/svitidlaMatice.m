@@ -11,7 +11,7 @@ close;
 %Mutace (pomerna hodnota):
                 pop.mut = 0.15;
 %Pocet generací:
-                pop.gen = 50;
+                pop.gen = 100;
 %Velikost populace:
                 pop.N = 100;
 %Pocet jedincu v turnaji:
@@ -549,9 +549,9 @@ for generace = 1:1:pop.gen
     
     %fitness
     pop.fitness = zeros(pop.N, 1);
-    pop.fitness = pop.fitness + 1 - exp(-pop.Eavg./ target.Eavg);
-    %pop.fitness = pop.fitness + 1 - exp(-pop.Uo./ target.Uo);
-    pop.fitness = pop.fitness + exp(-pop.var./pop.Eavg);
+    pop.fitness = pop.fitness + 1 - exp(-0.7*pop.Eavg./ target.Eavg);
+    pop.fitness = pop.fitness + 1 - exp(-0.7*pop.Uo./ target.Uo);
+    %pop.fitness = pop.fitness + exp(-pop.var./pop.Eavg);
     pop.fitness = pop.fitness./ 2;
     %pravdepodobnost vyberu
     pop.pravdep = pop.fitness./ sum(pop.fitness, 1);
