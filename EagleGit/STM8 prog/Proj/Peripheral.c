@@ -620,9 +620,83 @@ char rtcReqDone(void)
 //zapisuje do registru cipu RTC
 @far @interrupt void I2CRxTx(void)
 {
-  static char val;
-  //cteni SR1
-  val = I2C_SR1;
+  static char sr1;
+  static char sr2;
+  static char sr3;
+  
+  //cteni SR1, SR2
+  sr1 = I2C_SR1;
+  sr2 = I2C_SR2;
+  
+  //kontrola zda nenastala chyba
+  if(sr2 != 0)
+  {
+    I2C_SR2 = 0;
+  }
+  
+  //preruseni od startu
+  if(sr1 & I2C_SR1_SB)
+  {
+    switch(i2cTime.state)
+    {
+      case START_WR:
+        I2C_DR = I2C_ADDR_WRITE;
+        i2cTime.state = ADDR_WR;
+        break;
+      case START_RD:
+        I2C_DR = I2C_ADDR_WRITE;
+        i2cTime.state = ADDR_RDWR;
+        break;
+      case RESTART_RD:
+        I2C_DR = I2C_ADDR_READ;
+        i2cTime.state = ADDR_RDRD;
+        break;
+    }
+  }
+  
+  //preruseni po odeslani adresy
+  if(sr1 & I2C_SR1_ADDR)
+  {
+    switch(i2cTime.state)
+    {
+      case ADDR_WR:
+        //cteni SR3 maze vlajku preruseni
+        sr3 = I2C_SR3;
+        //zadani adresy registru
+        I2C_DR = i2cTime.writeAddr;
+        i2cTime.state = BTF_VALWR;
+        break;
+      case ADDR_RDWR:
+        //cteni SR3 maze vlajku preruseni
+        sr3 = I2C_SR3;
+        //zadani adresy registru na sekundy
+        I2C_DR = 0x02;
+        //restart I2C
+        I2C_CR2 = I2C_CR2_START | I2C_CR2_STOP;
+        i2cTime.state = RESTART_RD;
+        break;
+      case ADDR_RDRD:
+        //cteni SR3 maze vlajku preruseni
+        sr3 = I2C_SR3;
+        I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
+        i2cTime.state = BTF_SECRD;
+        break;
+    }
+  }
+  
+  //preruseni po odeslani nebo prijeti bufferu
+  if(sr1 & I2C_SR1_BTF)
+  {
+    switch(i2cTime.state)
+    {
+      case BTF_SECRD:
+        //cte sekundy
+        i2cTime.seconds = I2C_DR;
+        I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
+        i2cTime.state = BTF_MINRD;
+        break;
+    }
+  }
   
   switch(i2cTime.state)
   {
@@ -636,8 +710,7 @@ char rtcReqDone(void)
     case regaddr:
       if(val & I2C_SR1_ADDR)
       {
-        //cteni SR3 maze vlajku preruseni
-        val = I2C_SR3;
+        
         
         if(i2cTime.request & I2C_ST_BUSYW)
         {
