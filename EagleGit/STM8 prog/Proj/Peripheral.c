@@ -41,18 +41,21 @@ static struct i2cTime_st
   char years;
   enum timeState
   {
-    start, 
-    regaddr, 
-    wStop,
-    rStart, 
-    rAddr, 
-    rSeconds, 
-    rMinutes,
-    rHours,
-    rDays,
-    rWeekdays,
-    rMonths,
-    rYears
+    IDLE, 
+    START_WR, 
+    START_RD,
+    RESTART_RD, 
+    ADDR_WR, 
+    ADDR_RDWR, 
+    ADDR_RDRD,
+    RXNE_YARRD,
+    BTF_VALWR,
+    BTF_STOPWR,
+    BTF_SECRD,
+    BTF_MINRD,
+    BTF_HORRD,
+    BTF_DAYRD,
+    BTF_WDYRD
   }state;
   char request;
   char writeAddr;
@@ -87,10 +90,10 @@ void InitPeripherals(void)
   PA_ODR = P_B4; //SCL je aktivni v nule
   
   //PB - analogove vstupy
-  PB_DDR =   0x00;
-  PB_CR1 =   0x00;
-  PB_CR2 =   0x00;
-  ADC_TDRL =   0xFF;
+  PB_DDR =    0x00;
+  PB_CR1 =    0x00;
+  PB_CR2 =    0x00;
+  ADC_TDRL =  0xFF;
   
   //PC - nepouzivat
   
@@ -109,36 +112,36 @@ void InitPeripherals(void)
   
 //---------------------------------------------------------
 //nastaveni I2C
-  I2C_CR1 =   0x81;//enable
-  I2C_CR2 =   0x04;//ACK
-  I2C_FREQR = 0x10;//16MHz
-  I2C_OARL =   0x00;
-  I2C_OARH =   0x40;
-  I2C_ITR =   0x06;//ITEVTEN a ITBUFEN
+  I2C_CR1 =     0x81;//enable
+  I2C_CR2 =     0x04;//ACK
+  I2C_FREQR =   0x10;//16MHz
+  I2C_OARL =    0x00;
+  I2C_OARH =    0x40;
+  I2C_ITR =     0x03;//ITEVTEN a ITERRN
   
-  I2C_CCRL =   0x0D;//400 kHz
-  I2C_CCRH =   0x80;//fast mode
-  I2C_TRISER = 0x04;
+  I2C_CCRL =    0x0D;//400 kHz
+  I2C_CCRH =    0x80;//fast mode
+  I2C_TRISER =  0x04;
 //---------------------------------------------------------
 //nastaveni UART
-  UART2_BRR2 = 0x0B;
-  UART2_BRR1 = 0x08;//115200
-  UART2_CR1 = 0x00;//no parity
-  UART2_CR2 = 0x2C;//rx int, tx, rx enable
-  UART2_CR3 = 0x00;//1 stopbit, 0 clock polarity
-  UART2_CR4 = 0x00;//nic
-  UART2_CR6 = 0x00;//nic
-  UART2_GTR = 0x00;//nic
-  UART2_PSCR = 0x01;//nic, nema vliv
+  UART2_BRR2 =  0x0B;
+  UART2_BRR1 =  0x08;//115200
+  UART2_CR1 =   0x00;//no parity
+  UART2_CR2 =   0x2C;//rx int, tx, rx enable
+  UART2_CR3 =   0x00;//1 stopbit, 0 clock polarity
+  UART2_CR4 =   0x00;//nic
+  UART2_CR6 =   0x00;//nic
+  UART2_GTR =   0x00;//nic
+  UART2_PSCR =  0x01;//nic, nema vliv
 //---------------------------------------------------------
 //nastaveni TIM2 CLK = 16 MHz
-  TIM2_IER =   0x01;
-  TIM2_SR1 =   0x00;
-  TIM2_EGR =   0x00;
-  TIM2_PSCR = 0x04; //1MHz
-  TIM2_ARRH = 0x02; //1024 = 1 ms
-  TIM2_ARRL = 0x00;
-  TIM2_CR1 =   0x81;
+  TIM2_IER =    0x01;
+  TIM2_SR1 =    0x00;
+  TIM2_EGR =    0x00;
+  TIM2_PSCR =   0x04; //1MHz
+  TIM2_ARRH =   0x02; //1024 = 1 ms
+  TIM2_ARRL =   0x00;
+  TIM2_CR1 =    0x81;
   
   _asm("rim");
 //---------------------------------------------------------
@@ -290,6 +293,7 @@ static void osUart(void)
       printMsg("+funkcni vlakna\r\n");
       printMsg("+komunikace bluetooth\r\n");
       printMsg("+funkcni DIN, DOUT\r\n");
+      printMsg("+funkcni RTC\r\n");
     }
     else if(strComp(uartRxBf.buf, "uart"))
     {
@@ -310,29 +314,19 @@ static void osRtc(void)
   
   while(1)
   {
-    while(!(i2cTime.request & I2C_ST_BUSYR) && 
-        !(i2cTime.request & I2C_ST_BUSYW) && 
-        i2cTime.request)
+    while((i2cTime.state == IDLE) && !rtcReqDone())
     {
       if(i2cTime.request & I2C_ST_UPDATE)
       {
-        //nastaveni busy
-        i2cTime.request |= I2C_ST_BUSYR;
-        //smazani update
-        i2cTime.request &= ~I2C_ST_UPDATE;
         //stav automatu na zacatek
-        i2cTime.state = start;
+        i2cTime.state = START_RD;
         //zahajeni I2C prenosu
         I2C_CR2 |= I2C_CR2_START;
       }
       else if(i2cTime.request & I2C_ST_WRITE)
       {
-        //nastaveni busy
-        i2cTime.request |= I2C_ST_BUSYW;
-        //smazani update a write
-        i2cTime.request &= ~I2C_ST_WRITE;
         //stav automatu na zacatek
-        i2cTime.state = start;
+        i2cTime.state = START_WR;
         //zahajeni I2C prenosu
         I2C_CR2 |= I2C_CR2_START;
       }
@@ -505,7 +499,7 @@ char printMsg(char *message)
   uartTxBf.idxw &= UART_TX_BUF_IDX_MSK;
   uartTxBf.len++;
   //nastaveni priznaku pro odesilani
-  UART2_CR2 |= 0x80;//txe int enable
+  UART2_CR2 |= UART2_CR2_TXE;//txe int enable
   return 1;
 }
 //Preruseni UART pro vysilani znaku retezce ulozenych v bufferu
@@ -529,7 +523,7 @@ char printMsg(char *message)
   }
   else
   {
-    UART2_CR2 &= ~(0x80);//txe int disable
+    UART2_CR2 &= ~(UART2_CR2_TXE);//txe int disable
   }
   return;
 }
@@ -539,6 +533,13 @@ char printMsg(char *message)
 @far @interrupt void uartRx (void)
 {
   char inputChar;
+  //test zda nedoslo k chybe
+  if(UART2_SR & UART2_SR_ERRMSK)
+  {
+    //zahozeni znaku v DR
+    inputChar = UART2_DR;
+    return;
+  }
   //cteni znaku,
   //cteni datoveho registru by melo zaroven mazat vlajku
   //preruseni
@@ -571,22 +572,13 @@ char printMsg(char *message)
 //Vytisteni aktualniho casu na terminal
 void rtcPrint(void)
 {
-  if(i2cTime.request & I2C_ST_BUSYR)
-  {
-    //Zde uz update hodnoty bezi
-    i2cTime.request |= I2C_ST_PRINT;
-  }
-  else
-  {
-    i2cTime.request |= I2C_ST_UPDATE | I2C_ST_PRINT;
-    osSetRun(osTskIdx.rtc);
-  }
+  i2cTime.request |= I2C_ST_UPDATE | I2C_ST_PRINT;
+  osSetRun(osTskIdx.rtc);
 }
 //Zapis urcite hodnoty do registru RTC
 char rtcWrite(char addr, char val)
 {
-  if((i2cTime.request & I2C_ST_BUSYW) ||
-    addr > 15)
+  if((i2cTime.request & I2C_ST_WRITE) || addr > 15)
   {
     //Zapis zrovna bezi, nelze menit promenne,
     //nebo je adresa neplatna
@@ -604,157 +596,164 @@ char rtcWrite(char addr, char val)
 //Pozadavek na aktualizaci casu
 void rtcUpdate(void)
 {
-  if(!(i2cTime.request & I2C_ST_BUSYR))
-  {
-    i2cTime.request |= I2C_ST_UPDATE;
-    osSetRun(osTskIdx.rtc);
-  }
+  i2cTime.request |= I2C_ST_UPDATE;
+  osSetRun(osTskIdx.rtc);
 }
 //Dotaz, zda byly vsechny pozadavky zpracovany
 char rtcReqDone(void)
 {
-  return (i2cTime.request == 0);
+  //muze koncit i s chybou
+  return ((i2cTime.request & ~I2C_ST_ERR) == 0);
+}
+//Dotaz, zda vznikla chyba
+char rtcReqErr(void)
+{
+  return ((i2cTime.request & I2C_ST_ERR) == 0);
 }
 
 //Preruseni I2C, aktualizuje hodnoty promenych casu a
 //zapisuje do registru cipu RTC
 @far @interrupt void I2CRxTx(void)
 {
-  static char val;
-  //cteni SR1
-  val = I2C_SR1;
+  static char sr1;
+  static char sr2;
+  static char sr3;
   
-  switch(i2cTime.state)
+  //cteni SR1, SR2
+  sr1 = I2C_SR1;
+  sr2 = I2C_SR2;
+  
+  //kontrola zda nenastala chyba
+  if(sr2 != 0)
   {
-    case start:
-      if(val & I2C_SR1_SB)
-      {
+    I2C_SR2 = 0;
+    i2cTime.state = IDLE;
+    //vsechny pozadavky smazat a nahlasit chybu
+    i2cTime.request = I2C_ST_ERR;
+  }
+  
+  //preruseni od startu
+  if(sr1 & I2C_SR1_SB)
+  {
+    switch(i2cTime.state)
+    {
+      case START_WR:
         I2C_DR = I2C_ADDR_WRITE;
-        i2cTime.state = regaddr;
-      }
-      break;
-    case regaddr:
-      if(val & I2C_SR1_ADDR)
-      {
+        i2cTime.state = ADDR_WR;
+        break;
+      case START_RD:
+        I2C_DR = I2C_ADDR_WRITE;
+        i2cTime.state = ADDR_RDWR;
+        break;
+      case RESTART_RD:
+        I2C_DR = I2C_ADDR_READ;
+        i2cTime.state = ADDR_RDRD;
+        break;
+    }
+  }
+  
+  //preruseni po odeslani adresy
+  if(sr1 & I2C_SR1_ADDR)
+  {
+    switch(i2cTime.state)
+    {
+      case ADDR_WR:
         //cteni SR3 maze vlajku preruseni
-        val = I2C_SR3;
-        
-        if(i2cTime.request & I2C_ST_BUSYW)
+        sr3 = I2C_SR3;
+        //zadani adresy registru
+        I2C_DR = i2cTime.writeAddr;
+        i2cTime.state = BTF_VALWR;
+        break;
+      case ADDR_RDWR:
+        //cteni SR3 maze vlajku preruseni
+        sr3 = I2C_SR3;
+        //zadani adresy registru na sekundy
+        I2C_DR = 0x02;
+        //restart I2C
+        I2C_CR2 = I2C_CR2_START | I2C_CR2_STOP;
+        i2cTime.state = RESTART_RD;
+        break;
+      case ADDR_RDRD:
+        //cteni SR3 maze vlajku preruseni
+        sr3 = I2C_SR3;
+        I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
+        i2cTime.state = BTF_SECRD;
+        break;
+    }
+  }
+  //preruseni vyvolane prijetim jednoho byte
+  if(sr1 & I2C_SR1_RXNE)
+  {
+    //ukonceni prijmu
+    if(i2cTime.state == RXNE_YARRD)
+    {
+      //cte roky
+      i2cTime.years = I2C_DR;
+      i2cTime.state = IDLE;
+      //pozadavek oriznuti nevyznamnych bitu
+      i2cTime.request |= I2C_ST_BCDCUT;
+      //smazani vlajky UPDATE
+      i2cTime.request &= ~I2C_ST_UPDATE;
+      osSetRun(osTskIdx.rtc);
+    }
+    //zakaz preruseni TXE a RXNE
+    I2C_ITR &= ~I2C_ITR_ITBUFEN;
+  }
+  
+  //preruseni po odeslani nebo prijeti bufferu
+  if(sr1 & I2C_SR1_BTF)
+  {
+    switch(i2cTime.state)
+    {
+      case BTF_VALWR:
+        if(sr1 & I2C_SR1_TXE)
         {
-          //zadani adresy a hodnoty registru
-          //prvni byte se ihned presune do posuvneho 
-          //registru
-          I2C_DR = i2cTime.writeAddr;
+          //zadani hodnoty registru
           I2C_DR = i2cTime.writeVal;
-          //nic nenastavovat
-          I2C_CR2 = 0x00;
-          i2cTime.state = wStop;
-          
+          i2cTime.state = BTF_STOPWR;
         }
-        else //defaultne cteni
-        {
-          //zadani adresy registru na sekundy
-          I2C_DR = 0x02;
-          //nastavuje stop a start
-          I2C_CR2 = I2C_CR2_START | I2C_CR2_STOP;
-          i2cTime.state = rStart;
-        }
-      }
-      break;
-    case wStop:
-      if(val & I2C_SR1_TXE)
-      {
+        break;
+      case BTF_STOPWR:
         //nastavuje stop
         I2C_CR2 = I2C_CR2_STOP;
-        //smazani vlajky busy
-        i2cTime.request &= ~I2C_ST_BUSYW;
-        i2cTime.state = start;
-      }
-      break;
-    case rStart:
-      if(val & I2C_SR1_SB)
-      {
-        I2C_DR = I2C_ADDR_READ;
-        i2cTime.state = rAddr;
-      }
-      break;
-    case rAddr:
-      if(val & I2C_SR1_ADDR)
-      {
-        val = I2C_SR3;
-        I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
-        i2cTime.state = rSeconds;
-      }
-      break;
-    case rSeconds:
-      if(val & I2C_SR1_RXNE)
-      {
+        i2cTime.state = IDLE;
+        //smazani vlajky WRITE
+        i2cTime.request &= ~I2C_ST_WRITE;
+        break;
+      case BTF_SECRD:
         //cte sekundy
         i2cTime.seconds = I2C_DR;
         I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
-        i2cTime.state = rMinutes;
-      }
-      break;
-    case rMinutes:
-      if(val & I2C_SR1_RXNE)
-      {
+        i2cTime.state = BTF_MINRD;
+        break;
+      case BTF_MINRD:
         //cte minuty
         i2cTime.minutes = I2C_DR;
         I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
-        i2cTime.state = rHours;
-      }
-      break;
-    case rHours:
-      if(val & I2C_SR1_RXNE)
-      {
+        i2cTime.state = BTF_HORRD;
+        break;
+      case BTF_HORRD:
         //cte hodiny
         i2cTime.hours = I2C_DR;
         I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
-        i2cTime.state = rDays;
-      }
-      break;
-    case rDays:
-      if(val & I2C_SR1_RXNE)
-      {
+        i2cTime.state = BTF_DAYRD;
+        break;
+      case BTF_DAYRD:
         //cte dny
         i2cTime.days = I2C_DR;
         I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
-        i2cTime.state = rWeekdays;
-      }
-      break;
-    case rWeekdays:
-      if(val & I2C_SR1_RXNE)
-      {
+        i2cTime.state = BTF_WDYRD;
+        break;
+      case BTF_WDYRD:
         //cte dny v tydnu
         i2cTime.weekdays = I2C_DR;
-        I2C_CR2 = I2C_CR2_ACK;//nastavuje ACK
-        i2cTime.state = rMonths;
-      }
-      break;
-    case rMonths:
-      if(val & I2C_SR1_RXNE)
-      {
+        I2C_CR2 = I2C_CR2_STOP;//nastavuje NACK + STOP
         //cte mesice
         i2cTime.months = I2C_DR;
-        I2C_CR2 = I2C_CR2_STOP;//nastavuje stop bez ACK
-        i2cTime.state = rYears;
-      }
-      break;
-    case rYears:
-      if(val & I2C_SR1_RXNE)
-      {
-        //cte roky
-        i2cTime.years = I2C_DR;
-        I2C_CR2 = 0x00;//vsechno smazat
-        //pozadavek oriznuti nevyznamnych bitu
-        i2cTime.request |= I2C_ST_BCDCUT;
-        //smazani vlajky busy
-        i2cTime.request &= ~I2C_ST_BUSYR;
-        osSetRun(osTskIdx.rtc);
-        i2cTime.state = start;
-      }
-      break;
-    default:
-      while(1);
+        //povoleni preruseni
+        I2C_ITR |= I2C_ITR_ITBUFEN;
+        i2cTime.state = RXNE_YARRD;
+        break;
+    }
   }
 }
