@@ -293,6 +293,7 @@ static void osUart(void)
       printMsg("+funkcni vlakna\r\n");
       printMsg("+komunikace bluetooth\r\n");
       printMsg("+funkcni DIN, DOUT\r\n");
+      printMsg("+funkcni RTC\r\n");
     }
     else if(strComp(uartRxBf.buf, "uart"))
     {
@@ -498,7 +499,7 @@ char printMsg(char *message)
   uartTxBf.idxw &= UART_TX_BUF_IDX_MSK;
   uartTxBf.len++;
   //nastaveni priznaku pro odesilani
-  UART2_CR2 |= 0x80;//txe int enable
+  UART2_CR2 |= UART2_CR2_TXE;//txe int enable
   return 1;
 }
 //Preruseni UART pro vysilani znaku retezce ulozenych v bufferu
@@ -522,7 +523,7 @@ char printMsg(char *message)
   }
   else
   {
-    UART2_CR2 &= ~(0x80);//txe int disable
+    UART2_CR2 &= ~(UART2_CR2_TXE);//txe int disable
   }
   return;
 }
@@ -532,6 +533,13 @@ char printMsg(char *message)
 @far @interrupt void uartRx (void)
 {
   char inputChar;
+  //test zda nedoslo k chybe
+  if(UART2_SR & UART2_SR_ERRMSK)
+  {
+    //zahozeni znaku v DR
+    inputChar = UART2_DR;
+    return;
+  }
   //cteni znaku,
   //cteni datoveho registru by melo zaroven mazat vlajku
   //preruseni

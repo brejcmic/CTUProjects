@@ -23,6 +23,10 @@
  #define  UART_TX_BUF_LEN      8 //musi byt mocnina 2
  #define  UART_TX_BUF_IDX_MSK    (UART_TX_BUF_LEN-1)
  
+ #define  UART2_SR_ERRMSK     0x0F
+ 
+ #define  UART2_CR2_TXE        0x80
+ 
  //---------------------------------------------------------
  //masky a konstanty pro i2c
  #define  I2C_ADDR_READ       0xA3
