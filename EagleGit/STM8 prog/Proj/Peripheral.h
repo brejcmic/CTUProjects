@@ -59,3 +59,4 @@
  char rtcWrite(char addr, char val);
  void rtcUpdate(void);
  char rtcReqDone(void);
+ char rtcReqErr(void);
