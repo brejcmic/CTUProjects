@@ -2,6 +2,10 @@
 clear;
 clc;
 close;
+%Vstupem je krivka svitivosti v soubooru csv. Gain udava nasobek vseh
+%hodnot v krivce svitivosti.
+filenameinput = '13-210A-2028E_LUNCI_5G2';
+gain = 5.2;
 %Reseni rozmisteni svetel pomoci genetickeho algoritmu. Na zacatku se zvoli
 %pocet svitidel a jejich vyzarovaci charakteristika.
 %DNA: x, y, x, y, x, y,... zavisi na poctu svitidel, posledni je svitivost
@@ -18,8 +22,11 @@ close;
                 pop.N_turnament = 4;
 %krok pozice:
                 pop.stepXY = 1;
-%krok svitivosti:
-                pop.stepI0 = 100;
+%parametry fitness funkce:
+                pop.alfa = 1.9;
+                pop.beta = 0.1;
+                pop.A = (1+pop.alfa)/2;
+                pop.B = (1+pop.beta)/2;
 %Rozmery mistnosti v m:
                 mstn.x = 5;
                 mstn.y = 3;
@@ -32,36 +39,37 @@ close;
 %Pocet bodu na stenach v ose y:
                 mstn.Ny = 12;
 %Pocet bodu na stenach v ose z:
-                mstn.Nz = 8;
+                mstn.Nz = 10;
 %Pocatecni fitness
                 pop.fitness = zeros(1, pop.gen);
 %--------------------------------------------------------------------------
 %Fenotyp - cilove paramety
 %Prumerna hladina osvetlenosti:
-                target.Eavg = 200;
+                target.Eavg = 500;
 %Rovnomernost:
                 target.Uo = 0.6;
 
 %--------------------------------------------------------------------------
 %PARAMETRY ODRAZU
 %Uvazovany pocet odrazu:
-                mstn.Nodr = 3;
+                mstn.Nodr = 4;
 %Vyska srovnavaci roviny:
                 mstn.sRov = 0.8;
                 
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDEL
 %Krivka svitivosti
-                svt.I = csvread('LUNCI13210A2028E.csv',1,1);
+                svt.I = gain*csvread(['Svitidla/', filenameinput, '.csv'],1,1);
 %Vyska svitidel:
                 svt.z = 3.5;
 %Pocet svitidel:
-                svt.N = 6;
+                svt.N = 4;
 %Smerove vektory roviny os svitidla:
                 svt.vax = [0 1 0];%normala k C0 = osa svitidla
                 svt.vrd = [1 0 0];%normala k C90 = pricna osa svitidla
-
 %%
+%Inicializace vysledneho prubehu fitness funkce
+vysl.fit = zeros(1, pop.gen);
 %--------------------------------------------------------------------------
 %GENEROVANI BODU JEDNOTLIVYCH STEN
 %Deleni jednotlivych os:
@@ -549,10 +557,11 @@ for generace = 1:1:pop.gen
     
     %fitness
     pop.fitness = zeros(pop.N, 1);
-    pop.fitness = pop.fitness + 1 - exp(-0.7*pop.Eavg./ target.Eavg);
-    pop.fitness = pop.fitness + 1 - exp(-0.7*pop.Uo./ target.Uo);
+    pop.fitness = pop.fitness + (pop.A - pop.alfa*0.5*exp((target.Eavg-pop.Eavg)./ target.Eavg / pop.alfa)).*(pop.Eavg > target.Eavg) + (0.5*pop.Eavg./ target.Eavg).*(pop.Eavg <= target.Eavg);
+    pop.fitness = pop.fitness + (pop.B - pop.beta*0.5*exp((target.Uo-pop.Uo)./ target.Uo / pop.beta)).*(pop.Uo > target.Uo) + (0.5*pop.Uo./ target.Uo).*(pop.Uo <= target.Uo);
+    %pop.fitness = pop.fitness + 1 - exp(-pop.Uo./ target.Uo);
     %pop.fitness = pop.fitness + exp(-pop.var./pop.Eavg);
-    pop.fitness = pop.fitness./ 2;
+    pop.fitness = pop.fitness./ (pop.A+pop.B);
     %pravdepodobnost vyberu
     pop.pravdep = pop.fitness./ sum(pop.fitness, 1);
     
@@ -563,7 +572,9 @@ for generace = 1:1:pop.gen
     %----------------------------------------------------------------------
     %ELITISMUS - vyber nejlepsiho clena populace na prvni misto
     %----------------------------------------------------------------------
-    [elita.p, elita.idx]= max(pop.pravdep);
+    [~, elita.idx]= max(pop.pravdep);
+    %ulozeni nejlepsi hodnoty fitness funkce
+    vysl.fit(generace)= pop.fitness(elita.idx);
     %tento clen nebude mutovat
     pop.dnaPotomku(1,:) = pop.dna(elita.idx,:);
     %tento clen muze mutovat
@@ -626,15 +637,34 @@ end
 %--------------------------------------------------------------------------
 %Zobrazeni vysledku
 %--------------------------------------------------------------------------
+vysl.E = pop.E(elita.idx,:);
 figure(1)
-bod.ME = vec2mat(pop.E(elita.idx,:),mstn.Nx);
-surf(mstn.bx,mstn.by,bod.ME);
+vysl.ME = vec2mat(pop.E(elita.idx,:),mstn.Nx);
+surf(mstn.bx,mstn.by,vysl.ME);
 xlabel('x (m)');
 ylabel('y (m)');
 zlabel('E (lx)');
 
 figure(2)
-plot(pop.dna(elita.idx,1:2:(pop.dnaDelka-1)), pop.dna(elita.idx,2:2:(pop.dnaDelka)), 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'y', 'MarkerEdgeColor', 'k');
+vysl.dna = pop.dna(elita.idx,:);
+vysl.sx = pop.dna(elita.idx,1:2:(pop.dnaDelka-1));
+vysl.sy = pop.dna(elita.idx,2:2:(pop.dnaDelka));
+vysl.svz = svt.z;
+plot(vysl.sx, vysl.sy, 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'y', 'MarkerEdgeColor', 'k');
 xlabel('x (m)');
 ylabel('y (m)');
 axis([0 mstn.x 0 mstn.y]);
+
+figure(3)
+vysl.fitplot.xy = (0:0.06:3);
+u0 = vysl.fitplot.xy'*ones(1,51);
+eavg = ones(51,1)*vysl.fitplot.xy;
+vysl.fitplot.Fit = zeros(51,51);
+vysl.fitplot.Fit = vysl.fitplot.Fit + (pop.A - pop.alfa*0.5*exp((1-eavg)/pop.alfa)).*(eavg > 1) + (0.5*eavg).*(eavg <= 1);
+vysl.fitplot.Fit = vysl.fitplot.Fit + (pop.B - pop.beta*0.5*exp((1-u0)/pop.beta)).*(u0 > 1) + (0.5*u0).*(u0 <= 1);
+vysl.fitplot.Fit = vysl.fitplot.Fit/(pop.A + pop.B);
+surf(vysl.fitplot.xy,vysl.fitplot.xy,vysl.fitplot.Fit);
+
+%Ulozeni vysledku
+str = sprintf('_N%d_VAX%d%d%d.mat', svt.N, svt.vax(1), svt.vax(2), svt.vax(3));
+save(['Vysledky/' filenameinput str], 'vysl', 'pop', 'target', 'svt', 'mstn')
