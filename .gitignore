@@ -51,6 +51,7 @@
 !*.rtf
 !*.pptx
 !*.odp
+!*.csv
 
 #matlab files
 !*.m
