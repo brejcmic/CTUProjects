@@ -14203,7 +14203,7 @@ grid 5.08 mm</description>
 </class>
 </classes>
 <parts>
-<part name="R2" library="rcl" deviceset="R-EU_" device="0411/15" value="22R"/>
+<part name="R2" library="rcl" deviceset="R-EU_" device="0817/22" value="51R"/>
 <part name="D1" library="diode" deviceset="1N4004" device=""/>
 <part name="X2" library="con-phoenix-smkdsp" deviceset="SMKDSP_1,5/2" device=""/>
 <part name="X3" library="con-phoenix-smkdsp" deviceset="SMKDSP_1,5/2" device=""/>
@@ -14215,15 +14215,16 @@ grid 5.08 mm</description>
 <part name="C4" library="rcl" deviceset="CPOL-EU" device="E5-13" value="470u/50V"/>
 <part name="D4" library="diode" deviceset="1N4004" device=""/>
 <part name="R4" library="rcl" deviceset="R-EU_" device="0207/12" value="1M"/>
-<part name="R5" library="rcl" deviceset="R-EU_" device="0411/15" value="4k7"/>
-<part name="R6" library="rcl" deviceset="R-EU_" device="0411/15" value="12k"/>
+<part name="R5" library="rcl" deviceset="R-EU_" device="0817/22" value="4k7"/>
+<part name="R6" library="rcl" deviceset="R-EU_" device="0817/22" value="12k"/>
 <part name="X4" library="con-phoenix-smkdsp" deviceset="SMKDSP_1,5/6" device=""/>
-<part name="R7" library="rcl" deviceset="R-EU_" device="0411/15" value="33k"/>
-<part name="R8" library="rcl" deviceset="R-EU_" device="0411/15" value="68k"/>
+<part name="R7" library="rcl" deviceset="R-EU_" device="0817/22" value="33k"/>
+<part name="R8" library="rcl" deviceset="R-EU_" device="0817/22" value="68k"/>
 <part name="T1" library="transistor" deviceset="*-PNP-" device="TO220" value="BD240C"/>
 <part name="X1" library="con-phoenix-smkdsp" deviceset="SMKDSP_1,5/2" device=""/>
-<part name="R3" library="rcl" deviceset="R-EU_" device="0411/15" value="2k2"/>
-<part name="R1" library="rcl" deviceset="R-EU_" device="0411/15" value="820R"/>
+<part name="R3" library="rcl" deviceset="R-EU_" device="0817/22" value="2k2"/>
+<part name="R1" library="rcl" deviceset="R-EU_" device="0817/22" value="820R"/>
+<part name="R9" library="rcl" deviceset="R-EU_" device="0817/22" value="51R"/>
 </parts>
 <sheets>
 <sheet>
@@ -14268,6 +14269,7 @@ grid 5.08 mm</description>
 <instance part="X1" gate="-2" x="2.54" y="-7.62"/>
 <instance part="R3" gate="G$1" x="63.5" y="0" rot="R90"/>
 <instance part="R1" gate="G$1" x="63.5" y="86.36" rot="R90"/>
+<instance part="R9" gate="G$1" x="101.6" y="78.74" rot="R90"/>
 </instances>
 <busses>
 </busses>
@@ -14382,7 +14384,12 @@ grid 5.08 mm</description>
 <segment>
 <pinref part="T1" gate="G$1" pin="E"/>
 <pinref part="R2" gate="G$1" pin="1"/>
-<wire x1="91.44" y1="73.66" x2="91.44" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="91.44" y1="73.66" x2="91.44" y2="71.12" width="0.1524" layer="91"/>
+<pinref part="R9" gate="G$1" pin="1"/>
+<wire x1="91.44" y1="71.12" x2="91.44" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="101.6" y1="73.66" x2="101.6" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="101.6" y1="71.12" x2="91.44" y2="71.12" width="0.1524" layer="91"/>
+<junction x="91.44" y="71.12"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -14443,6 +14450,10 @@ grid 5.08 mm</description>
 <junction x="63.5" y="93.98"/>
 <junction x="55.88" y="93.98"/>
 <pinref part="R1" gate="G$1" pin="2"/>
+<pinref part="R9" gate="G$1" pin="2"/>
+<wire x1="91.44" y1="93.98" x2="101.6" y2="93.98" width="0.1524" layer="91"/>
+<wire x1="101.6" y1="93.98" x2="101.6" y2="83.82" width="0.1524" layer="91"/>
+<junction x="91.44" y="93.98"/>
 </segment>
 </net>
 <net name="N$9" class="0">
