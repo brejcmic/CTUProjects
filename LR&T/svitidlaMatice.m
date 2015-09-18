@@ -4,8 +4,9 @@ clc;
 close;
 %Vstupem je krivka svitivosti v soubooru csv. Gain udava nasobek vseh
 %hodnot v krivce svitivosti.
-filenameinput = '13-210A-2028E_LUNCI_5G2';
-gain = 5.2;
+filenameinput = '50-001P-2018E_BURE_2G4';
+ID = '_TestC';
+gain = 2.4;
 %Reseni rozmisteni svetel pomoci genetickeho algoritmu. Na zacatku se zvoli
 %pocet svitidel a jejich vyzarovaci charakteristika.
 %DNA: x, y, x, y, x, y,... zavisi na poctu svitidel, posledni je svitivost
@@ -23,31 +24,26 @@ gain = 5.2;
 %krok pozice:
                 pop.stepXY = 1;
 %parametry fitness funkce:
-                pop.alfa = 1.9;
-                pop.beta = 0.1;
+                pop.alfa = 1.8;
+                pop.beta = 0.2;
                 pop.A = (1+pop.alfa)/2;
                 pop.B = (1+pop.beta)/2;
+                pop.C = 0.001;
 %Rozmery mistnosti v m:
                 mstn.x = 5;
-                mstn.y = 3;
+                mstn.y = 2.5;
 %Vyska mistnosti (m):
                 mstn.z = 4;
 %Vyska srovnavaci roviny (m):
                 mstn.zsr = 0.85;
 %Pocet bodu na stenach v ose x:
-                mstn.Nx = 20;
+                mstn.Nx = ceil(4*mstn.x);
 %Pocet bodu na stenach v ose y:
-                mstn.Ny = 12;
+                mstn.Ny = ceil(4*mstn.y);
 %Pocet bodu na stenach v ose z:
-                mstn.Nz = 10;
+                mstn.Nz = ceil(4*mstn.z);
 %Pocatecni fitness
                 pop.fitness = zeros(1, pop.gen);
-%--------------------------------------------------------------------------
-%Fenotyp - cilove paramety
-%Prumerna hladina osvetlenosti:
-                target.Eavg = 500;
-%Rovnomernost:
-                target.Uo = 0.6;
 
 %--------------------------------------------------------------------------
 %PARAMETRY ODRAZU
@@ -61,12 +57,21 @@ gain = 5.2;
 %Krivka svitivosti
                 svt.I = gain*csvread(['Svitidla/', filenameinput, '.csv'],1,1);
 %Vyska svitidel:
-                svt.z = 3.5;
+                svt.z = 4;
 %Pocet svitidel:
-                svt.N = 4;
+                svt.N = 10;
 %Smerove vektory roviny os svitidla:
                 svt.vax = [0 1 0];%normala k C0 = osa svitidla
                 svt.vrd = [1 0 0];%normala k C90 = pricna osa svitidla
+                
+%--------------------------------------------------------------------------
+%Fenotyp - cilove paramety
+%Prumerna hladina osvetlenosti:
+                target.Eavg = 500;
+%Rovnomernost:
+                target.Uo = 0.6;
+%Symetrie:
+                target.sym = svt.N*(mstn.x + mstn.y)/2;
 %%
 %Inicializace vysledneho prubehu fitness funkce
 vysl.fit = zeros(1, pop.gen);
@@ -549,19 +554,17 @@ for generace = 1:1:pop.gen
     pop.Eavg = sum(pop.E, 2)./ podlaha.N;
     %rovnomernost, kazdy radek jeden clen
     pop.Uo = min(pop.E,[],2)./pop.Eavg;
-    %smerodatna odchylka
-    pop.var = pop.E - pop.Eavg*ones(1,podlaha.N);
-    pop.var = pop.var.^2;
-    pop.var = sum(pop.var, 2)./podlaha.N;
-    pop.var = sqrt(pop.var);
+    %symetrie
+    pop.asym = sum(pop.dna, 2) - target.sym;
     
     %fitness
     pop.fitness = zeros(pop.N, 1);
     pop.fitness = pop.fitness + (pop.A - pop.alfa*0.5*exp((target.Eavg-pop.Eavg)./ target.Eavg / pop.alfa)).*(pop.Eavg > target.Eavg) + (0.5*pop.Eavg./ target.Eavg).*(pop.Eavg <= target.Eavg);
     pop.fitness = pop.fitness + (pop.B - pop.beta*0.5*exp((target.Uo-pop.Uo)./ target.Uo / pop.beta)).*(pop.Uo > target.Uo) + (0.5*pop.Uo./ target.Uo).*(pop.Uo <= target.Uo);
-    %pop.fitness = pop.fitness + 1 - exp(-pop.Uo./ target.Uo);
-    %pop.fitness = pop.fitness + exp(-pop.var./pop.Eavg);
+
     pop.fitness = pop.fitness./ (pop.A+pop.B);
+    
+    pop.fitness = pop.fitness + pop.C*exp(-pop.asym).*(pop.asym > 0) + pop.C*exp(pop.asym).*(pop.asym <= 0);
     %pravdepodobnost vyberu
     pop.pravdep = pop.fitness./ sum(pop.fitness, 1);
     
@@ -573,6 +576,7 @@ for generace = 1:1:pop.gen
     %ELITISMUS - vyber nejlepsiho clena populace na prvni misto
     %----------------------------------------------------------------------
     [~, elita.idx]= max(pop.pravdep);
+    
     %ulozeni nejlepsi hodnoty fitness funkce
     vysl.fit(generace)= pop.fitness(elita.idx);
     %tento clen nebude mutovat
@@ -622,7 +626,7 @@ for generace = 1:1:pop.gen
     pop.dnaPotomku(2:end, 1:2:(pop.dnaDelka-1)) = pop.dnaPotomku(2:end, 1:2:(pop.dnaDelka-1)) + pop.mutace;
     %omezeni shora pro souradnici y
     pop.mutace = mstn.y * (pop.dnaPotomku(2:end, 2:2:pop.dnaDelka) > mstn.y);
-    pop.dnaPotomku(2:end, 2:2:pop.dnaDelka) = pop.dnaPotomku(2:end, 2:2:pop.dnaDelka) .* (pop.dnaPotomku(2:end, 2:2:(2*svt.N)) <= mstn.y);
+    pop.dnaPotomku(2:end, 2:2:pop.dnaDelka) = pop.dnaPotomku(2:end, 2:2:pop.dnaDelka) .* (pop.dnaPotomku(2:end, 2:2:(pop.dnaDelka)) <= mstn.y);
     pop.dnaPotomku(2:end, 2:2:pop.dnaDelka) = pop.dnaPotomku(2:end, 2:2:pop.dnaDelka) + pop.mutace;
 
     %----------------------------------------------------------------------
@@ -633,6 +637,7 @@ for generace = 1:1:pop.gen
     fprintf('Generace: %d\n',generace);
     fprintf('Nejlepsi jedinec: Eavg= %4.2f lx, Uo= %2.2f\n',pop.Eavg(elita.idx),pop.Uo(elita.idx));
     fprintf('Fitness= %2.4f\n',pop.fitness(elita.idx));
+    fprintf('Nesymetrie= %2.4f\n\n',pop.asym(elita.idx));
 end
 %--------------------------------------------------------------------------
 %Zobrazeni vysledku
@@ -667,4 +672,4 @@ surf(vysl.fitplot.xy,vysl.fitplot.xy,vysl.fitplot.Fit);
 
 %Ulozeni vysledku
 str = sprintf('_N%d_VAX%d%d%d.mat', svt.N, svt.vax(1), svt.vax(2), svt.vax(3));
-save(['Vysledky/' filenameinput str], 'vysl', 'pop', 'target', 'svt', 'mstn')
+save(['Vysledky/' filenameinput ID str], 'vysl', 'pop', 'target', 'svt', 'mstn')
