@@ -1931,11 +1931,11 @@ design rules under a new name.</description>
 <element name="R7" library="rcl" package="P0817/22" value="33k" x="46.99" y="45.75175" rot="R90"/>
 <element name="R8" library="rcl" package="P0817/22" value="68k" x="38.1" y="45.72" rot="R90"/>
 <element name="T1" library="transistor" package="TO220" value="BD240C" x="53.34" y="10.16" rot="MR270"/>
-<element name="X1" library="con-phoenix-smkdsp" package="SMKDSP_1,5/2" value="SMKDSP_1,5/2" x="27.94" y="48.26">
-<attribute name="OC_NEWARK" value="69C8588" x="27.94" y="48.26" size="1.778" layer="27" display="off"/>
-<attribute name="MPN" value="1733570" x="27.94" y="48.26" size="1.778" layer="27" display="off"/>
-<attribute name="MF" value="FARNELL" x="27.94" y="48.26" size="1.778" layer="27" display="off"/>
-<attribute name="OC_FARNELL" value="3041244" x="27.94" y="48.26" size="1.778" layer="27" display="off"/>
+<element name="X1" library="con-phoenix-smkdsp" package="SMKDSP_1,5/2" value="SMKDSP_1,5/2" x="25.4" y="48.26">
+<attribute name="OC_NEWARK" value="69C8588" x="25.4" y="48.26" size="1.778" layer="27" display="off"/>
+<attribute name="MPN" value="1733570" x="25.4" y="48.26" size="1.778" layer="27" display="off"/>
+<attribute name="MF" value="FARNELL" x="25.4" y="48.26" size="1.778" layer="27" display="off"/>
+<attribute name="OC_FARNELL" value="3041244" x="25.4" y="48.26" size="1.778" layer="27" display="off"/>
 </element>
 <element name="X2" library="con-phoenix-smkdsp" package="SMKDSP_1,5/2" value="SMKDSP_1,5/2" x="8.89" y="5.08" rot="R180">
 <attribute name="OC_NEWARK" value="69C8588" x="8.89" y="5.08" size="1.778" layer="27" rot="R180" display="off"/>
@@ -2022,8 +2022,6 @@ design rules under a new name.</description>
 <contactref element="C1" pad="1"/>
 <contactref element="C3" pad="+"/>
 <contactref element="R1" pad="2"/>
-<wire x1="25.44" y1="48.26" x2="25.44" y2="43.14" width="1.4224" layer="16"/>
-<wire x1="25.44" y1="43.14" x2="30.48" y2="38.1" width="1.4224" layer="16"/>
 <wire x1="30.48" y1="34.29" x2="30.48" y2="38.1" width="1.4224" layer="16"/>
 <contactref element="R9" pad="2"/>
 <wire x1="74.93" y1="30.48" x2="66.04" y2="30.48" width="1.4224" layer="16"/>
@@ -2039,6 +2037,9 @@ design rules under a new name.</description>
 <vertex x="36.83" y="27.94"/>
 <vertex x="33.02" y="24.13"/>
 </polygon>
+<wire x1="30.48" y1="38.1" x2="22.86" y2="45.72" width="1.4224" layer="16"/>
+<wire x1="22.86" y1="45.72" x2="22.86" y2="48.22" width="1.4224" layer="16"/>
+<wire x1="22.86" y1="48.22" x2="22.9" y2="48.26" width="1.4224" layer="16"/>
 </signal>
 <signal name="BASE">
 <contactref element="D1" pad="A"/>
@@ -2053,14 +2054,15 @@ design rules under a new name.</description>
 <contactref element="R6" pad="1"/>
 <contactref element="R5" pad="1"/>
 <contactref element="R3" pad="1"/>
-<wire x1="38.1" y1="34.29" x2="38.1" y2="40.6" width="1.4224" layer="16"/>
-<wire x1="38.1" y1="40.6" x2="30.44" y2="48.26" width="1.4224" layer="16"/>
 <wire x1="38.1" y1="34.29" x2="46.95825" y2="34.29" width="1.4224" layer="16"/>
 <wire x1="46.95825" y1="34.29" x2="46.99" y2="34.32175" width="1.4224" layer="16"/>
 <wire x1="46.99" y1="34.32175" x2="55.84825" y2="34.32175" width="1.4224" layer="16"/>
 <wire x1="55.84825" y1="34.32175" x2="55.88" y2="34.29" width="1.4224" layer="16"/>
 <wire x1="55.88" y1="34.29" x2="66.04" y2="34.29" width="1.4224" layer="16"/>
 <wire x1="66.04" y1="34.29" x2="74.93" y2="34.29" width="1.4224" layer="16"/>
+<wire x1="27.9" y1="48.26" x2="27.94" y2="48.26" width="1.4224" layer="16"/>
+<wire x1="27.94" y1="48.26" x2="38.1" y2="38.1" width="1.4224" layer="16"/>
+<wire x1="38.1" y1="38.1" x2="38.1" y2="34.29" width="1.4224" layer="16"/>
 </signal>
 <signal name="N$4">
 <contactref element="D4" pad="A"/>
