@@ -24,8 +24,8 @@ gain = 2.4;
 %krok pozice:
                 pop.stepXY = 1;
 %parametry fitness funkce:
-                pop.alfa = 1.8;
-                pop.beta = 0.2;
+                pop.alfa = 1.5;
+                pop.beta = 0.5;
                 pop.A = (1+pop.alfa)/2;
                 pop.B = (1+pop.beta)/2;
                 pop.C = 0.001;
@@ -59,10 +59,10 @@ gain = 2.4;
 %Vyska svitidel:
                 svt.z = 4;
 %Pocet svitidel:
-                svt.N = 10;
+                svt.N = 12;
 %Smerove vektory roviny os svitidla:
-                svt.vax = [0 1 0];%normala k C0 = osa svitidla
-                svt.vrd = [1 0 0];%normala k C90 = pricna osa svitidla
+                svt.vax = [1 0 0];%normala k C0 = osa svitidla
+                svt.vrd = [0 -1 0];%normala k C90 = pricna osa svitidla
                 
 %--------------------------------------------------------------------------
 %Fenotyp - cilove paramety
