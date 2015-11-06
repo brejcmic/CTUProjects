@@ -14681,14 +14681,14 @@ Source: http://www.bourns.com/data/global/PDFs/3223.PDF</description>
 <part name="PAD9" library="wirepad" deviceset="3,81/1,4" device=""/>
 <part name="PAD10" library="wirepad" deviceset="3,81/1,4" device=""/>
 <part name="SUPPLY4" library="supply2" deviceset="GND2" device=""/>
-<part name="C3" library="rcl" deviceset="C-EU" device="050-035X075"/>
-<part name="C4" library="rcl" deviceset="C-EU" device="050-035X075"/>
-<part name="C5" library="rcl" deviceset="C-EU" device="050-035X075"/>
-<part name="C6" library="rcl" deviceset="C-EU" device="050-035X075"/>
+<part name="C3" library="rcl" deviceset="C-EU" device="050-035X075" value="330n"/>
+<part name="C4" library="rcl" deviceset="C-EU" device="050-035X075" value="330n"/>
+<part name="C5" library="rcl" deviceset="C-EU" device="050-035X075" value="330n"/>
+<part name="C6" library="rcl" deviceset="C-EU" device="050-035X075" value="330n"/>
 <part name="VDD5" library="supply1" deviceset="VDD" device=""/>
 <part name="GND9" library="supply1" deviceset="GND" device=""/>
-<part name="C7" library="rcl" deviceset="CPOL-EU" device="E2.5-7"/>
-<part name="C8" library="rcl" deviceset="CPOL-EU" device="E2.5-7"/>
+<part name="C7" library="rcl" deviceset="CPOL-EU" device="E2.5-7" value="47u"/>
+<part name="C8" library="rcl" deviceset="CPOL-EU" device="E2.5-7" value="47u"/>
 </parts>
 <sheets>
 <sheet>
