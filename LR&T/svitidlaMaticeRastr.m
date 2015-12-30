@@ -7,27 +7,25 @@ close;
 filenameinput = '50-001P-2018E_BURE_2G4';
 ID = '_TestC';
 gain = 2.4;
-%Reseni rozmisteni svetel pomoci genetickeho algoritmu. Na zacatku se zvoli
-%pocet svitidel a jejich vyzarovaci charakteristika.
-%DNA: x, y, x, y, x, y,... zavisi na poctu svitidel
+%Reseni rozmisteni svetel pomoci genetickeho algoritmu. Algorytmus vklada
+%svitidla do rovnomerneho rastru.
+%DNA: Nx, Ny = prvni 3 LS bity odpovidaji poctu svitidel v ose X, dalsi 3
+%bity odpovidaji poctu svitidel v ose Y.
 %Krizeni: jednobodove (udat pravdepodobnost)
                 pop.kriz = 0.9;
 %Mutace (pomerna hodnota):
                 pop.mut = 0.15;
 %Pocet generací:
-                pop.gen = 100;
+                pop.gen = 2;
 %Velikost populace:
                 pop.N = 100;
 %Pocet jedincu v turnaji:
                 pop.N_turnament = 4;
-%krok pozice:
-                pop.stepXY = 1;
 %parametry fitness funkce:
-                pop.alfa = 0.5;
-                pop.beta = 2.5;
+                pop.alfa = 1.5;
+                pop.beta = 0.5;
                 pop.A = (1+pop.alfa)/2;
                 pop.B = (1+pop.beta)/2;
-                pop.C = 0.001;
 %Rozmery mistnosti v m:
                 mstn.x = 5;
                 mstn.y = 2.5;
@@ -67,8 +65,6 @@ gain = 2.4;
                 target.Eavg = 500;
 %Rovnomernost:
                 target.Uo = 0.6;
-%Symetrie:
-                target.sym = svt.N*(mstn.x + mstn.y)/2;
 %%
 %Inicializace vysledneho prubehu fitness funkce
 vysl.fit = zeros(1, pop.gen);
@@ -183,11 +179,8 @@ srovina.nv = [0 0 1];
 %GENEROVANI DNA POCATECNICH POPULACI
 %DNA: liche pozice x, sude pozice y
 %Pocatecni populace je nahodna:
-pop.dnaDelka = 2*svt.N;
-pop.dna = zeros(pop.N, pop.dnaDelka);
-pop.dna(:,1:2:(pop.dnaDelka-1)) = mstn.x.*rand(pop.N,svt.N);
-pop.dna(:,2:2:pop.dnaDelka) = mstn.y.*rand(pop.N,svt.N);
-
+pop.dna = floor((2^6).*rand(pop.N,1));
+pop.dna = pop.dna .* (pop.dna < (2^6));
 %--------------------------------------------------------------------------
 %SMYCKA GENETICKEHO ALGORITMU
 %--------------------------------------------------------------------------
@@ -196,15 +189,23 @@ for generace = 1:1:pop.gen
     %vynulovani sledovanych promennych
     pop.E = zeros(pop.N, podlaha.N);
     
+    Nx = mod(pop.dna, 8) + 1;
+    Ny = floor(pop.dna./8) + 1;
     %----------------------------------------------------------------------
     %Vypocet osvetleni vsech bodu pro kazdeho clena populace
     for clen = 1:1:pop.N
         %------------------------------------------------------------------
         %Vsechna svitidla tohoto clena populace vuci bodum mistnosti
         %------------------------------------------------------------------
-        x1 = pop.dna(clen, 1:2:((2*svt.N)-1));
-        y1 = pop.dna(clen, 2:2:(2*svt.N));
-        z1 = svt.z*ones(1, svt.N);
+        sx1 = ((1:Nx(clen)).*mstn.x - mstn.x/2)./Nx(clen);
+        sy1 = ((1:Ny(clen)).*mstn.y - mstn.y/2)./Ny(clen);
+        x1 = zeros(1, Nx(clen)*Ny(clen));
+        y1 = zeros(1, Nx(clen)*Ny(clen));
+        for idx= 1:1:Ny(clen)
+        x1((((idx-1)*Nx(clen))+1):(idx*Nx(clen))) = sx1;
+        y1((((idx-1)*Nx(clen))+1):(idx*Nx(clen))) = ones(1, Nx(clen)).*sy1(idx);
+        end
+        z1 = svt.z*ones(1, Nx(clen)*Ny(clen));
         vax = svt.vax;
         vrd = svt.vrd;
         
@@ -475,9 +476,15 @@ for generace = 1:1:pop.gen
         %Vypocet osvetleni srovnavaci roviny
         %------------------------------------------------------------------
         %Srovnavaci rovina + svitidla
-        x1 = pop.dna(clen, 1:2:((2*svt.N)-1));
-        y1 = pop.dna(clen, 2:2:(2*svt.N));
-        z1 = svt.z*ones(1, svt.N);
+        sx1 = ((1:Nx(clen)).*mstn.x - mstn.x/2)./Nx(clen);
+        sy1 = ((1:Ny(clen)).*mstn.y - mstn.y/2)./Ny(clen);
+        x1 = zeros(1, Nx(clen)*Ny(clen));
+        y1 = zeros(1, Nx(clen)*Ny(clen));
+        for idx= 1:1:Ny(clen)
+        x1((((idx-1)*Nx(clen))+1):(idx*Nx(clen))) = sx1;
+        y1((((idx-1)*Nx(clen))+1):(idx*Nx(clen))) = ones(1, Nx(clen)).*sy1(idx);
+        end
+        z1 = svt.z*ones(1, Nx(clen)*Ny(clen));
         vax = svt.vax;
         vrd = svt.vrd;
         
@@ -551,8 +558,6 @@ for generace = 1:1:pop.gen
     pop.Eavg = sum(pop.E, 2)./ podlaha.N;
     %rovnomernost, kazdy radek jeden clen
     pop.Uo = min(pop.E,[],2)./pop.Eavg;
-    %symetrie
-    pop.asym = sum(pop.dna, 2) - target.sym;
     
     %fitness
     pop.fitness = zeros(pop.N, 1);
@@ -560,15 +565,13 @@ for generace = 1:1:pop.gen
     pop.fitness = pop.fitness + (pop.B - pop.beta*0.5*exp((target.Uo-pop.Uo)./ target.Uo / pop.beta)).*(pop.Uo > target.Uo) + (0.5*pop.Uo./ target.Uo).*(pop.Uo <= target.Uo);
 
     pop.fitness = pop.fitness./ (pop.A+pop.B);
-    
-    pop.fitness = pop.fitness + pop.C*exp(-pop.asym).*(pop.asym > 0) + pop.C*exp(pop.asym).*(pop.asym <= 0);
     %pravdepodobnost vyberu
     pop.pravdep = pop.fitness./ sum(pop.fitness, 1);
     
     %----------------------------------------------------------------------
     %Generovani nove populace
     %----------------------------------------------------------------------
-    pop.dnaPotomku = zeros(pop.N,pop.dnaDelka);
+    pop.dnaPotomku = zeros(pop.N, 1);
     %----------------------------------------------------------------------
     %ELITISMUS - vyber nejlepsiho clena populace na prvni misto
     %----------------------------------------------------------------------
@@ -594,37 +597,27 @@ for generace = 1:1:pop.gen
         rodicB.idx = idx(rodicB.idx);
 
         %Krizeni - podle indexu a dle pravdepodobnosti krizeni
-        idx= ceil(pop.dnaDelka*rand(1,1)/pop.kriz + eps);
-        if idx >= pop.dnaDelka %zde nekrizit
-            pop.dnaPotomku(clen, :) = pop.dna(rodicA.idx, :);
-            pop.dnaPotomku(clen+1, :) = pop.dna(rodicB.idx, :);
+        idx= ceil(6*rand(1,1)/pop.kriz + eps);
+        if idx >= 6 %zde nekrizit
+            pop.dnaPotomku(clen) = pop.dna(rodicA.idx);
+            pop.dnaPotomku(clen+1) = pop.dna(rodicB.idx);
         else %zde krizit
-            pop.dnaPotomku(clen, :) = [pop.dna(rodicA.idx, (1:idx)), pop.dna(rodicB.idx, (idx+1):end)];
-            pop.dnaPotomku(clen+1, :) = [pop.dna(rodicB.idx, (1:idx)), pop.dna(rodicA.idx, (idx+1):end)];
+            pop.dnaPotomku(clen) = floor(pop.dna(rodicA.idx)/(2^idx))*(2^idx) + mod(pop.dna(rodicB.idx),(2^idx));
+            pop.dnaPotomku(clen+1) = floor(pop.dna(rodicB.idx)/(2^idx))*(2^idx) + mod(pop.dna(rodicA.idx),(2^idx));
         end
     end
     %----------------------------------------------------------------------
     %Mutace
     %----------------------------------------------------------------------
     %POZOR: prvni clen nesmi mutovat
-    %Uvazovano normalni rozdeleni prirustku mutace
-    mut= rand(pop.N-1,pop.dnaDelka);
-    pop.mutace = pop.stepXY .* randn(pop.N-1,pop.dnaDelka);
+    %Uvazovano rovnomerne rozdeleni prirustku mutace
+    mut= rand(pop.N-1,1);
+    pop.mutace = floor(6 * rand(pop.N-1, 1));
+    pop.mutace = 2.^pop.mutace;
 
     %zvyseni hodnoty
     pop.mutace = pop.mutace .* (mut <= pop.mut);
-    pop.dnaPotomku(2:end, :) = pop.dnaPotomku(2:end, :)+ pop.mutace;
-
-    %omezeni zdola je pro obe souradnice stejne
-    pop.dnaPotomku(2:end, :) = pop.dnaPotomku(2:end, :).* (pop.dnaPotomku(2:end, :) > 0);
-    %omezeni shora pro souradnici x
-    pop.mutace = mstn.x * (pop.dnaPotomku(2:end, 1:2:(pop.dnaDelka-1)) > mstn.x);
-    pop.dnaPotomku(2:end, 1:2:(pop.dnaDelka-1)) = pop.dnaPotomku(2:end, 1:2:(pop.dnaDelka-1)) .* (pop.dnaPotomku(2:end, 1:2:(pop.dnaDelka-1)) <= mstn.x);
-    pop.dnaPotomku(2:end, 1:2:(pop.dnaDelka-1)) = pop.dnaPotomku(2:end, 1:2:(pop.dnaDelka-1)) + pop.mutace;
-    %omezeni shora pro souradnici y
-    pop.mutace = mstn.y * (pop.dnaPotomku(2:end, 2:2:pop.dnaDelka) > mstn.y);
-    pop.dnaPotomku(2:end, 2:2:pop.dnaDelka) = pop.dnaPotomku(2:end, 2:2:pop.dnaDelka) .* (pop.dnaPotomku(2:end, 2:2:(pop.dnaDelka)) <= mstn.y);
-    pop.dnaPotomku(2:end, 2:2:pop.dnaDelka) = pop.dnaPotomku(2:end, 2:2:pop.dnaDelka) + pop.mutace;
+    pop.dnaPotomku(2:end) = mod(pop.dnaPotomku(2:end) + pop.mutace, (2^6));
 
     %----------------------------------------------------------------------
     %NOVA GENERACE
@@ -634,7 +627,6 @@ for generace = 1:1:pop.gen
     fprintf('Generace: %d\n',generace);
     fprintf('Nejlepsi jedinec: Eavg= %4.2f lx, Uo= %2.2f\n',pop.Eavg(elita.idx),pop.Uo(elita.idx));
     fprintf('Fitness= %2.4f\n',pop.fitness(elita.idx));
-    fprintf('Nesymetrie= %2.4f\n\n',pop.asym(elita.idx));
 end
 %--------------------------------------------------------------------------
 %Zobrazeni vysledku
@@ -648,10 +640,21 @@ ylabel('y (m)');
 zlabel('E (lx)');
 
 figure(2)
-vysl.dna = pop.dna(elita.idx,:);
-vysl.sx = pop.dna(elita.idx,1:2:(pop.dnaDelka-1));
-vysl.sy = pop.dna(elita.idx,2:2:(pop.dnaDelka));
-vysl.svz = svt.z;
+Nx = mod(pop.dna, 8) + 1;
+Ny = floor(pop.dna./8) + 1;
+sx1 = ((1:Nx(elita.idx)).*mstn.x - mstn.x/2)./Nx(elita.idx);
+sy1 = ((1:Ny(elita.idx)).*mstn.y - mstn.y/2)./Ny(elita.idx);
+x1 = zeros(1, Nx(elita.idx)*Ny(elita.idx));
+y1 = zeros(1, Nx(elita.idx)*Ny(elita.idx));
+for idx= 1:1:Ny(elita.idx)
+x1((((idx-1)*Nx(elita.idx))+1):(idx*Nx(elita.idx))) = sx1;
+y1((((idx-1)*Nx(elita.idx))+1):(idx*Nx(elita.idx))) = ones(1, Ny(elita.idx)).*sy1(idx);
+end
+z1 = svt.z*ones(1, Nx(clen)*Ny(clen));
+vysl.dna = pop.dna(elita.idx);
+vysl.sx = x1;
+vysl.sy = y1;
+vysl.svz = z1;
 plot(vysl.sx, vysl.sy, 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'y', 'MarkerEdgeColor', 'k');
 xlabel('x (m)');
 ylabel('y (m)');
