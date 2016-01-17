@@ -54,7 +54,8 @@ gain = 2.4;
 %Vyska svitidel:
                 svt.z = 4;
 %Pocet svitidel:
-                svt.N = 12;
+                svt.Nx = 12;
+                svt.Ny = 12;
 %Smerove vektory roviny os svitidla:
                 svt.vax = [1 0 0];%normala k C0 = osa svitidla
                 svt.vrd = [0 -1 0];%normala k C90 = pricna osa svitidla
@@ -68,6 +69,18 @@ gain = 2.4;
 %%
 %Inicializace vysledneho prubehu fitness funkce
 vysl.fit = zeros(1, pop.gen);
+%--------------------------------------------------------------------------
+%GENEROVANI RASTRU SVITIDEL
+%Deleni jednotlivych os:
+svt.bx = ((1:svt.Nx).*mstn.x - mstn.x/2)./svt.Nx;
+svt.by = ((1:svt.Ny).*mstn.y - mstn.y/2)./svt.Ny;
+
+for idx= 1:1:svt.Ny
+    svt.x((((idx-1)*Nx(clen))+1):(idx*Nx(clen))) = svt.bx;
+    svt.y((((idx-1)*Nx(clen))+1):(idx*Nx(clen))) = ones(1, svt.Nx).*svt.by(idx);
+end
+svt.z = svt.z .* ones(1, svt.Nx*svt.Ny);
+
 %--------------------------------------------------------------------------
 %GENEROVANI BODU JEDNOTLIVYCH STEN
 %Deleni jednotlivych os:
@@ -89,6 +102,7 @@ for idx= 1:1:mstn.Ny
     podlaha.y((((idx-1)*mstn.Nx)+1):(idx*mstn.Nx)) = ones(1, mstn.Nx).*mstn.by(idx);
     podlaha.z((((idx-1)*mstn.Nx)+1):(idx*mstn.Nx)) = zeros(1, mstn.Nx);
 end
+
 podlaha.A = ones(1, mstn.Nx*mstn.Ny).* (mstn.x*mstn.y)/ mstn.Nx/ mstn.Ny;
 podlaha.N = mstn.Nx*mstn.Ny;
 podlaha.E = 0;
@@ -102,6 +116,7 @@ for idx= 1:1:mstn.Ny
     strop.y((((idx-1)*mstn.Nx)+1):(idx*mstn.Nx)) = ones(1, mstn.Nx).*mstn.by(idx);
     strop.z((((idx-1)*mstn.Nx)+1):(idx*mstn.Nx)) = ones(1, mstn.Nx).*mstn.z;
 end
+
 strop.A = ones(1, mstn.Nx*mstn.Ny).*(mstn.x*mstn.y)/ mstn.Nx/ mstn.Ny;
 strop.N = mstn.Nx*mstn.Ny;
 strop.E = 0;
@@ -115,6 +130,7 @@ for idx= 1:1:mstn.Nz
     stenaJ.y((((idx-1)*mstn.Nx)+1):(idx*mstn.Nx)) = zeros(1, mstn.Nx);
     stenaJ.z((((idx-1)*mstn.Nx)+1):(idx*mstn.Nx)) = ones(1, mstn.Nx).*mstn.bz(idx);
 end
+
 stenaJ.A = ones(1, mstn.Nx*mstn.Nz).*(mstn.x*mstn.z)/ mstn.Nx/ mstn.Nz;
 stenaJ.N = mstn.Nx*mstn.Nz;
 stenaJ.E = 0;
@@ -177,10 +193,12 @@ srovina.nv = [0 0 1];
 
 %--------------------------------------------------------------------------
 %GENEROVANI DNA POCATECNICH POPULACI
-%DNA: liche pozice x, sude pozice y
-%Pocatecni populace je nahodna:
-pop.dna = floor((2^6).*rand(pop.N,1));
-pop.dna = pop.dna .* (pop.dna < (2^6));
+%DNA: udava platnost souradnice - je to logicka hodnota
+%Pocatecni populace je nahodna v intervalu <-0.5, 0.5>:
+pop.dna = -0.5 .* rand(pop.N,svt.Nx.*svt.Ny);
+pop.dnaDelka = svt.Nx.*svt.Ny;
+%Tohle je prevod na binarni nahodny vektor
+pop.dna = (pop.dna > 0);
 %--------------------------------------------------------------------------
 %SMYCKA GENETICKEHO ALGORITMU
 %--------------------------------------------------------------------------
@@ -188,68 +206,61 @@ pop.dna = pop.dna .* (pop.dna < (2^6));
 for generace = 1:1:pop.gen
     %vynulovani sledovanych promennych
     pop.E = zeros(pop.N, podlaha.N);
-    
-    Nx = mod(pop.dna, 8) + 1;
-    Ny = floor(pop.dna./8) + 1;
+
     %----------------------------------------------------------------------
     %Vypocet osvetleni vsech bodu pro kazdeho clena populace
     for clen = 1:1:pop.N
         %------------------------------------------------------------------
         %Vsechna svitidla tohoto clena populace vuci bodum mistnosti
         %------------------------------------------------------------------
-        sx1 = ((1:Nx(clen)).*mstn.x - mstn.x/2)./Nx(clen);
-        sy1 = ((1:Ny(clen)).*mstn.y - mstn.y/2)./Ny(clen);
-        x1 = zeros(1, Nx(clen)*Ny(clen));
-        y1 = zeros(1, Nx(clen)*Ny(clen));
-        for idx= 1:1:Ny(clen)
-        x1((((idx-1)*Nx(clen))+1):(idx*Nx(clen))) = sx1;
-        y1((((idx-1)*Nx(clen))+1):(idx*Nx(clen))) = ones(1, Nx(clen)).*sy1(idx);
-        end
-        z1 = svt.z*ones(1, Nx(clen)*Ny(clen));
+        x1 = svt.x;
+        y1 = svt.y;
+        z1 = svt.z;
         vax = svt.vax;
         vrd = svt.vrd;
+        dna = pop.dna(clen);
         
         %PODLAHA
         x2 = podlaha.x;
         y2 = podlaha.y;
         z2 = podlaha.z;
         nv = podlaha.nv;
-        podlaha.E = osvSvitCGama(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I);
+        podlaha.E = osvSvitCGama2(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I, dna);
         
         %STROP
         x2 = strop.x;
         y2 = strop.y;
         z2 = strop.z;
         nv = strop.nv;
-        strop.E = osvSvitCGama(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I);
+        strop.E = osvSvitCGama2(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I, dna);
         
         %STENA J
         x2 = stenaJ.x;
         y2 = stenaJ.y;
         z2 = stenaJ.z;
         nv = stenaJ.nv;
-        stenaJ.E = osvSvitCGama(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I);
+        stenaJ.E = osvSvitCGama2(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I, dna);
         
         %STENA S
         x2 = stenaS.x;
         y2 = stenaS.y;
         z2 = stenaS.z;
         nv = stenaS.nv;
-        stenaS.E = osvSvitCGama(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I);
+        stenaS.E = osvSvitCGama2(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I, dna);
         
         %STENA Z
         x2 = stenaZ.x;
         y2 = stenaZ.y;
         z2 = stenaZ.z;
         nv = stenaZ.nv;
-        stenaZ.E = osvSvitCGama(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I);
+        stenaZ.E = osvSvitCGama2(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I, dna);
         
         %STENA V
         x2 = stenaV.x;
         y2 = stenaV.y;
         z2 = stenaV.z;
         nv = stenaV.nv;
-        stenaV.E = osvSvitCGama(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I);
+        stenaV.E = osvSvitCGama2(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I, dna);
         
         %------------------------------------------------------------------
         %Vypocet odrazu mezi stenami
@@ -476,23 +487,18 @@ for generace = 1:1:pop.gen
         %Vypocet osvetleni srovnavaci roviny
         %------------------------------------------------------------------
         %Srovnavaci rovina + svitidla
-        sx1 = ((1:Nx(clen)).*mstn.x - mstn.x/2)./Nx(clen);
-        sy1 = ((1:Ny(clen)).*mstn.y - mstn.y/2)./Ny(clen);
-        x1 = zeros(1, Nx(clen)*Ny(clen));
-        y1 = zeros(1, Nx(clen)*Ny(clen));
-        for idx= 1:1:Ny(clen)
-        x1((((idx-1)*Nx(clen))+1):(idx*Nx(clen))) = sx1;
-        y1((((idx-1)*Nx(clen))+1):(idx*Nx(clen))) = ones(1, Nx(clen)).*sy1(idx);
-        end
-        z1 = svt.z*ones(1, Nx(clen)*Ny(clen));
+        x1 = svt.x;
+        y1 = svt.y;
+        z1 = svt.z;
         vax = svt.vax;
         vrd = svt.vrd;
+        dna = pop.dna(clen);
         
         x2 = srovina.x;
         y2 = srovina.y;
         z2 = srovina.z;
         nv = srovina.nv;
-        srovina.E = osvSvitCGama(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I);
+        srovina.E = osvSvitCGama2(x1, y1, z1, x2, y2, z2, vax, vrd, nv, svt.I, dna);
         
         %Srovnavaci rovina + steny
         x1 = srovina.x;
@@ -561,17 +567,16 @@ for generace = 1:1:pop.gen
     
     %fitness
     pop.fitness = zeros(pop.N, 1);
-    pop.fitness = pop.fitness + (pop.A - pop.alfa*0.5*exp((target.Eavg-pop.Eavg)./ target.Eavg / pop.alfa)).*(pop.Eavg > target.Eavg) + (0.5*pop.Eavg./ target.Eavg).*(pop.Eavg <= target.Eavg);
-    pop.fitness = pop.fitness + (pop.B - pop.beta*0.5*exp((target.Uo-pop.Uo)./ target.Uo / pop.beta)).*(pop.Uo > target.Uo) + (0.5*pop.Uo./ target.Uo).*(pop.Uo <= target.Uo);
+    pop.fitness = pop.fitness + (exp(target.Eavg - pop.Eavg).*(pop.Eavg > target.Eavg) + exp(pop.Eavg - target.Eavg).*(pop.Eavg <= target.Eavg));
+    pop.fitness = pop.fitness .* ((1 - 0.5*exp((target.Uo-pop.Uo)./ target.Uo)).*(pop.Uo > target.Uo) + (0.5*pop.Uo./ target.Uo).*(pop.Uo <= target.Uo));
 
-    pop.fitness = pop.fitness./ (pop.A+pop.B);
     %pravdepodobnost vyberu
     pop.pravdep = pop.fitness./ sum(pop.fitness, 1);
     
     %----------------------------------------------------------------------
     %Generovani nove populace
     %----------------------------------------------------------------------
-    pop.dnaPotomku = zeros(pop.N, 1);
+    pop.dnaPotomku = zeros(pop.N, pop.dnaDelka);
     %----------------------------------------------------------------------
     %ELITISMUS - vyber nejlepsiho clena populace na prvni misto
     %----------------------------------------------------------------------
@@ -597,27 +602,25 @@ for generace = 1:1:pop.gen
         rodicB.idx = idx(rodicB.idx);
 
         %Krizeni - podle indexu a dle pravdepodobnosti krizeni
-        idx= ceil(6*rand(1,1)/pop.kriz + eps);
-        if idx >= 6 %zde nekrizit
+        idx= ceil(pop.dnaDelka*rand(1,1)/pop.kriz + eps);
+        if idx >= pop.dnaDelka %zde nekrizit
             pop.dnaPotomku(clen) = pop.dna(rodicA.idx);
             pop.dnaPotomku(clen+1) = pop.dna(rodicB.idx);
         else %zde krizit
-            pop.dnaPotomku(clen) = floor(pop.dna(rodicA.idx)/(2^idx))*(2^idx) + mod(pop.dna(rodicB.idx),(2^idx));
-            pop.dnaPotomku(clen+1) = floor(pop.dna(rodicB.idx)/(2^idx))*(2^idx) + mod(pop.dna(rodicA.idx),(2^idx));
+            pop.dnaPotomku(clen, :) = [pop.dna(rodicA.idx, (1:idx)), pop.dna(rodicB.idx, (idx+1):end)];
+            pop.dnaPotomku(clen+1, :) = [pop.dna(rodicB.idx, (1:idx)), pop.dna(rodicA.idx, (idx+1):end)];
         end
     end
     %----------------------------------------------------------------------
     %Mutace
     %----------------------------------------------------------------------
     %POZOR: prvni clen nesmi mutovat
-    %Uvazovano rovnomerne rozdeleni prirustku mutace
-    mut= rand(pop.N-1,1);
-    pop.mutace = floor(6 * rand(pop.N-1, 1));
-    pop.mutace = 2.^pop.mutace;
+    %Vylosovani bitu pro mutaci
+    mut= rand(pop.N-1,pop.dnaDelka);
+    mut= (mut <= pop.mut);
 
-    %zvyseni hodnoty
-    pop.mutace = pop.mutace .* (mut <= pop.mut);
-    pop.dnaPotomku(2:end) = mod(pop.dnaPotomku(2:end) + pop.mutace, (2^6));
+    %zmena hodnoty
+    pop.dnaPotomku(2:end) = xor(pop.dnaPotomku(2:end), mut);
 
     %----------------------------------------------------------------------
     %NOVA GENERACE
