@@ -354,7 +354,7 @@
 
 
 % correct bad hyphenation here
-\hyphenation{op-tical net-works semi-conduc-tor}
+\hyphenation{opti-cal net-works semi-conduc-tor}
 
 \pagestyle{empty}
 \begin{document}
@@ -363,7 +363,7 @@
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{Road lighting design by means of genetic algorithm}
+\title{Algorithmic Solution of Luminaries Placement - Reflections and Symmetry Issues}
 
 
 % author names and affiliations
@@ -375,8 +375,7 @@
 \IEEEauthorblockN{
 Rudolf Bayer\IEEEauthorrefmark{1}, 
 Michal Brejcha\IEEEauthorrefmark{2}, 
-Zuzana Pelánová\IEEEauthorrefmark{1},
-Jan Zálešák\IEEEauthorrefmark{1}}
+Zuzana Pelánová\IEEEauthorrefmark{1}}
 
 \IEEEauthorblockA{
 \IEEEauthorrefmark{1}CTU in Prague, Faculty of Electrical Engineering, Department of Electrical Power Engineering\\
@@ -450,11 +449,7 @@ The paper deals with lighting road design. The demands on illuminance are define
 % creates the second title. It will be ignored for other modes.
 \IEEEpeerreviewmaketitle
 
-\input{secRoadLightingDesign}
-\input{secECalc}
-\input{secLuminaire}
-\input{secGenAlg}
-\input{secResults}
+\input{secInLightDesign}
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -541,11 +536,7 @@ The paper deals with lighting road design. The demands on illuminance are define
 
 
 \section{Conclusion}
-Authors presented results of road lightening design using genetic algorithm in the paper. The results were compared with outputs of common used software DIALux. It was proved that found solutions satisfies all demands defined in standards.
-
-Even the algorithm found the solutions in only 60\break \newpage \noindent generations, the calculation last approximately 10~minutes. The reason was lot of calculated points ($8000+6000$) and relatively large population (200) in each generation. The standards recommend much thinner points concentrations and they do not deal with lighting out of the sidewalk. The algorithm lasted only 2~minutes in case of recommended count of points.
-
-The genetic algorithm can help the designer to find good design even if he is limited by some constraints. These constraints are simply included to limitations of each searched parameter or are taken into account in the fitness function. The fact, that the lighting out of the sidewalk can be taken into account is also very helpful. 
+Here comes conclusion.
 
 
 
