@@ -104,7 +104,7 @@ function E = osvSvitCGama2(xs, ys, zs, xb, yb, zb, vax, vrd, nb, Is_cg, dna)
     idxj = 1+ round((NI(2)-1) .* 2*C/pi);
     Is = zeros(Ns, Nb);
     for i = 1:1:Ns
-        if dna(i) = 0
+        if dna(i) == 0
             Is(i,:) = zeros(1, Nb);
         else
             for j = 1:1:Nb

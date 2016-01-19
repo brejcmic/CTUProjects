@@ -2,30 +2,27 @@
 clear;
 clc;
 close;
-%Vstupem je krivka svitivosti v soubooru csv. Gain udava nasobek vseh
+%Vstupem je krivka svitivosti v soubooru csv. Gain udava nasobek vsech
 %hodnot v krivce svitivosti.
-filenameinput = '50-001P-2018E_BURE_2G4';
+filenameinput = '12-551A-1028E_ZULI_2G6';
 ID = '_TestC';
-gain = 2.4;
+gain = 2.6;
 %Reseni rozmisteni svetel pomoci genetickeho algoritmu. Algorytmus vklada
 %svitidla do rovnomerneho rastru.
-%DNA: Nx, Ny = prvni 3 LS bity odpovidaji poctu svitidel v ose X, dalsi 3
-%bity odpovidaji poctu svitidel v ose Y.
+%DNA: Uava logickou hodnotu platnosti souradnice v rastru. Pro 0 neni
+%svitidlo na dane pozici, pro 1 je na dane poyici svitidlo. Kvuli zachovani
+%symetrie rozmisteni, je DNA zrcadlove rozkopirovano pro druhou polovinu
+%souradnic.
 %Krizeni: jednobodove (udat pravdepodobnost)
                 pop.kriz = 0.9;
 %Mutace (pomerna hodnota):
-                pop.mut = 0.15;
+                pop.mut = 0.05;
 %Pocet generací:
-                pop.gen = 2;
+                pop.gen = 20;
 %Velikost populace:
-                pop.N = 100;
+                pop.N = 50;
 %Pocet jedincu v turnaji:
                 pop.N_turnament = 4;
-%parametry fitness funkce:
-                pop.alfa = 1.5;
-                pop.beta = 0.5;
-                pop.A = (1+pop.alfa)/2;
-                pop.B = (1+pop.beta)/2;
 %Rozmery mistnosti v m:
                 mstn.x = 5;
                 mstn.y = 2.5;
@@ -52,13 +49,13 @@ gain = 2.4;
 %Krivka svitivosti
                 svt.I = gain*csvread(['Svitidla/', filenameinput, '.csv'],1,1);
 %Vyska svitidel:
-                svt.z = 4;
+                svt.z = 3.5;
 %Pocet svitidel:
-                svt.Nx = 12;
-                svt.Ny = 12;
+                svt.Nx = 20;
+                svt.Ny = 3;
 %Smerove vektory roviny os svitidla:
-                svt.vax = [1 0 0];%normala k C0 = osa svitidla
-                svt.vrd = [0 -1 0];%normala k C90 = pricna osa svitidla
+                svt.vax = [0 1 0];%normala k C0 = osa svitidla
+                svt.vrd = [1 0 0];%normala k C90 = pricna osa svitidla
                 
 %--------------------------------------------------------------------------
 %Fenotyp - cilove paramety
@@ -76,8 +73,8 @@ svt.bx = ((1:svt.Nx).*mstn.x - mstn.x/2)./svt.Nx;
 svt.by = ((1:svt.Ny).*mstn.y - mstn.y/2)./svt.Ny;
 
 for idx= 1:1:svt.Ny
-    svt.x((((idx-1)*Nx(clen))+1):(idx*Nx(clen))) = svt.bx;
-    svt.y((((idx-1)*Nx(clen))+1):(idx*Nx(clen))) = ones(1, svt.Nx).*svt.by(idx);
+    svt.x((((idx-1)*svt.Nx)+1):(idx*svt.Nx)) = svt.bx;
+    svt.y((((idx-1)*svt.Nx)+1):(idx*svt.Nx)) = ones(1, svt.Nx).*svt.by(idx);
 end
 svt.z = svt.z .* ones(1, svt.Nx*svt.Ny);
 
@@ -195,8 +192,8 @@ srovina.nv = [0 0 1];
 %GENEROVANI DNA POCATECNICH POPULACI
 %DNA: udava platnost souradnice - je to logicka hodnota
 %Pocatecni populace je nahodna v intervalu <-0.5, 0.5>:
-pop.dna = -0.5 .* rand(pop.N,svt.Nx.*svt.Ny);
-pop.dnaDelka = svt.Nx.*svt.Ny;
+pop.dnaDelka = svt.Nx.*svt.Ny/4;
+pop.dna = -0.5 + rand(pop.N,pop.dnaDelka);
 %Tohle je prevod na binarni nahodny vektor
 pop.dna = (pop.dna > 0);
 %--------------------------------------------------------------------------
@@ -218,7 +215,10 @@ for generace = 1:1:pop.gen
         z1 = svt.z;
         vax = svt.vax;
         vrd = svt.vrd;
-        dna = pop.dna(clen);
+        %dna = [pop.dna(clen, :), pop.dna(clen, end:-1:1)];
+        N = (svt.Nx/2);
+        dnam = zrcadlo(pop.dna(clen,:), N);
+        dna = [dnam, dnam(end:-1:1)];
         
         %PODLAHA
         x2 = podlaha.x;
@@ -492,7 +492,10 @@ for generace = 1:1:pop.gen
         z1 = svt.z;
         vax = svt.vax;
         vrd = svt.vrd;
-        dna = pop.dna(clen);
+        %dna = [pop.dna(clen, :), pop.dna(clen, end:-1:1)];
+        N = (svt.Nx/2);
+        dnam = zrcadlo(pop.dna(clen,:), N);
+        dna = [dnam, dnam(end:-1:1)];
         
         x2 = srovina.x;
         y2 = srovina.y;
@@ -567,8 +570,10 @@ for generace = 1:1:pop.gen
     
     %fitness
     pop.fitness = zeros(pop.N, 1);
-    pop.fitness = pop.fitness + (exp(target.Eavg - pop.Eavg).*(pop.Eavg > target.Eavg) + exp(pop.Eavg - target.Eavg).*(pop.Eavg <= target.Eavg));
-    pop.fitness = pop.fitness .* ((1 - 0.5*exp((target.Uo-pop.Uo)./ target.Uo)).*(pop.Uo > target.Uo) + (0.5*pop.Uo./ target.Uo).*(pop.Uo <= target.Uo));
+    pop.fitness = exp((target.Eavg - pop.Eavg)./pop.Eavg).*(pop.Eavg > target.Eavg);
+    pop.fitness = pop.fitness + exp((pop.Eavg - target.Eavg)./pop.Eavg).*(pop.Eavg <= target.Eavg);
+    pop.fitness = pop.fitness + (1 - 0.5*exp((target.Uo-pop.Uo)./ target.Uo)).*(pop.Uo > target.Uo);
+    pop.fitness = pop.fitness + (0.5*pop.Uo./ target.Uo).*(pop.Uo <= target.Uo);
 
     %pravdepodobnost vyberu
     pop.pravdep = pop.fitness./ sum(pop.fitness, 1);
@@ -620,7 +625,7 @@ for generace = 1:1:pop.gen
     mut= (mut <= pop.mut);
 
     %zmena hodnoty
-    pop.dnaPotomku(2:end) = xor(pop.dnaPotomku(2:end), mut);
+    pop.dnaPotomku(2:end, :) = xor(pop.dnaPotomku(2:end, :), mut);
 
     %----------------------------------------------------------------------
     %NOVA GENERACE
@@ -643,36 +648,23 @@ ylabel('y (m)');
 zlabel('E (lx)');
 
 figure(2)
-Nx = mod(pop.dna, 8) + 1;
-Ny = floor(pop.dna./8) + 1;
-sx1 = ((1:Nx(elita.idx)).*mstn.x - mstn.x/2)./Nx(elita.idx);
-sy1 = ((1:Ny(elita.idx)).*mstn.y - mstn.y/2)./Ny(elita.idx);
-x1 = zeros(1, Nx(elita.idx)*Ny(elita.idx));
-y1 = zeros(1, Nx(elita.idx)*Ny(elita.idx));
-for idx= 1:1:Ny(elita.idx)
-x1((((idx-1)*Nx(elita.idx))+1):(idx*Nx(elita.idx))) = sx1;
-y1((((idx-1)*Nx(elita.idx))+1):(idx*Nx(elita.idx))) = ones(1, Ny(elita.idx)).*sy1(idx);
-end
-z1 = svt.z*ones(1, Nx(clen)*Ny(clen));
-vysl.dna = pop.dna(elita.idx);
-vysl.sx = x1;
-vysl.sy = y1;
-vysl.svz = z1;
-plot(vysl.sx, vysl.sy, 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'y', 'MarkerEdgeColor', 'k');
+
+vysl.dna = pop.dna(elita.idx, :);
+vysl.sx = svt.x;
+vysl.sy = svt.y;
+vysl.sz = svt.z;
+vysl.zsr = mstn.zsr;
+N = (svt.Nx/2);
+dna = zrcadlo(vysl.dna, N);
+%vysl.dnaIdx = find([vysl.dna, vysl.dna(end:-1:1)]);
+vysl.dnaIdx = find([dna, dna(end:-1:1)]);
+vysl.dnax = vysl.sx(vysl.dnaIdx);
+vysl.dnay = vysl.sy(vysl.dnaIdx);
+plot(vysl.dnax, vysl.dnay, 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'y', 'MarkerEdgeColor', 'k');
 xlabel('x (m)');
 ylabel('y (m)');
 axis([0 mstn.x 0 mstn.y]);
 
-figure(3)
-vysl.fitplot.xy = (0:0.06:3);
-u0 = vysl.fitplot.xy'*ones(1,51);
-eavg = ones(51,1)*vysl.fitplot.xy;
-vysl.fitplot.Fit = zeros(51,51);
-vysl.fitplot.Fit = vysl.fitplot.Fit + (pop.A - pop.alfa*0.5*exp((1-eavg)/pop.alfa)).*(eavg > 1) + (0.5*eavg).*(eavg <= 1);
-vysl.fitplot.Fit = vysl.fitplot.Fit + (pop.B - pop.beta*0.5*exp((1-u0)/pop.beta)).*(u0 > 1) + (0.5*u0).*(u0 <= 1);
-vysl.fitplot.Fit = vysl.fitplot.Fit/(pop.A + pop.B);
-surf(vysl.fitplot.xy,vysl.fitplot.xy,vysl.fitplot.Fit);
-
 %Ulozeni vysledku
-str = sprintf('_N%d_VAX%d%d%d.mat', svt.N, svt.vax(1), svt.vax(2), svt.vax(3));
-save(['Vysledky/' filenameinput ID str], 'vysl', 'pop', 'target', 'svt', 'mstn')
+%str = sprintf('_N%d_VAX%d%d%d.mat', svt.N, svt.vax(1), svt.vax(2), svt.vax(3));
+%save(['Vysledky/' filenameinput ID str], 'vysl', 'pop', 'target', 'svt', 'mstn')
