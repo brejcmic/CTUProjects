@@ -4,21 +4,23 @@ clc;
 close;
 %Vstupem je krivka svitivosti v soubooru csv. Gain udava nasobek vsech
 %hodnot v krivce svitivosti.
-filenameinput = '12-551A-1028E_ZULI_2G6';
+filenameinput = '13-551A-2028E_LUNCI_5G2';
 ID = '_TestC';
-gain = 2.6;
+gain = 5.2;
 %Reseni rozmisteni svetel pomoci genetickeho algoritmu. Algorytmus vklada
 %svitidla do rovnomerneho rastru.
 %DNA: Uava logickou hodnotu platnosti souradnice v rastru. Pro 0 neni
 %svitidlo na dane pozici, pro 1 je na dane poyici svitidlo. Kvuli zachovani
 %symetrie rozmisteni, je DNA zrcadlove rozkopirovano pro druhou polovinu
 %souradnic.
+%Typ symetrie: 0 = stredova, 1 = osova
+pop.sym = 0;
 %Krizeni: jednobodove (udat pravdepodobnost)
                 pop.kriz = 0.9;
 %Mutace (pomerna hodnota):
                 pop.mut = 0.05;
 %Pocet generací:
-                pop.gen = 20;
+                pop.gen = 60;
 %Velikost populace:
                 pop.N = 50;
 %Pocet jedincu v turnaji:
@@ -52,7 +54,7 @@ gain = 2.6;
                 svt.z = 3.5;
 %Pocet svitidel:
                 svt.Nx = 20;
-                svt.Ny = 3;
+                svt.Ny = 10;
 %Smerove vektory roviny os svitidla:
                 svt.vax = [0 1 0];%normala k C0 = osa svitidla
                 svt.vrd = [1 0 0];%normala k C90 = pricna osa svitidla
@@ -69,8 +71,19 @@ vysl.fit = zeros(1, pop.gen);
 %--------------------------------------------------------------------------
 %GENEROVANI RASTRU SVITIDEL
 %Deleni jednotlivych os:
-svt.bx = ((1:svt.Nx).*mstn.x - mstn.x/2)./svt.Nx;
-svt.by = ((1:svt.Ny).*mstn.y - mstn.y/2)./svt.Ny;
+%Polovina vydalenosti od sten
+%svt.bx = ((1:svt.Nx).*mstn.x - mstn.x/2)./svt.Nx;
+%svt.by = ((1:svt.Ny).*mstn.y - mstn.y/2)./svt.Ny;
+
+%stejna vzdalenost od sten jako mezi svitidly
+%svt.bx = ((1:svt.Nx).*mstn.x)./(svt.Nx+1);
+%svt.by = ((1:svt.Ny).*mstn.y)./(svt.Ny+1);
+
+%definovana vzdalenost od sten
+mstn.Dx = 0.25;
+mstn.Dy = 0.5;
+svt.bx = mstn.Dx + ((0:(svt.Nx-1)).*(mstn.x - 2*mstn.Dx))./(svt.Nx-1);
+svt.by = mstn.Dy + ((0:(svt.Ny-1)).*(mstn.y - 2*mstn.Dy))./(svt.Ny-1);
 
 for idx= 1:1:svt.Ny
     svt.x((((idx-1)*svt.Nx)+1):(idx*svt.Nx)) = svt.bx;
@@ -192,7 +205,11 @@ srovina.nv = [0 0 1];
 %GENEROVANI DNA POCATECNICH POPULACI
 %DNA: udava platnost souradnice - je to logicka hodnota
 %Pocatecni populace je nahodna v intervalu <-0.5, 0.5>:
-pop.dnaDelka = svt.Nx.*svt.Ny/4;
+if pop.sym == 1
+    pop.dnaDelka = svt.Nx.*svt.Ny/4;
+else
+    pop.dnaDelka = svt.Nx.*svt.Ny/2;
+end
 pop.dna = -0.5 + rand(pop.N,pop.dnaDelka);
 %Tohle je prevod na binarni nahodny vektor
 pop.dna = (pop.dna > 0);
@@ -215,10 +232,13 @@ for generace = 1:1:pop.gen
         z1 = svt.z;
         vax = svt.vax;
         vrd = svt.vrd;
-        %dna = [pop.dna(clen, :), pop.dna(clen, end:-1:1)];
-        N = (svt.Nx/2);
-        dnam = zrcadlo(pop.dna(clen,:), N);
-        dna = [dnam, dnam(end:-1:1)];
+        if pop.sym == 1
+           N = (svt.Nx/2);
+           dnam = zrcadlo(pop.dna(clen,:), N);
+           dna = [dnam, dnam(end:-1:1)];
+        else
+           dna = [pop.dna(clen, :), pop.dna(clen, end:-1:1)]; 
+        end
         
         %PODLAHA
         x2 = podlaha.x;
@@ -492,10 +512,13 @@ for generace = 1:1:pop.gen
         z1 = svt.z;
         vax = svt.vax;
         vrd = svt.vrd;
-        %dna = [pop.dna(clen, :), pop.dna(clen, end:-1:1)];
-        N = (svt.Nx/2);
-        dnam = zrcadlo(pop.dna(clen,:), N);
-        dna = [dnam, dnam(end:-1:1)];
+        if pop.sym == 1
+           N = (svt.Nx/2);
+           dnam = zrcadlo(pop.dna(clen,:), N);
+           dna = [dnam, dnam(end:-1:1)];
+        else
+           dna = [pop.dna(clen, :), pop.dna(clen, end:-1:1)]; 
+        end
         
         x2 = srovina.x;
         y2 = srovina.y;
@@ -654,10 +677,15 @@ vysl.sx = svt.x;
 vysl.sy = svt.y;
 vysl.sz = svt.z;
 vysl.zsr = mstn.zsr;
-N = (svt.Nx/2);
-dna = zrcadlo(vysl.dna, N);
-%vysl.dnaIdx = find([vysl.dna, vysl.dna(end:-1:1)]);
-vysl.dnaIdx = find([dna, dna(end:-1:1)]);
+
+if pop.sym == 1
+   N = (svt.Nx/2);
+   dna = zrcadlo(vysl.dna, N);
+   vysl.dnaIdx = find([dna, dna(end:-1:1)]);
+else
+   vysl.dnaIdx = find([vysl.dna, vysl.dna(end:-1:1)]);
+end
+
 vysl.dnax = vysl.sx(vysl.dnaIdx);
 vysl.dnay = vysl.sy(vysl.dnaIdx);
 plot(vysl.dnax, vysl.dnay, 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'y', 'MarkerEdgeColor', 'k');
