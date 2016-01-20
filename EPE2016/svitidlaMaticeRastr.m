@@ -18,9 +18,9 @@ pop.sym = 0;
 %Krizeni: jednobodove (udat pravdepodobnost)
                 pop.kriz = 0.9;
 %Mutace (pomerna hodnota):
-                pop.mut = 0.01;
+                pop.mut = 0.05;
 %Pocet generací:
-                pop.gen = 40;
+                pop.gen = 60;
 %Velikost populace:
                 pop.N = 50;
 %Pocet jedincu v turnaji:
