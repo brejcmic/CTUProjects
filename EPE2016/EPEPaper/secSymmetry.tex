@@ -1,3 +1,40 @@
-\section{Symmetric Solutions}
-One of the requirements to the output design was to get the symmetric solutions of luminaire placement. There seemed to be two approaches how this might be done. The First counts with introduction of the symmetry in the fitness function. On the basis of the fitness equation evaluation the algorithm can prefer symmetric solutions more than others. Unfortunately this approach was very difficult due to unknown function that could describe how good is the symmetry of the luminare placement. Best experience came from using least squares method. After adding the sum of squares of the differences from the average value of ilumminance, a lot of output results showed the symmetry towards axis or center. However some types of luminous intensity distribution curves were very sensitive to create a tight groups of lamps in specific positions. This type of solutions were unable to realize in real conditions.
-Authors chose eventually the second approach dealing with introduction of the symmetry in the dna.
+\section{Proposed DNA}
+\subsection{Symmetric Solutions}
+\label{ssec:symmetry}
+One of the requirements to the output design was to get the symmetric solutions of luminaire placement. There seemed to be two approaches how this might be done. The First counts with introduction of the symmetry in the fitness function. On the basis of the fitness equation evaluation the algorithm can prefer symmetric solutions more than others. Unfortunately this approach was very difficult due to unknown function that could describe how good is the symmetry of the luminaire placement. Best experience came from using least squares method. After adding the sum of squares of the differences towards the average value of illuminance, a lot of output results showed the symmetry towards axis or center. However some types of luminous intensity distribution curves were very sensitive to create a tight groups of lamps in specific positions. This type of solutions were unable to realize in real conditions.
+At last the second approach dealing with introduction of the symmetry in the DNA was chosen. The symmetry towards the center and the symmetry towards the axis were further studied. The center symmetry was reached by proposing the luminaire positions only for one half of the room. The another half of positions were got by mirroring towards both axis. Similar for the axis symmetry was proposed the position only for one quarter of the room. Other quarters were got by mirroring. It is obvious that there must be even number of luminaires in case of center symmetry and number of luminaires divisible by four in case of axis symmetry. This approach works well but the designer must keep in mind that he never gets results for odd number of luminaires respectively for numbers of luminaires that are not divisible by four.
+
+\subsection{Grid of Allowed Positions}
+\label{ssec:grid}
+Some types of luminous intensity distribution curves were prone to place the luminaires to groups with almost the same coordinates as it was mentioned in the section~\ref{ssec:symmetry}. Very close distances are not allowed because of defined luminaire sizes. To fix this behavior of the algorithm, the luminaires are placed to the defined grid now. Positions out of the grid intersections are not allowed.
+
+Grid of allowed positions also let the designer to define specific shape of area for the luminaire independently on the shape of the room. This might be useful for rooms with complex design on the ceiling or where the recessed luminaire are used. On the other hand the set of solutions is restricted always only on the grid.
+
+\subsection{DNA structure}
+\label{ssec:dnaStruc}
+The resulting DNA just define logic vector of luminaire presence in the specific grid intersection. The length of the DNA depends on the number of grid intersections and on the type of the symmetry:
+\begin{equation}
+\label{eq:DNALength}
+L_{DNA} = \frac{N_G}{2\cdot sym}
+\end{equation}
+where:
+\begin{description}
+	\item[$N_G$] is number of grid intersections,
+	\item[$sym$] is the chosen symmetry that is equal to 1 for center symmetry and equal to 2 for axis symmetry.
+\end{description}
+
+\begin{table}[htb]
+	\renewcommand{\arraystretch}{1.3}
+	\caption{Structure of the DNA}
+ 	\label{tab:onesideLamps}
+	\centering
+  \begin{tabular}{| c | c | c |}
+    \hline
+    $\lbrace0,1\rbrace$ for $[x_1,y_1]$ & $\lbrace0,1\rbrace$ for $[x_2,y_1]$ & ... \\
+    \hline
+    $\lbrace0,1\rbrace$ for $[x_1,y_2]$ & ... & $\lbrace0,1\rbrace$ for $[x_n,y_m]$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+The proposed structure of DNA let the algorithm determine needed number of luminaire. Therefore the designer just set target values of illuminance and uniformity, the luminous intensity distribution curve for chosen luminaires and the grid.
