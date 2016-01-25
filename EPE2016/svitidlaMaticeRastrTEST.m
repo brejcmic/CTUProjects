@@ -6,7 +6,7 @@ close;
 %funkci, ktere jsou nasledne pouzity v genetickem algoritmu.
 filenameinput = 'OFCE_PAR_2x58W_10G4_v2';
 ID = '_TestC';
-gain = 10.2*0.8;
+gain = 10.4;
 %Rozmery mistnosti v m:
                 mstn.x = 10;
                 mstn.y = 5;
@@ -15,9 +15,9 @@ gain = 10.2*0.8;
 %Vyska srovnavaci roviny (m):
                 mstn.zsr = 0.85;
 %Pocet bodu na stenach v ose x:
-                mstn.Nx = ceil(10*mstn.x);
+                mstn.Nx = ceil(4*mstn.x);
 %Pocet bodu na stenach v ose y:
-                mstn.Ny = ceil(10*mstn.y);
+                mstn.Ny = ceil(4*mstn.y);
 %Pocet bodu na stenach v ose z:
                 mstn.Nz = ceil(4*mstn.z);
 
@@ -88,7 +88,7 @@ podlaha.N = mstn.Nx*mstn.Ny;
 podlaha.E = 0;
 podlaha.E0 = 0;
 podlaha.Ep = 0;
-podlaha.co = 0.2;
+podlaha.co = 0.3;
 podlaha.nv = [0 0 1];
 
 for idx= 1:1:mstn.Ny
