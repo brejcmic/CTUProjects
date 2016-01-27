@@ -4,9 +4,9 @@ clc;
 close;
 %Vypocet osvetleni s uvazovanim mnohonasobnych odrazu. Vyuziva se zde
 %funkci, ktere jsou nasledne pouzity v genetickem algoritmu.
-filenameinput = 'OFCE_PAR_2x58W_10G4_v2';
+filenameinput = 'MSTR_SLB_2x18W_2G7';
 ID = '_TestC';
-gain = 10.4;
+gain = 2.7;
 %Rozmery mistnosti v m:
                 mstn.x = 10;
                 mstn.y = 5;
@@ -24,7 +24,7 @@ gain = 10.4;
 %--------------------------------------------------------------------------
 %PARAMETRY ODRAZU
 %Uvazovany pocet odrazu:
-                mstn.Nodr = 3;
+                mstn.Nodr = 0;
                 
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDEL
@@ -544,7 +544,7 @@ Uo = min(srovina.E,[],2)./Eavg;
 %Zobrazeni vysledku
 %--------------------------------------------------------------------------
 figure(1)
-vysl.ME = vec2mat(srovina.E,mstn.Nx);
+vysl.ME = 0.8*vec2mat(srovina.E,mstn.Nx);
 %surf(mstn.bx,mstn.by,vysl.ME);
 contour(mstn.bx,mstn.by,vysl.ME,'ShowText','on');
 xlabel('x (m)');
