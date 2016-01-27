@@ -10,19 +10,19 @@ The best solution was saved (elitism) from every population in two specimens. Th
 	\caption{Genetic Algorithm Settings}
  	\label{tab:GAsettings}
 	\centering
-  \begin{tabular}{| c | c |}
+  \begin{tabular}{| l | c |}
     \hline
     \textbf{First Population} & Random logic vectors \\
     \hline
     \textbf{Termination Cond.} & Maximum number of generations \\
     \hline
-		\textbf{Number of Gen.} & $60$ \\
+		\textbf{Number of Gen.} & $40$ \\
     \hline
 		\textbf{Population Size} & $50$ \\
     \hline
 		\textbf{Recombination Prop.} & $90 \%$ \\
     \hline
-		\textbf{Mutation Prop.} & $5 \%$ \\
+		\textbf{Mutation Prop.} & $2 \%$ \\
     \hline
 		\textbf{Parent Selec.} & Tournament 1 of 4 \\
     \hline
@@ -35,7 +35,7 @@ The best solution was saved (elitism) from every population in two specimens. Th
 
 \subsection{Fitness Function}
 \label{ssec:FitFn}
-The fitness function defines how good the solutions are. The target value of average illuminance and target value of uniformity are watched in the algorithm. In common case the average illuminance is given especially by number of the lamps. The uniformity is given especially by placement of the lamps on the other hand. The count of the lamps is proportional to the investment cost to the lighting system. So the number of lamps that exactly fulfill the target average value of illuminance is appropriate. The uniformity is always required as much as possible for defined number of lamps. Therefore the fitness function was determined within discussed facts as follows:
+The fitness function defines how good the solutions are. The target value of average illuminance and target value of uniformity are watched in the algorithm. In common case the average illuminance is given especially by number of the luminaires. The uniformity is given especially by placement of the luminaires on the other hand. The count of the luminaires is proportional to the investment cost to the lighting system. So the number of luminaires that exactly fulfill the target average value of illuminance is appropriate. The uniformity is always required as much as possible for defined number of luminaires. Therefore the fitness function was determined within discussed facts as follows:
 
 \begin{equation}
 \label{eq:fitness}
@@ -70,17 +70,20 @@ The function $g_1\left(E_{avg}\right)$ has peak value equal to $1$ at target val
 \lim_{E_{avg}\to \infty} g_1\left(E_{avg}\right) = e^{-1}
 \end{equation}
 
-Both limits have different values and the limit in infinity is higher than that in the $0$. This means that for the same absolute difference from the target value is preferred the solution with the higher average illuminance.
+Both limits have different values and the limit in infinity is higher than that in the $0$. This means that it is preferred the solution with the higher average illuminance for the same absolute difference from the target value.
 
 \begin{figure}[htb]
   \centering
   \includegraphics[width=\columnwidth]{obrG1G2}
   \caption{Graphs of parts $g_1\left(E_{avg}\right)$ and $g_2\left(U_0\right)$ from the fitness function}
-  \label{fig:sidewalk}
+  \label{fig:fitG1G2}
 \end{figure}
 
-The function $g_2\left(U_{0}\right)$ reach value $0.5$ at target value of uniformity. It has a bound at $0$ for values less then target value. There is a limit for values in interval higher than target value:
+The function $g_2\left(U_{0}\right)$ reach the value $0.5$ at target value of uniformity. It has a bound at $0$ for values less then target value. There is a limit for values in interval higher than target value:
 \begin{equation}
 \label{eq:g2limInf}
 \lim_{U_{0}\to \infty} g_2\left(U_{0}\right) = 1
 \end{equation}
+
+So the function $g_2\left(U_{0}\right)$ has an horizontal asymptote equal to one. Function $g_2\left(U_{0}\right)$ is linear for values of uniformity less than the target value. The highest slope is obtained here. For higher values of uniformity is the slope smaller due to the saturation effect of the exponential function. Therefore the algorithm is forced to reach target value of uniformity because of big change in the fitness function. Higher values makes the fitness better too but there is smaller effect.
+Both functions $g_1\left(E_{avg}\right)$ and $g_2\left(U_{0}\right)$ are shown in figure~\ref{fig:fitG1G2} for better understanding.
