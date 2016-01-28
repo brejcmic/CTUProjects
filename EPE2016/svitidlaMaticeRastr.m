@@ -5,7 +5,7 @@ close;
 %Vstupem je krivka svitivosti v soubooru csv. Gain udava nasobek vsech
 %hodnot v krivce svitivosti.
 filenameinput = 'MSTR_SLB_4x18W_5G4';
-ID = '_MSTR';
+ID = '_SR075';
 gain = 5.4;
 %Reseni rozmisteni svetel pomoci genetickeho algoritmu. Algorytmus vklada
 %svitidla do rovnomerneho rastru.
@@ -18,9 +18,9 @@ pop.sym = 0;
 %Krizeni: jednobodove (udat pravdepodobnost)
                 pop.kriz = 0.9;
 %Mutace (pomerna hodnota):
-                pop.mut = 0.02;
+                pop.mut = 0.05;
 %Pocet generací:
-                pop.gen = 40;
+                pop.gen = 30;
 %Velikost populace:
                 pop.N = 50;
 %Pocet jedincu v turnaji:
@@ -31,7 +31,7 @@ pop.sym = 0;
 %Vyska mistnosti (m):
                 mstn.z = 4;
 %Vyska srovnavaci roviny (m):
-                mstn.zsr = 0.85;
+                mstn.zsr = 0.75;
 %Pocet bodu na stenach v ose x:
                 mstn.Nx = ceil(4*mstn.x);
 %Pocet bodu na stenach v ose y:
@@ -53,8 +53,8 @@ pop.sym = 0;
 %Vyska svitidel:
                 svt.z = 4;
 %Pocet svitidel:
-                svt.Nx = 20;
-                svt.Ny = 10;
+                svt.Nx = 16;
+                svt.Ny = 8;
 %Smerove vektory roviny os svitidla:
                 svt.vax = [0 1 0];%normala k C0 = osa svitidla
                 svt.vrd = [1 0 0];%normala k C90 = pricna osa svitidla
@@ -80,8 +80,8 @@ pop.sym = 0;
 %svt.by = ((1:svt.Ny).*mstn.y)./(svt.Ny+1);
 
 %definovana vzdalenost od sten
-mstn.Dx = 0.35;
-mstn.Dy = 0.35;
+mstn.Dx = 0.5;
+mstn.Dy = 0.4;
 svt.bx = mstn.Dx + ((0:(svt.Nx-1)).*(mstn.x - 2*mstn.Dx))./(svt.Nx-1);
 svt.by = mstn.Dy + ((0:(svt.Ny-1)).*(mstn.y - 2*mstn.Dy))./(svt.Ny-1);
 
@@ -695,12 +695,15 @@ vysl.dnay = vysl.sy(vysl.dnaIdx);
 plot(vysl.dnax, vysl.dnay, 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'y', 'MarkerEdgeColor', 'k');
 xlabel('x (m)');
 ylabel('y (m)');
+grid on;
 axis([0 mstn.x 0 mstn.y]);
 
 figure(3)
 plot(1:pop.gen, vysl.fitness);
+xlabel('generation (-)');
+ylabel('best fitness (-)')
 grid on;
 
 %Ulozeni vysledku
-str = sprintf('_VAX%d%d%d.mat', svt.vax(1), svt.vax(2), svt.vax(3));
+str = sprintf('_V%d%d%d_S%d.mat', svt.vax(1), svt.vax(2), svt.vax(3), pop.sym);
 save(['Vysledky/' filenameinput ID str], 'vysl', 'pop', 'target', 'svt', 'mstn', 'srovina', 'stenaJ', 'stenaS', 'stenaV', 'stenaZ', 'strop')

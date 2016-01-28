@@ -4,16 +4,16 @@ clc;
 close;
 %Vypocet osvetleni s uvazovanim mnohonasobnych odrazu. Vyuziva se zde
 %funkci, ktere jsou nasledne pouzity v genetickem algoritmu.
-filenameinput = 'MSTR_SLB_2x18W_2G7';
+filenameinput = 'MSTR_SLB_4x18W_5G4';
 ID = '_TestC';
-gain = 2.7;
+gain = 5.4;
 %Rozmery mistnosti v m:
                 mstn.x = 10;
                 mstn.y = 5;
 %Vyska mistnosti (m):
                 mstn.z = 4;
 %Vyska srovnavaci roviny (m):
-                mstn.zsr = 0.85;
+                mstn.zsr = 0.8;
 %Pocet bodu na stenach v ose x:
                 mstn.Nx = ceil(4*mstn.x);
 %Pocet bodu na stenach v ose y:
@@ -24,7 +24,7 @@ gain = 2.7;
 %--------------------------------------------------------------------------
 %PARAMETRY ODRAZU
 %Uvazovany pocet odrazu:
-                mstn.Nodr = 0;
+                mstn.Nodr = 10;
                 
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDEL
@@ -36,8 +36,8 @@ gain = 2.7;
                 svt.Nx = 1;
                 svt.Ny = 1;
 %Smerove vektory roviny os svitidla:
-                svt.vax = [1 0 0];%normala k C0 = osa svitidla
-                svt.vrd = [0 -1 0];%normala k C90 = pricna osa svitidla
+                svt.vax = [0 1 0];%normala k C0 = osa svitidla
+                svt.vrd = [1 0 0];%normala k C90 = pricna osa svitidla
 %%
 %--------------------------------------------------------------------------
 %GENEROVANI RASTRU SVITIDEL
@@ -544,7 +544,7 @@ Uo = min(srovina.E,[],2)./Eavg;
 %Zobrazeni vysledku
 %--------------------------------------------------------------------------
 figure(1)
-vysl.ME = 0.8*vec2mat(srovina.E,mstn.Nx);
+vysl.ME = vec2mat(srovina.E,mstn.Nx);
 %surf(mstn.bx,mstn.by,vysl.ME);
 contour(mstn.bx,mstn.by,vysl.ME,'ShowText','on');
 xlabel('x (m)');
