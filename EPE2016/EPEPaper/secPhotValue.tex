@@ -1,6 +1,6 @@
 \section{Photometric Value Calculation}
 %Výpočet mnohonásobných odrazů, algoritmus - odrazy
-To evaluate the lighting system's quality of the model room in terms of standard \cite{12464} four parameters have to be observed listed in section \ref{sec:design}. For simplification reasons parameter $UGR_{L}$ will not be calculated. $R_{a}$ is a parameter of the chosen luminaire and is not affected by the model room. Uniformity $U_{0}$ is calculated by the following equation:
+To evaluate the lighting system's quality of the model room in terms of standard \cite{12464} four parameters have to be observed listed in section~\ref{sec:design}. For simplification reasons parameter $UGR_{L}$ will not be calculated. $R_{a}$ is a parameter of the chosen luminaire and is not affected by the model room. Uniformity $U_{0}$ is calculated by the following equation:
 
 \begin{equation}
 U_{0}=\frac{E_{min}}{\overline{E}} \quad \mathrm{(-;lx,lx)}
@@ -12,7 +12,7 @@ where:
 	\item[$\overline{E}$] is the average illuminance of the working plane.
 \end{description}
 
-Illuminances can be acquired by measurements or calculations in certain points of working planes that are chosen in accordance to the purpose of the room. To calculate the illuminance in a given point of the working plane contributions of all light sources illuminating the given point have to be summed up. This can be achieved by using luminous intensities of all the light sources pointing from the light source towards the point (as seen in figure \ref{fig:osv}):
+Illuminances can be acquired by measurements or calculations in certain points of working planes that are chosen in accordance to the purpose of the room. To calculate the illuminance in a given point of the working plane contributions of all light sources illuminating the given point have to be summed up. This can be achieved by using luminous intensities of all the light sources pointing from the light source towards the point (as seen in figure~\ref{fig:osv}):
 
 \begin{equation}
 E_{P\rho}=\sum_{i} \frac{I_{C \gamma i} \cdot \cos{\beta_{i}}}{{l_{i}}^{2}}
@@ -20,38 +20,38 @@ E_{P\rho}=\sum_{i} \frac{I_{C \gamma i} \cdot \cos{\beta_{i}}}{{l_{i}}^{2}}
 
 where:
 \begin{description}
-	\item[$I_{C \gamma i}$] is the luminous intensity of the light source pointing towards point P of plane $\rho$,
+	\item[$I_{C \gamma i}$] is the luminous intensity of the light source pointing towards point P of plane $\rho$, i.e. luminous intensity of plane C at angle $\gamma$ ($C-\gamma$ angular coordinate system),
 	\item[$\beta_{i}$] is the angle between the normal of plane $\rho$ and the light ray from light source $S_{i}$,
-	\item[$\l_{i}$] is the distance of point $P$ from the light source.
+	\item[$l_{i}$] is the distance of point $P$ from the light source.
 \end{description}
 
-\begin{figure}[htb] \label{fig:osv}
+\begin{figure}[htb]
   \centering
-  \includegraphics[width=\columnwidth]{315_osvetlenost_bodovym_zdrojem}
-  \caption{Graphs of parts $g_1\left(E_{avg}\right)$ and $g_2\left(U_0\right)$ from the fitness function}
+  \includegraphics[width=200pt]{315_osvetlenost_bodovym_zdrojem_2}
+  \caption{Light source $S$ illuminates point P of plane $\rho$.}
+  \label{fig:osv}
 \end{figure}
 
+Luminous intensity curves are stored in eulumdat files supplied with luminaires to make light scene calculations possible. For most indoor luminaires the $C-\gamma$ angular coordinate system is used as found in figure~\ref{fig:cgamma}.
 
- luminous intensities of all light sources illuminating the point have to be summed up.
-luminous flux incident on the working plane in the close proximity of the point has to be acquired. Illuminances can be calculated by the following equation:
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=200pt]{Cgama}
+  \caption{$C-\gamma$ polar coordinate system with luminaire in center.}
+  \label{fig:cgamma}
+\end{figure}
 
-\begin{equation}
-E=\frac{\mathrm{d}\Phi}{\mathrm{d}A} \quad \mathrm{(lx;lm,m^{2})}
-\end{equation}
+To achieve more accurate simulation results of light scenes, reflections have to be included. From point's P point of view (figure~\ref{fig:osv}), walls, ceiling and floor will become light sources of reflected light. Using the finite element method, surfaces of the model room will be divided into smaller facets. These facets, after illuminated, will become secondary light sources (figure~\ref{fig:difRefl}). The process of reflections can be repeated as many times as needed. During each reflection a portion of the incident luminous flux is consumed by the illuminated surface as defined by reflectance. Therefore after a several reflections the reflected luminous flux becomes negligible.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=170pt]{diffuseReflection}
+  \caption{Multiple reflections between planes $\rho1$ and $\rho2$ with Lambertian reflectance.}
+  \label{fig:difRefl}
+\end{figure}
+
+Most common wall and ceiling paints exhibit near Lambertian reflectance properties as depicted in figure~\ref{fig:difRefl}, meaning that the spacial luminous intensity distribution curve of the facet will only depend on angle~$\beta$, being the angle between the facets normal $N_{\rho}$ and the line of center points of both facets. The model rooms surfaces, including the floor, have been chosen to exhibit purely Lambertian reflectance.
 
 
 
-
-
-The average illuminance $E$ of a planar surface is the areal density of luminous flux incident on the surface \cite{Habel}:
-
-\begin{equation} \label{eq:illuminance}
-E=\frac{d\Phi_{i}}{dA} \quad \mathrm{(lx;lm,m^2)}
-\end{equation}
-
-where:
-\begin{description}
-	\item[$d\Phi_{i}$] is the luminous flux incident on a surface,
-	\item[$dA$] is the surface area.
-\end{description}
 
