@@ -12,13 +12,24 @@ where:
 	\item[$\overline{E}$] is the average illuminance of the working plane.
 \end{description}
 
-Illuminances can be acquired by measurements or calculations in certain points of working planes that are chosen in accordance to the purpose of the room. To calculate the illuminance in a given point of the working plane contributions of all light sources illuminating the given point have to be summed up. This can be achieved by using luminous intensity of all the light sources pointing from the light source towards the point:
+Illuminances can be acquired by measurements or calculations in certain points of working planes that are chosen in accordance to the purpose of the room. To calculate the illuminance in a given point of the working plane contributions of all light sources illuminating the given point have to be summed up. This can be achieved by using luminous intensities of all the light sources pointing from the light source towards the point (as seen in figure \ref{fig:osv}):
 
 \begin{equation}
-E_{P\rho}=\sum_{i} \frac{I_{\gamma i} \cdot \cos{\beta_{i}}}{{l_{i}}^{2}}
+E_{P\rho}=\sum_{i} \frac{I_{C \gamma i} \cdot \cos{\beta_{i}}}{{l_{i}}^{2}}
 \end{equation}
 
+where:
+\begin{description}
+	\item[$I_{C \gamma i}$] is the luminous intensity of the light source pointing towards point P of plane $\rho$,
+	\item[$\beta_{i}$] is the angle between the normal of plane $\rho$ and the light ray from light source $S_{i}$,
+	\item[$\l_{i}$] is the distance of point $P$ from the light source.
+\end{description}
 
+\begin{figure}[htb] \label{fig:osv}
+  \centering
+  \includegraphics[width=\columnwidth]{315_osvetlenost_bodovym_zdrojem}
+  \caption{Graphs of parts $g_1\left(E_{avg}\right)$ and $g_2\left(U_0\right)$ from the fitness function}
+\end{figure}
 
 
  luminous intensities of all light sources illuminating the point have to be summed up.
