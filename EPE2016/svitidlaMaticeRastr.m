@@ -14,11 +14,11 @@ gain = 5.4;
 %symetrie rozmisteni, je DNA zrcadlove rozkopirovano pro druhou polovinu
 %souradnic.
 %Typ symetrie: 0 = stredova, 1 = osova
-pop.sym = 0;
+pop.sym = 1;
 %Krizeni: jednobodove (udat pravdepodobnost)
                 pop.kriz = 0.9;
 %Mutace (pomerna hodnota):
-                pop.mut = 0.05;
+                pop.mut = 0.06;
 %Pocet generací:
                 pop.gen = 30;
 %Velikost populace:
@@ -56,13 +56,13 @@ pop.sym = 0;
                 svt.Nx = 16;
                 svt.Ny = 8;
 %Smerove vektory roviny os svitidla:
-                svt.vax = [0 1 0];%normala k C0 = osa svitidla
-                svt.vrd = [1 0 0];%normala k C90 = pricna osa svitidla
+                svt.vax = [1 0 0];%normala k C0 = osa svitidla
+                svt.vrd = [0 -1 0];%normala k C90 = pricna osa svitidla
                 
 %--------------------------------------------------------------------------
 %Fenotyp - cilove paramety
 %Prumerna hladina osvetlenosti:
-                target.Eavg = 500;
+                target.Eavg = 510;
 %Rovnomernost:
                 target.Uo = 0.6;
 %Udrzovaci cinitel:
