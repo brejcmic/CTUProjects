@@ -1,0 +1,66 @@
+\section{Example of the Results}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.7\columnwidth]{IDiag}
+  \caption{Luminous intensity distribution curve of the luminaire sample}
+  \label{fig:IDiag}
+\end{figure}
+
+\begin{table}[htb]
+	\renewcommand{\arraystretch}{1.3}
+	\caption{Target Values and Settings}
+ 	\label{tab:trgVal}
+	\centering
+  \begin{tabular}{| l | c |}
+    \hline
+    $\overline{E}_{m}$ (lx) & $510$ \\
+    \hline
+    $U_{0}$ (-) & $0.6$ \\
+    \hline
+		$MF$ & $0.75$ \\
+    \hline
+		Luminaire axis vector & $\left\langle 010\right\rangle$ \\
+    \hline
+		Grid ($N_x \times N_y$) & $16 \times 8$ \\
+    \hline
+		Grid distance from the walls (m) & $D_x=0.5, D_y=0.4$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\begin{table}[htb]
+	\renewcommand{\arraystretch}{1.3}
+	\caption{Result Values}
+ 	\label{tab:resValCS}
+	\centering
+  \begin{tabular}{| l | c | c |}
+	  \hline
+	  \textbf{Parameter} & \textbf{Central sym.} & \textbf{Axis sym.}\\
+    \hline
+    $\overline{E}_{m}$ (lx) & $526.9$ & $511.8$ \\
+    \hline
+    $U_{0}$ (-) & $0.81$ & $0.71$ \\
+    \hline
+		Luminaire count (-) & $18$ & $16$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\begin{figure}[t]
+        \centering
+        \subfloat[3D graph of the illuminance \label{fig:resCS:E}]{\includegraphics[width=\columnwidth]{../Vysledky/MSTR_SLB_4x18W_5G4_SR075_V010_S0_F1}}\\
+        \subfloat[Luminaire positions \label{fig:resCS:P}]{\includegraphics[width=\columnwidth]{../Vysledky/MSTR_SLB_4x18W_5G4_SR075_V010_S0_F2}}\\
+        \subfloat[Best fitness during optimization \label{fig:resCS:F}]{\includegraphics[width=\columnwidth]{../Vysledky/MSTR_SLB_4x18W_5G4_SR075_V010_S0_F3}}
+        \caption{Example of result for lamp MSTR SLB 4x18W and central placement symmetry}
+        \label{fig:resCS}
+\end{figure}
+
+\begin{figure}[t]
+        \centering
+        \subfloat[3D graph of the illuminance \label{fig:resAS:E}]{\includegraphics[width=\columnwidth]{../Vysledky/MSTR_SLB_4x18W_5G4_SR075_V010_S1_F1}}\\
+        \subfloat[Luminaire positions \label{fig:resAS:P}]{\includegraphics[width=\columnwidth]{../Vysledky/MSTR_SLB_4x18W_5G4_SR075_V010_S1_F2}}\\
+        \subfloat[Best fitness during optimization \label{fig:resAS:F}]{\includegraphics[width=\columnwidth]{../Vysledky/MSTR_SLB_4x18W_5G4_SR075_V010_S1_F3}}
+        \caption{Example of result for lamp MSTR SLB 4x18W and axis placement symmetry}
+				\label{fig:resAS}
+\end{figure}
