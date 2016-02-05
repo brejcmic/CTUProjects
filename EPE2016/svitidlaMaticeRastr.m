@@ -5,7 +5,7 @@ close;
 %Vstupem je krivka svitivosti v soubooru csv. Gain udava nasobek vsech
 %hodnot v krivce svitivosti.
 filenameinput = 'MSTR_SLB_4x18W_5G4';
-ID = '_SR075';
+ID = '_test';
 gain = 5.4;
 %Reseni rozmisteni svetel pomoci genetickeho algoritmu. Algorytmus vklada
 %svitidla do rovnomerneho rastru.
@@ -20,9 +20,9 @@ pop.sym = 0;
 %Mutace (pomerna hodnota):
                 pop.mut = 0.04;
 %Pocet generací:
-                pop.gen = 30;
+                pop.gen = 40;
 %Velikost populace:
-                pop.N = 50;
+                pop.N = 100;
 %Pocet jedincu v turnaji:
                 pop.N_turnament = 4;
 %Rozmery mistnosti v m:

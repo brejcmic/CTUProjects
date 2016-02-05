@@ -39,12 +39,12 @@ The fitness function defines how good the solutions are. The target value of ave
 
 \begin{equation}
 \label{eq:fitness}
-f_{DNA}\left(E_{avg}, U_0\right) = g_1\left(E_{avg}\right) + g_2\left(U_0\right)
+f_{DNA}\left(\overline{E}_{m}, U_0\right) = g_1\left(\overline{E}_{m}\right) + g_2\left(U_0\right)
 \end{equation}
 
-\begin{subnumcases}{\label{eq:fitnessG1} g_1\left(E_{avg}\right)=} 
-  e^{\frac{E_{avg}-E_{avgT}}{E_{avg}}} &, $\left\langle 0, E_{avgT}\right\rangle$ \label{eq:fitnessG1A}\\
-  e^{\frac{E_{avgT}-E_{avg}}{E_{avg}}} &, $\left( E_{avgT}, \infty\right)$ \label{eq:fitnessG1B}
+\begin{subnumcases}{\label{eq:fitnessG1} g_1\left(\overline{E}_{m}\right)=} 
+  e^{\frac{\overline{E}_{m}-\overline{E}_{mT}}{\overline{E}_{m}}} &, $\left\langle 0, \overline{E}_{mT}\right\rangle$ \label{eq:fitnessG1A}\\
+  e^{\frac{\overline{E}_{mT}-\overline{E}_{m}}{\overline{E}_{m}}} &, $\left( \overline{E}_{mT}, \infty\right)$ \label{eq:fitnessG1B}
 \end{subnumcases}
 
 \begin{subnumcases}{\label{eq:fitnessG2} g_2\left(U_0\right)=} 
@@ -54,20 +54,20 @@ f_{DNA}\left(E_{avg}, U_0\right) = g_1\left(E_{avg}\right) + g_2\left(U_0\right)
 
 where:
 \begin{description}
-	\item[$E_{avg}$] is a calculated average value of illuminance,
-	\item[$E_{avgT}$] is a target average value of illuminance,
+	\item[$\overline{E}_{m}$] is a calculated average value of illuminance,
+	\item[$\overline{E}_{mT}$] is a target average value of illuminance,
 	\item[$U_0$] is a calculated uniformity,
 	\item[$U_{0T}$] is a target uniformity.
 \end{description}
 
-The function $g_1\left(E_{avg}\right)$ has peak value equal to $1$ at target value of average illuminance. Because the illuminance cannot be less than zero, the function reaches two limits:
+The function $g_1\left(\overline{E}_{m}\right)$ has peak value equal to $1$ at target value of average illuminance. Because the illuminance cannot be less than zero, the function reaches two limits:
 \begin{equation}
 \label{eq:g1lim0}
-\lim_{E_{avg}\to 0+} g_1\left(E_{avg}\right) = 0
+\lim_{\overline{E}_{m}\to 0+} g_1\left(\overline{E}_{m}\right) = 0
 \end{equation}
 \begin{equation}
 \label{eq:g1limInf}
-\lim_{E_{avg}\to \infty} g_1\left(E_{avg}\right) = e^{-1}
+\lim_{\overline{E}_{m}\to \infty} g_1\left(\overline{E}_{m}\right) = e^{-1}
 \end{equation}
 
 Both limits have different values and the limit in infinity is higher than that in the $0$. This means that it is preferred the solution with the higher average illuminance for the same absolute difference from the target value.
@@ -75,7 +75,7 @@ Both limits have different values and the limit in infinity is higher than that 
 \begin{figure}[htb]
   \centering
   \includegraphics[width=\columnwidth]{obrG1G2}
-  \caption{Graphs of parts $g_1\left(E_{avg}\right)$ and $g_2\left(U_0\right)$ from the fitness function}
+  \caption{Graphs of parts $g_1\left(\overline{E}_{m}\right)$ and $g_2\left(U_0\right)$ from the fitness function}
   \label{fig:fitG1G2}
 \end{figure}
 
@@ -85,5 +85,5 @@ The function $g_2\left(U_{0}\right)$ reach the value $0.5$ at target value of un
 \lim_{U_{0}\to \infty} g_2\left(U_{0}\right) = 1
 \end{equation}
 
-So the function $g_2\left(U_{0}\right)$ has an horizontal asymptote equal to one. Function $g_2\left(U_{0}\right)$ is linear for values of uniformity less than the target value. The highest slope is obtained here. For higher values of uniformity is the slope smaller due to the saturation effect of the exponential function. Therefore the algorithm is forced to reach target value of uniformity because of big change in the fitness function. Higher values makes the fitness better too but there is smaller effect.
-Both functions $g_1\left(E_{avg}\right)$ and $g_2\left(U_{0}\right)$ are shown in figure~\ref{fig:fitG1G2} for better understanding.
+So the function $g_2\left(U_{0}\right)$ has an horizontal asymptote equal to one. Function $g_2\left(U_{0}\right)$ is linear for values of uniformity less than the target value. The highest slope is obtained here. For higher values of uniformity is the slope smaller due to the saturation effect of the exponential function. Therefore the algorithm is forced to reach target value of uniformity because of big change in the fitness function. Higher values makes the fitness better too, but there is a smaller effect.
+Both functions $g_1\left(\overline{E}_{m}\right)$ and $g_2\left(U_{0}\right)$ are shown in figure~\ref{fig:fitG1G2} for better understanding.

@@ -24,7 +24,7 @@ gain = 5.4;
 %--------------------------------------------------------------------------
 %PARAMETRY ODRAZU
 %Uvazovany pocet odrazu:
-                mstn.Nodr = 10;
+                mstn.Nodr = 8;
                 
 %--------------------------------------------------------------------------
 %PARAMETRY SVITIDEL
@@ -259,14 +259,14 @@ for odraz = 1:1:mstn.Nodr
     z1 = podlaha.z;
     nv1 = podlaha.nv;
     fi01 = podlaha.E0.* podlaha.co.* podlaha.A;
-    podlaha.fiOdr(odraz,:) = fi01;
+    podlaha.fiOdr(odraz,:) = podlaha.E0.* podlaha.A;
 
     x2 = strop.x;
     y2 = strop.y;
     z2 = strop.z;
     nv2 = strop.nv;
     fi02 = strop.E0.* strop.co.* strop.A;
-    strop.fiOdr(odraz,:) = fi02;
+    strop.fiOdr(odraz,:) = strop.E0.* strop.A;
     [Ep1, Ep2] = osvPlchPlch(x1,y1,z1,x2,y2,z2,nv1,nv2,fi01,fi02);
 
     podlaha.Ep = Ep1;
@@ -277,7 +277,7 @@ for odraz = 1:1:mstn.Nodr
     z2 = stenaJ.z;
     nv2 = stenaJ.nv;
     fi02 = stenaJ.E0.* stenaJ.co.* stenaJ.A;
-    stenaJ.fiOdr(odraz,:) = fi02;
+    stenaJ.fiOdr(odraz,:) = stenaJ.E0.* stenaJ.A;
     [Ep1, Ep2] = osvPlchPlch(x1,y1,z1,x2,y2,z2,nv1,nv2,fi01,fi02);
 
     podlaha.Ep = podlaha.Ep + Ep1;
@@ -288,7 +288,7 @@ for odraz = 1:1:mstn.Nodr
     z2 = stenaS.z;
     nv2 = stenaS.nv;
     fi02 = stenaS.E0.* stenaS.co.* stenaS.A;
-    stenaS.fiOdr(odraz,:) = fi02;
+    stenaS.fiOdr(odraz,:) = stenaS.E0.* stenaS.A;
     [Ep1, Ep2] = osvPlchPlch(x1,y1,z1,x2,y2,z2,nv1,nv2,fi01,fi02);
 
     podlaha.Ep = podlaha.Ep + Ep1;
@@ -299,7 +299,7 @@ for odraz = 1:1:mstn.Nodr
     z2 = stenaZ.z;
     nv2 = stenaZ.nv;
     fi02 = stenaZ.E0.* stenaZ.co.* stenaZ.A;
-    stenaZ.fiOdr(odraz,:) = fi02;
+    stenaZ.fiOdr(odraz,:) = stenaZ.E0.* stenaZ.A;
     [Ep1, Ep2] = osvPlchPlch(x1,y1,z1,x2,y2,z2,nv1,nv2,fi01,fi02);
 
     podlaha.Ep = podlaha.Ep + Ep1;
@@ -310,7 +310,7 @@ for odraz = 1:1:mstn.Nodr
     z2 = stenaV.z;
     nv2 = stenaV.nv;
     fi02 = stenaV.E0.* stenaV.co.* stenaV.A;
-    stenaV.fiOdr(odraz,:) = fi02;
+    stenaV.fiOdr(odraz,:) = stenaV.E0.* stenaV.A;
     [Ep1, Ep2] = osvPlchPlch(x1,y1,z1,x2,y2,z2,nv1,nv2,fi01,fi02);
 
     podlaha.Ep = podlaha.Ep + Ep1;
@@ -558,5 +558,22 @@ ylabel('y (m)');
 axis([0 mstn.x 0 mstn.y]);
 
 figure(3)
-FI = sum(stenaV.fiOdr, 2);
-plot(FI)
+podlaha.FI = sum(podlaha.fiOdr, 2);
+stenaJ.FI = sum(stenaJ.fiOdr, 2);
+stenaS.FI = sum(stenaS.fiOdr, 2);
+stenaV.FI = sum(stenaV.fiOdr, 2);
+stenaZ.FI = sum(stenaZ.fiOdr, 2);
+strop.FI = sum(strop.fiOdr, 2);
+% podlaha.FI = log10(podlaha.FI);
+% stenaJ.FI = log10(stenaJ.FI);
+% stenaS.FI = log10(stenaS.FI);
+% stenaV.FI = log10(stenaV.FI);
+% stenaZ.FI = log10(stenaZ.FI);
+% strop.FI = log10(strop.FI);
+b = bar((0:(mstn.Nodr-1)), [podlaha.FI, strop.FI, stenaS.FI, stenaV.FI]);
+g = gca;
+g.YScale = 'log';
+grid on;
+ylabel('$$\phi_{sum}$$ (lm)','interpreter','latex');
+xlabel('reflection','interpreter','latex');
+legend('floor', 'ceiling', 'wall N&S', 'wall E&W')
