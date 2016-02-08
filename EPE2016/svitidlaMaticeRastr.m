@@ -62,7 +62,7 @@ pop.sym = 0;
 %--------------------------------------------------------------------------
 %Fenotyp - cilove paramety
 %Prumerna hladina osvetlenosti:
-                target.Eavg = 510;
+                target.Eavg = 530;
 %Rovnomernost:
                 target.Uo = 0.6;
 %Udrzovaci cinitel:
