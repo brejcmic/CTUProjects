@@ -550,6 +550,7 @@ contour(mstn.bx,mstn.by,vysl.ME,'ShowText','on');
 xlabel('x (m)');
 ylabel('y (m)');
 zlabel('E (lx)');
+grid on;
 
 figure(2)
 plot(svt.x, svt.y, 'o', 'MarkerSize', 10, 'LineWidth', 2, 'MarkerFaceColor', 'y', 'MarkerEdgeColor', 'k');
@@ -570,10 +571,10 @@ strop.FI = sum(strop.fiOdr, 2)/mstn.x/mstn.y;
 % stenaV.FI = log10(stenaV.FI);
 % stenaZ.FI = log10(stenaZ.FI);
 % strop.FI = log10(strop.FI);
-b = bar((0:(mstn.Nodr-1)), [podlaha.FI, strop.FI, stenaS.FI, stenaV.FI]);
+b = bar((1:(mstn.Nodr)), [podlaha.FI, strop.FI, stenaS.FI, stenaV.FI]);
 g = gca;
 g.YScale = 'log';
 grid on;
-ylabel('$$\overline{E}$$ (lx)','interpreter','latex');
-xlabel('reflection','interpreter','latex');
+ylabel('$$\Delta\overline{E}$$ (lx)','interpreter','latex');
+xlabel('impact','interpreter','latex');
 legend('floor', 'ceiling', 'wall N&S', 'wall E&W')
