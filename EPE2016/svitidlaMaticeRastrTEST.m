@@ -558,12 +558,12 @@ ylabel('y (m)');
 axis([0 mstn.x 0 mstn.y]);
 
 figure(3)
-podlaha.FI = sum(podlaha.fiOdr, 2);
-stenaJ.FI = sum(stenaJ.fiOdr, 2);
-stenaS.FI = sum(stenaS.fiOdr, 2);
-stenaV.FI = sum(stenaV.fiOdr, 2);
-stenaZ.FI = sum(stenaZ.fiOdr, 2);
-strop.FI = sum(strop.fiOdr, 2);
+podlaha.FI = sum(podlaha.fiOdr, 2)/mstn.x/mstn.y;
+stenaJ.FI = sum(stenaJ.fiOdr, 2)/mstn.x/mstn.z;
+stenaS.FI = sum(stenaS.fiOdr, 2)/mstn.x/mstn.z;
+stenaV.FI = sum(stenaV.fiOdr, 2)/mstn.y/mstn.z;
+stenaZ.FI = sum(stenaZ.fiOdr, 2)/mstn.y/mstn.z;
+strop.FI = sum(strop.fiOdr, 2)/mstn.x/mstn.y;
 % podlaha.FI = log10(podlaha.FI);
 % stenaJ.FI = log10(stenaJ.FI);
 % stenaS.FI = log10(stenaS.FI);
@@ -574,6 +574,6 @@ b = bar((0:(mstn.Nodr-1)), [podlaha.FI, strop.FI, stenaS.FI, stenaV.FI]);
 g = gca;
 g.YScale = 'log';
 grid on;
-ylabel('$$\phi_{sum}$$ (lm)','interpreter','latex');
+ylabel('$$\overline{E}$$ (lx)','interpreter','latex');
 xlabel('reflection','interpreter','latex');
 legend('floor', 'ceiling', 'wall N&S', 'wall E&W')
