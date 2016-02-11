@@ -72,13 +72,6 @@ The function $g_1\left(\overline{E}_{m}\right)$ has peak value equal to $1$ at t
 
 Both limits have different values and the limit in the infinity is higher than that in the $0$. Hence it is preferred the solution with the higher average illuminance for the same absolute difference from the target value.
 
-\begin{figure}[htb]
-  \centering
-  \includegraphics[width=\columnwidth]{obrG1G2}
-  \caption{Graphs of parts $g_1\left(\overline{E}_{m}\right)$ and $g_2\left(U_0\right)$ from the fitness function}
-  \label{fig:fitG1G2}
-\end{figure}
-
 The function $g_2\left(U_{0}\right)$ reach the value $0.5$ at the target value of uniformity. It has a bound at $0$ for values less then the target value. There is a limit in the infinity for values higher than target value:
 \begin{equation}
 \label{eq:g2limInf}
@@ -88,3 +81,10 @@ The function $g_2\left(U_{0}\right)$ reach the value $0.5$ at the target value o
 So the function $g_2\left(U_{0}\right)$ has an horizontal asymptote equal to one. Function $g_2\left(U_{0}\right)$ is linear for values of uniformity less than the target value. The highest slope is obtained here. The slope is  smaller for higher values of uniformity due to the saturation effect of the exponential function. Therefore the algorithm is forced to reach target value of the uniformity because of big change in the fitness function at its beginning. Higher values improves the fitness function too, but there is a smaller effect.
 
 Both functions $g_1\left(\overline{E}_{m}\right)$ and $g_2\left(U_{0}\right)$ are shown in figure~\ref{fig:fitG1G2} for better understanding.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=\columnwidth]{obrG1G2}
+  \caption{Graphs of parts $g_1\left(\overline{E}_{m}\right)$ and $g_2\left(U_0\right)$ from the fitness function}
+  \label{fig:fitG1G2}
+\end{figure}
