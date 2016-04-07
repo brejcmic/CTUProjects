@@ -3,7 +3,17 @@ It have been done several tests of the algorithm. Some interesting features or t
 
 Algorithm returns different results sometimes for several runs. That might be consequence of not exactly defined requirements. There might exist multiple solutions of luminaire placement for defined illuminance and uniformity. Another possible reason is quite small population size or few count of generation. For bigger population size ($100$ members and more) the solutions were often more similar.
 
-The evaluation of the algorithm takes quite long time due to complex calculation of illuminance and reflections. It took about 20~minutes to obtain a result for settings in table~\ref{tab:GAsettings}, $4$ reflections and amount of $3520$ wall facets.
+The evaluation of the algorithm takes quite long time due to complex calculation of illuminance and reflections. It took about 20~minutes to obtain a result for settings in table~\ref{tab:GAsettings}, $4$ reflections and amount of $3520$ wall facets. The algorithm was implemented via software MATLAB on the following machine settings:
+
+\begin{table}[htb]
+	\renewcommand{\arraystretch}{1.3}
+	\centering
+  \begin{tabular}{ l l }
+    Processor: & Intel Core i5, 3.1 GHz \\
+    RAM: & 4 GB \\
+		Graphic Card: & NVIDIA GeForce GTX 560 Ti \\
+  \end{tabular}
+\end{table}
 
 A trap is hidden in target maintained illuminance $\overline{E}_{mT}$ adjustment. This value affects also the resulting luminary placement. If the value is changed a little bit then the count of luminaires usually does not change. However the algorithm puts the luminaires for example close to the middle of the room then, although it put them close to the walls for the previous target value. This effect is caused especially by the definition of the part $g_1\left(\overline{E}_{m}\right)$ in the fitness function (\ref{eq:fitness}). The target value has a very sharp extreme. Therefore the algorithm tries to reach it at any cost. The average illuminance is dependent not only on the count of the luminaires but a little bit also on the positions of the luminaires. So if the designer is not satisfied with the output of the algorithm, he could try change the target value of average maintained illuminance $\overline{E}_{mT}$.
 

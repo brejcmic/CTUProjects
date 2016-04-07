@@ -1,9 +1,11 @@
-\section{Proposed DNA}
+\section{Proposed genotype}
 \subsection{Symmetric Solutions}
 \label{ssec:symmetry}
+The genotype has the meaning of set of parameters for a solution in this paper. These parameters define the characteristics of the solution (phenotype). The illuminance and uniformity are watched characteristics in our case.
+
 One of the requirements to the output design was to get the symmetric solutions of luminairies placement. There seemed to be two approaches how this might be done. The first counts with introduction of the symmetry in the fitness function. On the basis of the fitness equation evaluation the algorithm can prefer symmetric solutions more than others. Unfortunately this approach was very difficult due to unknown function that could clearly describe how good is the symmetry of the luminairies placement. Best experience came from using least squares method. After adding the sum of squares of the differences towards the average value of illuminance, a lot of output results showed the symmetry towards both axis or center. However some types of luminous intensity distribution curves were very sensitive to create a tight groups of luminaires in specific positions. This type of outputs were unable to realize in real conditions, so they were not acceptable.
 
-The second approach dealing with introduction of the symmetry in the DNA was chosen at last. The symmetry towards the center (one point) and the symmetry towards both axis were further studied. The center symmetry was reached by proposing the luminaire positions only for one half of the room. The another half of positions were got by mirroring towards one axis. Similar for the axis symmetry was proposed the position only for one quarter of the room. Other quarters were got by mirroring towards both axis. It is obvious that there must be even number of luminaires in case of center symmetry and number of luminaires divisible by four in the case of axis symmetry. This approach works well but the designer must keep in mind that he never gets results for odd number of luminaires respectively for numbers of luminaires that are not divisible by four.
+The second approach dealing with introduction of the symmetry in the genotype was chosen at last. The symmetry towards the center (one point) and the symmetry towards both axis were further studied. The center symmetry was reached by proposing the luminaire positions only for one half of the room. The another half of positions were got by mirroring towards one axis. Similar for the axis symmetry was proposed the position only for one quarter of the room. Other quarters were got by mirroring towards both axis. It is obvious that there must be even number of luminaires in case of center symmetry and number of luminaires divisible by four in the case of axis symmetry. This approach works well but the designer must keep in mind that he never gets results for odd number of luminaires respectively for numbers of luminaires that are not divisible by four.
 
 \subsection{Grid of Allowed Positions}
 \label{ssec:grid}
@@ -11,12 +13,12 @@ Some types of luminous intensity distribution curves were prone to place the lum
 
 Grid of allowed positions also let the designer to define specific shape of area for the luminaire independently on the shape of the room. This might be useful for rooms with complex design of the ceiling or where the recessed luminairies are used. On the other hand the set of solutions is restricted always only on the grid.
 
-\subsection{DNA structure}
-\label{ssec:dnaStruc}
-The resulting DNA defines logic vector of luminaire presence in the specific grid intersection. The length of the DNA depends on the number of grid intersections and on the type of the symmetry:
+\subsection{Genotype structure}
+\label{ssec:genotypeStruc}
+The resulting genotype defines logic vector of luminaire presence in the specific grid intersection. The length of the genotype depends on the number of grid intersections and on the type of the symmetry:
 \begin{equation}
-\label{eq:DNALength}
-L_{DNA} = \frac{N_G}{2\cdot sym}
+\label{eq:genotypeLength}
+L_{genotype} = \frac{N_G}{2\cdot sym}
 \end{equation}
 where:
 \begin{description}
@@ -26,8 +28,8 @@ where:
 
 \begin{table}[htb]
 	\renewcommand{\arraystretch}{1.3}
-	\caption{Structure of the DNA}
- 	\label{tab:strucDNA}
+	\caption{Structure of the genotype}
+ 	\label{tab:strucgenotype}
 	\centering
   \begin{tabular}{| c | c | c |}
     \hline
@@ -38,4 +40,4 @@ where:
   \end{tabular}
 \end{table}
 
-The proposed structure of DNA lets the algorithm determine needed number of luminaires. Therefore the designer just sets target value of illuminance, target value of uniformity, the luminous intensity distribution curve for chosen luminaires and the grid.
+The proposed structure of genotype lets the algorithm determine needed number of luminaires. Therefore the designer just sets target value of illuminance, target value of uniformity, the luminous intensity distribution curve for chosen luminaires and the grid.
