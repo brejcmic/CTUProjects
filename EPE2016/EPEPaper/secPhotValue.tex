@@ -12,7 +12,7 @@ where:
 	\item[$\overline{E}$] is the average illuminance of the working plane.
 \end{description}
 
-Illuminances can be acquired by measurements or calculations in certain points of working planes that are chosen in accordance to the purpose of the room. To calculate the illuminance in a given point of the working plane contributions of all light sources illuminating the given point have to be summed up. This can be achieved by using luminous intensities of all the light sources pointing from the light source towards the point (as seen in figure~\ref{fig:osv}):
+Illuminances can be acquired by measurements or calculations in certain points of working planes that are chosen in accordance to the purpose of the room. To calculate the illuminance in a given point of the working plane contributions of all light sources illuminating the given point have to be summed up. This can be achieved by using luminous intensities of all the light sources pointing from the light source towards the point (Fig~\ref{fig:osv}):
 
 \begin{equation}
 E_{P\rho}=\sum_{i} \frac{I_{C \gamma i} \cdot \cos{\beta_{i}}}{{l_{i}}^{2}} \quad \mathrm{(lx;cd,-,m^{2})}
@@ -33,7 +33,7 @@ where:
   \label{fig:osv}
 \end{figure}
 
-Luminous intensity curves are stored in eulumdat files supplied with luminaires to make light scene calculations possible. For most indoor luminaires the $C-\gamma$ angular coordinate system is used as found in figure~\ref{fig:cgamma}.
+Luminous intensity curves are stored in eulumdat files supplied with luminaires to make light scene calculations possible. For most indoor luminaires the $C-\gamma$ angular coordinate system is used (Fig.~\ref{fig:cgamma}).
 
 \begin{figure}[htb]
   \centering
@@ -42,7 +42,7 @@ Luminous intensity curves are stored in eulumdat files supplied with luminaires 
   \label{fig:cgamma}
 \end{figure}
 
-To achieve more accurate simulation results of light scenes, reflections have to be included. From point's P point of view (figure~\ref{fig:osv}), walls, ceiling and floor will become light sources of reflected light. Using the finite element method, surfaces of the model room will be divided into smaller facets. These facets, after illuminated, will become secondary light sources (figure~\ref{fig:difRefl}). The process of reflections can be repeated as many times as needed. During each reflection a portion of the incident luminous flux is consumed by the illuminated surface as defined by its reflectance. Therefore after several reflections the reflected luminous flux becomes negligible.
+To achieve more accurate simulation results of light scenes, reflections have to be included. From point's P point of view (Fig.~\ref{fig:osv}), walls, ceiling and floor will become light sources of reflected light. Using the finite element method, surfaces of the model room will be divided into smaller facets. These facets, after illuminated, will become secondary light sources (Fig.~\ref{fig:difRefl}). The process of reflections can be repeated as many times as needed. During each reflection a portion of the incident luminous flux is consumed by the illuminated surface as defined by its reflectance. Therefore after several reflections the reflected luminous flux becomes negligible.
 
 \begin{figure}[htb]
   \centering
@@ -51,7 +51,7 @@ To achieve more accurate simulation results of light scenes, reflections have to
   \label{fig:difRefl}
 \end{figure}
 
-Most common wall and ceiling paints exhibit near Lambertian reflectance properties as depicted in figure~\ref{fig:difRefl}, meaning that the spacial luminous intensity distribution curve of the facet will only depend on angle~$\beta$, being the angle between the facet's normal $N_{\rho}$ and the line of center points of both facets. The model room's surfaces, including the floor, have been chosen to exhibit purely Lambertian reflectance.
+Most common wall and ceiling paints exhibit near Lambertian reflectance properties (Fig.~\ref{fig:difRefl}), meaning that the spacial luminous intensity distribution curve of the facet will only depend on angle~$\beta$, being the angle between the facet's normal $N_{\rho}$ and the line of center points of both facets. The model room's surfaces, including the floor, have been chosen to exhibit purely Lambertian reflectance.
 
 After a facet has been illuminated by primary light sources and all the illuminances have been summed up (equation~\ref{eq:illSum}), the facet becomes a Lambertian secondary light source of luminous intensity \cite{Habel}:
 
