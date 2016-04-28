@@ -2,6 +2,7 @@
 clear;
 clc;
 close;
+%Tento script ma upravenou fittness funkci.
 %Vstupem je krivka svitivosti v soubooru csv. Gain udava nasobek vsech
 %hodnot v krivce svitivosti.
 filenameinput = 'MSTR_SLB_4x18W_5G4';
