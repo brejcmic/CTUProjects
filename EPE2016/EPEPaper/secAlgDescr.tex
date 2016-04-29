@@ -3,7 +3,7 @@
 \label{ssec:GenAlg}
 The algorithm must determine positions and number of luminaries in dependency on target illuminance and uniformity. This is the multicriteria and multiparametric type of the problem. The genetic algorithms offer quite simple way how to solve it, therefore they were used in this project. The genetic algorithms are well known today so only specific settings are further described.
 
-The best solution was saved (elitism) from every population in two specimens. The first one was unable to change its DNA via mutation, the second one had the same probability of mutation like other solutions. Other parent solutions were selected via tournament selection. It consisted of making random group of $4$ solutions from the population and take the one with the best fitness. This type of selection had vital role in the algorithm. It avoided a premature convergence of the best solution in comparison with the roulette selection. Similar effect was ensured also by setting the recombination probability less than $1$. There was used only one point DNA crossover during presented tests. Overview of the GA settings is shown in table~\ref{tab:GAsettings}.
+The best solution was saved (elitism) from every population in two specimens. The first one was unable to change its DNA via mutation, the second one had the same probability of mutation like other solutions. Other parent solutions were selected via tournament selection. It consisted of making random group of $4$ solutions from the population and take the one with the best fitness. This type of selection had vital role in the algorithm. It avoided a premature convergence of the best solution in comparison with the roulette selection. Similar effect was ensured also by setting the recombination probability less than $1$. There was used only one point DNA crossover during presented tests. Overview of the GA settings is shown in Tab.~\ref{tab:GAsettings}.
 
 \begin{table}[htb]
 	\renewcommand{\arraystretch}{1.3}
@@ -49,7 +49,7 @@ f_{DNA}\left(\overline{E}_{m}, U_0\right) = g_1\left(\overline{E}_{m}\right) + g
 
 \begin{subnumcases}{\label{eq:fitnessG2} g_2\left(U_0\right)=} 
   \frac{U_0}{2\cdot U_{0T}} &, $\left\langle 0, U_{0T}\right\rangle$ \label{eq:fitnessG2A}\\
-  1-\frac{e^{U_{0T}-U_0}}{2} &, $\left( U_{0T}, \infty\right)$ \label{eq:fitnessG2B}
+  1-\frac{e^{\frac{U_{0T}-U_0}{U_{0T}}}}{2} &, $\left( U_{0T}, \infty\right)$ \label{eq:fitnessG2B}
 \end{subnumcases}
 
 where:
