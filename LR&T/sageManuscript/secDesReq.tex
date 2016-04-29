@@ -1,12 +1,14 @@
 \section{Design Requirements}
 The design results must involve all requirements given by standards. Therefore the first task is always to obtain at least the minimal level of illuminance and uniformity. Several designs overpass the minimal values and fit the requirements. Better specification and other restrictions for the results must be done. Some specifications are obvious from the designer's preferences. The solutions with higher efficiency are the better for example. Other examples of designer's preferences can involve:
 
-\begin{itemize}
+\begin{enumerate}
 	\item the minimal count of luminaires (efficiency),
 	\item symmetry of the luminaires placement,
 	\item the placement restricted only in specific area,
 	\item placement in specific shape of groups of luminaires,
-	\item higher illuminance or uniformity etc.
-\end{itemize}
+	\item get the highest illuminance for given uniformity etc.
+\end{enumerate}
 
 The result must also respect the luminaires dimensions. Proximity among luminaires can be unfeasible.
+
+The genetic algorithm can handle the requirements in two ways. First introduces the requirements as a part of the fitness function. It is the case, where the requirements are some part of the phenotype. This is very common and it can be used for example in case of target illuminance and uniformity accomplishment. It will be described in the next section. The second way uses the restriction in the space of allowed solutions.

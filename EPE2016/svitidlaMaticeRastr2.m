@@ -147,7 +147,7 @@ stenaJ.N = mstn.Nx*mstn.Nz;
 stenaJ.E = 0;
 stenaJ.E0 = 0;
 stenaJ.Ep = 0;
-stenaJ.co = 0;
+stenaJ.co = 0.5;
 stenaJ.nv = [0 1 0];
 
 for idx= 1:1:mstn.Nz
@@ -595,13 +595,10 @@ for generace = 1:1:pop.gen
     pop.Eavg= target.MF .* pop.Eavg;
     %fitness
     pop.fitness = zeros(pop.N, 1);
-    pop.fitness = exp((target.Eavg - pop.Eavg)./pop.Eavg).*(pop.Eavg > target.Eavg);
-    pop.fitness = pop.fitness + exp((pop.Eavg - target.Eavg)./pop.Eavg).*(pop.Eavg <= target.Eavg);
-    pop.fitness = pop.fitness + (1 - 0.5*exp((target.Uo-pop.Uo)./ target.Uo)).*(pop.Uo > target.Uo);
-    pop.fitness = pop.fitness + (0.5*pop.Uo./ target.Uo).*(pop.Uo <= target.Uo);
-
-    %pravdepodobnost vyberu
-    pop.pravdep = pop.fitness./ sum(pop.fitness, 1);
+    pop.fitness = 2.*(pop.Eavg < target.Eavg);
+    pop.fitness = pop.fitness + (pop.Uo < target.Uo);
+    pop.fitness = pop.fitness .* pop.dnaDelka;
+    pop.fitness = pop.fitness + sum(pop.dna, 2);
     
     %----------------------------------------------------------------------
     %Generovani nove populace
@@ -610,7 +607,7 @@ for generace = 1:1:pop.gen
     %----------------------------------------------------------------------
     %ELITISMUS - vyber nejlepsiho clena populace na prvni misto
     %----------------------------------------------------------------------
-    [~, elita.idx]= max(pop.pravdep);
+    [~, elita.idx]= min(pop.fitness);
     
     %ulozeni nejlepsi hodnoty fitness funkce
     vysl.fitness(generace)= pop.fitness(elita.idx);
@@ -624,11 +621,11 @@ for generace = 1:1:pop.gen
     for clen = 3:2:pop.N
         %Vyber potomku na zaklade souteze mezi nekolika nahodnymi
         idx = ceil(pop.N*rand(1,pop.N_turnament)+eps);
-        [rodicA.p, rodicA.idx]= max(pop.pravdep(idx));
+        [rodicA.p, rodicA.idx]= min(pop.fitness(idx));
         rodicA.idx = idx(rodicA.idx);
 
         idx = ceil(pop.N*rand(1,pop.N_turnament)+eps);
-        [rodicB.p, rodicB.idx]= max(pop.pravdep(idx));
+        [rodicB.p, rodicB.idx]= min(pop.fitness(idx));
         rodicB.idx = idx(rodicB.idx);
 
         %Krizeni - podle indexu a dle pravdepodobnosti krizeni
