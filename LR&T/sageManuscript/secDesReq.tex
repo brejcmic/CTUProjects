@@ -1,14 +1,16 @@
 \section{Design Requirements}
-The design results must involve all requirements given by standards. Therefore the first task is always to obtain at least the minimal level of illuminance and uniformity. Several designs overpass the minimal values and fit the requirements. Better specification and other restrictions for the results must be done. Some specifications are obvious from the designer's preferences. The solutions with higher efficiency are the better for example. Other examples of designer's preferences can involve:
+The design results must involve all requirements given by standards. Therefore the first task is always to obtain at least the minimal level of illuminance and uniformity. It is obvious that several designs overpass the minimal values and fit the standard. Better specification and other restrictions for the results must be done. Some specifications arise from the designer's preferences. The solutions with higher efficiency are the better for example. Other examples of designer's preferences can involve:
 
 \begin{enumerate}
-	\item the minimal count of luminaires (efficiency),
-	\item symmetry of the luminaires placement,
-	\item the placement restricted only in specific area,
-	\item placement in specific shape of groups of luminaires,
-	\item get the highest illuminance for given uniformity etc.
+	\item[(i)] the minimal count of luminaires (efficiency),
+	\item[(ii)] symmetry of the luminaires placement,
+	\item[(iii)] the placement restricted only in specific area,
+	\item[(iv)] placement in specific shape of groups of luminaires,
+	\item[(v)] get the highest illuminance for given uniformity etc.
 \end{enumerate}
 
 The result must also respect the luminaires dimensions. Proximity among luminaires can be unfeasible.
 
-The genetic algorithm can handle the requirements in two ways. First introduces the requirements as a part of the fitness function. It is the case, where the requirements are some part of the phenotype. This is very common and it can be used for example in case of target illuminance and uniformity accomplishment. It will be described in the next section. The second way uses the restriction in the space of allowed solutions.
+The genetic algorithm can handle the requirements in two ways. First introduces the requirements as a part of the fitness function. It is the case, where the requirements are some part of the phenotype. This is very common and it can be used for example in case of target illuminance and uniformity accomplishment. Other specification fitting this method are the (i) and (v) from the list above. The usage will be described in the next section. 
+
+Some requirements are very difficult to introduce in the fitness function. Therefore the second possible way uses the restrictions in the space of allowed solutions. Such method fits the specification (ii), (iii) and (iv) from the list above.
