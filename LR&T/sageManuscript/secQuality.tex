@@ -1,6 +1,6 @@
 \section{Lighting System Quality Evaluation}
 %Výpočet mnohonásobných odrazů, algoritmus - odrazy
-Evaluating the model room's lighting system quality in terms of standard \cite{12464} requires observing four parameters. As mentioned in the previous section, only maintained average illuminance $\overline{E}_{m}$ and uniformity $U_{0}$ will be included into calculations in this project.
+Evaluating the model room's lighting system quality in terms of standard \cite{12464} requires observing four parameters. As mentioned in the previous section only maintained average illuminance $\overline{E}_{m}$ and uniformity $U_{0}$ will be calculated in this project, both obtained from illuminances of the working plane.
 
 Uniformity can be calculated from the following equation:
 \begin{equation}
@@ -13,7 +13,7 @@ where:
 	\item[$\overline{E}$] is the average illuminance of the working plane.
 \end{description}
 
-Illuminances are acquired by measurements or calculations in defined points of working planes chosen in accordance to the purpose of the indoor space~\cite{12464}. Calculating illuminance in a given point of the working plane requires summing up all partial contributions of illuminances from light sources illuminating this point. Illuminance can be obtained from luminous intensity of the light source pointing towards the measurement point $P$ of plane $\rho$ (Figure\ref{fig:osv}):
+Illuminances are acquired by measurements or calculations in defined points of working planes chosen in accordance to the purpose of the indoor space~\cite{12464}. Calculating illuminance in a given point of the working plane requires summing up all partial contributions of illuminances from light sources illuminating this point. Illuminance can be obtained from luminous intensity of the light source in direction pointing towards the measurement point $P$ of plane $\rho$ (Figure\ref{fig:osv}):
 
 \begin{equation}
 E_{P\rho}=\sum_{i} \frac{I_{C \gamma i} \cdot \cos{\beta_{i}}}{{l_{i}}^{2}} \quad \mathrm{(lx;cd,-,m^{2})}
@@ -43,7 +43,7 @@ Luminous intensity curves (Equation~\ref{eq:illSum}) can be found in Eulumdat fi
   \label{fig:cgamma}
 \end{figure}
 
-To bring simulation results closer to real conditions, interaction of light and surfaces has to be included into calculations the most affecting the light scene in this project being light reflection. In case of the model room light active surfaces are walls, ceiling and floor becoming after light impact secondary light sources. Using the finite element method, surfaces of the model room are divided into smaller facets each becoming a point light source illuminating other facets leading to multiple reflections (Figure~\ref{fig:difRefl}). Every time light is reflected, a portion of incident luminous flux is consumed by the surface defined by reflectance value $\rho$. After several reflections the reflected luminous flux becomes negligible.
+To bring simulation results closer to real conditions, interaction of light and surfaces has to be included into calculations the most affecting the light scene in this project being light reflection. In case of the model room light active surfaces are walls, ceiling and floor becoming after light impact secondary light sources. Using the finite element method, surfaces of the model room are divided into smaller facets each becoming a point light source illuminating other facets leading to multiple reflections (Figure~\ref{fig:difRefl}). Each reflection of light a portion of incident luminous flux is consumed by the surface defined by reflectance value $\rho$. After several reflections the reflected luminous flux becomes negligible.
 
 \begin{figure}[htb]
   \centering
@@ -52,7 +52,7 @@ To bring simulation results closer to real conditions, interaction of light and 
   \label{fig:difRefl}
 \end{figure}
 
-Most common indoor wall and ceiling surfaces exhibit near Lambertian (diffuse) reflectance. The spacial luminous intensity distribution of purely Lambertian surfaces is dependent only on the amount of reflected light and on angle~$\gamma$ between the facet's normal~$N_{\rho}$ and the observed direction of the outgoing light ray (Figure~\ref{fig:difRefl}, Equation~\ref{eq:Igamma}). For simplification reasons all surfaces including the floor of the model room exhibit purely diffuse reflection. Such surfaces become secondary light sources of luminous intensity in direction $\gamma=0^{\circ}$ according to \cite{Habel} as follows:
+Most common indoor wall and ceiling surfaces exhibit near Lambertian (diffuse) reflectance. The spacial luminous intensity distribution of purely Lambertian surfaces is dependent only on luminous intensity $I_{0}$ in direction $\gamma=0^{\circ}$ and on angle~$\gamma$ between the facet's normal~$N_{\rho}$ and the observed direction of the outgoing light ray (Equation~\ref{eq:Igamma}). For simplification reasons all surfaces including the floor of the model room exhibit purely diffuse reflection. Such surfaces become secondary light sources of luminous intensity in direction $\gamma=0^{\circ}$ according to \cite{Habel}:
 
 \begin{equation}
 I_{0}=\frac{\rho \cdot E \cdot dA}{\pi} \quad \mathrm{(cd;-,lx,m^{2})}
