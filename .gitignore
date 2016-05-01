@@ -7,6 +7,9 @@
 #permited files
 #--------------------------------------
 
+#pdf files
+!*.pdf
+
 #txt files
 !*.txt
 !.placeholder
@@ -63,8 +66,6 @@
 !*.sch
 !*.brd
 
-!*.pdf
-
 #--------------------------------------
 #ignored files - special specifications
 #--------------------------------------
@@ -78,3 +79,6 @@ makefile
 ~$*.doc
 ~$*.xls
 ~$*.rtf
+
+#papers
+sageManuscript.pdf
