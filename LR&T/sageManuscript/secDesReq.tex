@@ -13,4 +13,8 @@ The result must also respect the luminaires dimensions. Proximity among luminair
 
 The genetic algorithm can handle the requirements in two ways. First introduces the requirements as a part of the fitness function. It is the case, where the requirements are some part of the phenotype. This is very common and it can be used for example in case of target illuminance and uniformity accomplishment. Other specification fitting this method are the (i) and (v) from the list above. The usage will be described in the next section. 
 
-Some requirements are very difficult to introduce in the fitness function. Therefore the second possible way uses the restrictions in the space of allowed solutions. Such method fits the specification (ii), (iii) and (iv) from the list above.
+Some requirements are very difficult to introduce in the fitness function. Therefore the second possible way uses the restrictions in the space of allowed solutions. Such method fits the specification (ii), (iii) and (iv) from the list above. The final algorithm processed only the solutions restricted into a defined grid. The grid was defined to respect the luminaires dimensions. Therefore the problem about proximity was solved. On the other hand the placement optimum was also restricted by the grid, which is not desirable. The authors currently try to remove this unpleasant feature of the realized algorithm. However the grid of solutions also allowed to simply define symmetry of the placement.
+
+\subsection{Symmetry}
+
+\subsection{Genotype}
