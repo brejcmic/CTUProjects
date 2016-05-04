@@ -3,8 +3,8 @@
 %--------------------------------------------------------------------------
 figure(1)
 vysl.ME = vec2mat(vysl.E,mstn.Nx);
-%surf(mstn.bx,mstn.by,vysl.ME);
-contour(mstn.bx,mstn.by,vysl.ME,'ShowText','on');
+surf(mstn.bx,mstn.by,vysl.ME);
+%contour(mstn.bx,mstn.by,vysl.ME,'ShowText','on');
 xlabel('x (m)');
 ylabel('y (m)');
 zlabel('E (lx)');
