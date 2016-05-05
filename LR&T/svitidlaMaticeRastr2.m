@@ -6,7 +6,7 @@ close;
 %Vstupem je krivka svitivosti v soubooru csv. Gain udava nasobek vsech
 %hodnot v krivce svitivosti.
 filenameinput = 'MSTR_SLB_4x18W_5G4';
-ID = '_pokus';
+ID = '_Fit2_U';
 gain = 5.4;
 %Reseni rozmisteni svetel pomoci genetickeho algoritmu. Algorytmus vklada
 %svitidla do rovnomerneho rastru.
@@ -34,11 +34,11 @@ pop.sym = 0;
 %Vyska srovnavaci roviny (m):
                 mstn.zsr = 0.75;
 %Pocet bodu na stenach v ose x:
-                mstn.Nx = ceil(4*mstn.x);
+                mstn.Nx = ceil(2*mstn.x);
 %Pocet bodu na stenach v ose y:
-                mstn.Ny = ceil(4*mstn.y);
+                mstn.Ny = ceil(2*mstn.y);
 %Pocet bodu na stenach v ose z:
-                mstn.Nz = ceil(4*mstn.z);
+                mstn.Nz = ceil(2*mstn.z);
 %Pocatecni fitness
                 vysl.fitness = zeros(1, pop.gen);
 
@@ -54,8 +54,8 @@ pop.sym = 0;
 %Vyska svitidel:
                 svt.z = 4;
 %Pocet svitidel:
-                svt.Nx = 16;
-                svt.Ny = 8;
+                svt.Nx = 14;
+                svt.Ny = 6;
 %Smerove vektory roviny os svitidla:
                 svt.vax = [0 1 0];%normala k C0 = osa svitidla
                 svt.vrd = [1 0 0];%normala k C90 = pricna osa svitidla
@@ -595,10 +595,12 @@ for generace = 1:1:pop.gen
     pop.Eavg= target.MF .* pop.Eavg;
     %fitness
     pop.fitness = zeros(pop.N, 1);
-    pop.fitness = 2.*(pop.Eavg < target.Eavg);
-    pop.fitness = pop.fitness + (pop.Uo < target.Uo);
-    pop.fitness = pop.fitness .* pop.dnaDelka;
-    pop.fitness = pop.fitness + sum(pop.dna, 2);
+    DROP = (pop.Eavg < target.Eavg) | (pop.Uo < target.Uo);
+    pop.fitness = DROP .* pop.dnaDelka;
+    pop.fitness = pop.fitness + not(DROP) .* sum(pop.dna, 2);
+    %pop.fitness = pop.fitness + target.Uo.*target.Eavg./pop.Uo./pop.Eavg;
+    %pop.fitness = pop.fitness + target.Eavg./pop.Eavg;
+    pop.fitness = pop.fitness + target.Uo./pop.Uo;
     
     %----------------------------------------------------------------------
     %Generovani nove populace
