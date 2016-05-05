@@ -676,7 +676,7 @@ zlabel('E (lx)');
 
 figure(2)
 
-vysl.dna = pop.dna(elita.idx, :);
+vysl.dna = pop.dna(1, :);
 vysl.sx = svt.x;
 vysl.sy = svt.y;
 vysl.sz = svt.z;
