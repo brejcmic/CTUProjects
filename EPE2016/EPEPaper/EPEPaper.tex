@@ -62,7 +62,7 @@
 % should be used if it is desired that the figures are to be displayed in
 % draft mode.
 %
-\documentclass[conference]{IEEEtran}
+\documentclass[conference,a4paper]{IEEEtran}
 % Add the compsoc option for Computer Society conferences.
 %
 % If IEEEtran.cls has not been installed into the LaTeX system files,
@@ -371,22 +371,38 @@
 % affiliations
 \selectlanguage{czech}
 
-\author{
-\IEEEauthorblockN{
-Rudolf Bayer\IEEEauthorrefmark{1}, 
-Michal Brejcha\IEEEauthorrefmark{2}, 
-Zuzana Panská\IEEEauthorrefmark{1}}
+%\author{
+%\IEEEauthorblockN{
+%Rudolf Bayer\IEEEauthorrefmark{1}, 
+%Michal Brejcha\IEEEauthorrefmark{2}, 
+%Zuzana Panská\IEEEauthorrefmark{1}}
+%
+%\IEEEauthorblockA{
+%\IEEEauthorrefmark{1}CTU in Prague, Faculty of Electrical Engineering, Department of Electrical Power Engineering\\
+%Praha 6, Technická 2, 166 27\\
+%Email: bayerrud@fel.cvut.cz, pelanzuz@fel.cvut.cz\\}
+%
+%\IEEEauthorblockA{
+%\IEEEauthorrefmark{2}CTU in Prague, Faculty of Electrical Engineering, Department of Electrotechnology\\
+%Praha 6, Technická 2, 166 27\\
+%Email: brejcmic@fel.cvut.cz}
+%}
 
+\author{\IEEEauthorblockN{Rudolf Bayer, Zuzana Panská}
 \IEEEauthorblockA{
-\IEEEauthorrefmark{1}CTU in Prague, Faculty of Electrical Engineering, Department of Electrical Power Engineering\\
-Praha 6, Technická 2, 166 27\\
-Email: bayerrud@fel.cvut.cz, pelanzuz@fel.cvut.cz\\}
-
-\IEEEauthorblockA{
-\IEEEauthorrefmark{2}CTU in Prague, Faculty of Electrical Engineering, Department of Electrotechnology\\
-Praha 6, Technická 2, 166 27\\
-Email: brejcmic@fel.cvut.cz}
+Department of Electrical Power Engineering\\
+CTU in Prague, Faculty of Electrical Engineering\\
+Technická 2, Prague 6, Czech Republic\\
+%bayerrud@fel.cvut.cz, pelanzuz@fel.cvut.cz\\
 }
+\and
+\IEEEauthorblockN{Michal Brejcha}
+\IEEEauthorblockA{
+Department of Electrotechnology\\
+CTU in Prague, Faculty of Electrical Engineering\\
+Technická 2, Prague 6, Czech Republic\\
+%brejcmic@fel.cvut.cz\\
+}}
 
 \selectlanguage{english}
 % conference papers do not typically use \thanks and this command
@@ -435,7 +451,7 @@ The paper discusses a way to deploy luminaires in a model room to provide requir
 % of the abstract to achieve this. Many IEEE journals/conferences frown on
 % math in the abstract anyway.
 
-\textbf{\textit{Keywords - genetic algorithm, lighting, design, illuminance}}
+\textbf{\textit{Keywords---genetic algorithm; lighting; design; illuminance}}
 \thispagestyle{fancy}
 \let\thefootnote\relax\footnotetext{Research sponsored by SGS13/197/OHK3/3T/13}
 
