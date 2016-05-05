@@ -1,4 +1,4 @@
-\section{Design Requirements}
+\section{Design Requirements and GA Settings}
 The design results must involve all requirements given by standards. Therefore the first task is always to obtain at least the minimal level of illuminance and uniformity. It is obvious that several designs overpass the minimal values and fit the standard. Better specification and other restrictions for the results must be done. Some specifications arise from the designer's preferences. The solutions with higher efficiency are the better for example. Other examples of designer's preferences can involve:
 
 \begin{enumerate}
@@ -11,13 +11,46 @@ The design results must involve all requirements given by standards. Therefore t
 
 The result must also respect the luminaires dimensions. Proximity among luminaires can be unfeasible.
 
-The genetic algorithm can handle the requirements in two ways. First introduces the requirements as a part of the fitness function. It is the case, where the requirements are some part of the phenotype. This is very common and it can be used for example in case of target illuminance and uniformity accomplishment. Other specification fitting this method are the (i) and (v) from the list above. The usage will be described in the next section. 
+The genetic algorithm can handle the requirements in two ways. First introduces the requirements as a part of the fitness function. It is the case, where the requirements are some part of the phenotype. This is very common and it can be used for example in case of target illuminance and uniformity accomplishment. Other specification fitting this method are the (i) and (v) from the list above. The practice will be described in the next section. 
 
-Some requirements are very difficult to introduce in the fitness function. Therefore the second possible way uses the restrictions in the space of allowed solutions. Such method fits the specification (ii), (iii) and (iv) from the list above. The final algorithm processed only the solutions restricted into a defined grid. The grid was defined to respect the luminaires dimensions. Therefore the problem about proximity was solved. On the other hand the placement optimum was also restricted by the grid, which is not desirable. The authors currently try to remove this unpleasant feature of the realized algorithm. However the grid of solutions also allowed to simply define symmetry of the placement.
+Some requirements are very difficult to introduce in the fitness function. Therefore the second possible way uses the restrictions in the space of allowed solutions. Such method fits the specification (ii), (iii) and (iv) from the list above. The final algorithm processed only the solutions restricted into a defined grid. The grid was defined to respect the luminaires dimensions. Therefore the problem about proximity was solved. On the other hand the placement optimum was also restricted by the grid, which is not desirable. The authors currently try to solve this unpleasant feature of the realized algorithm. However the grid allowed to simply define symmetry of the placement.
 
 \subsection{Symmetry}
 The final algorithm solves two types of the symmetry. First type is considered towards the center. The luminaires are placed only in the half of the model room. The another half of positions is created by placing the equivalent luminaires on the other side towards the center. All luminaires are part of a pair with an identical distance from the center. It is obvious that this design of symmetry does not allow to get solutions with odd number of the luminaires. This fact had to be respected also during the design of the grid of allowed positions. The algorithm was not able to handle an odd number of intersections.
 
-The second type of the symmetry is considered towards both axis. Only quarter of the model room is placed by luminaires. Other parts are created from the first one by mirroring the positions. There is possible only to place the count of luminaires, that is product of four.
+The second type of the symmetry is considered towards both axis. Only quarter of the model room is placed by luminaires. Other parts are created from the first one by mirroring the positions. Similar to the previous case there is possible to place only the counts of luminaires that are product of four.
 
 \subsection{Genotype}
+The resulting genotype defines logic vector of luminaire presence in the specific grid intersection. The length of the chromosome depends on the number of grid intersections and on the type of the symmetry:
+\begin{equation}
+\label{eq:chromLength}
+L = \frac{N_G}{2\cdot sym}
+\end{equation}
+where:
+\begin{description}
+	\item[$N_G$] is number of grid intersections ($m\times n$ for table~\ref{tab:strucgenotype}),
+	\item[$sym$] is the chosen symmetry that is equal to 1 for center symmetry and equal to 2 for axis symmetry.
+\end{description}
+
+\begin{table}[htb]
+	\renewcommand{\arraystretch}{1.3}
+	\caption{Structure of the chromosome}
+ 	\label{tab:strucgenotype}
+	\centering
+  \begin{tabular}{| c | c | c |}
+    \hline
+    $\lbrace0,1\rbrace$ at $[x_1,y_1]$ & $\lbrace0,1\rbrace$ at $[x_2,y_1]$ & ... \\
+    \hline
+    $\lbrace0,1\rbrace$ at $[x_1,y_2]$ & ... & $\lbrace0,1\rbrace$ at $[x_m,y_n]$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+The proposed structure of genotype lets the algorithm determine needed number of luminaires. Therefore the designer is supposed to set the target values of illuminance and uniformity and specify the luminous intensity distribution curve for chosen luminaires.
+
+\subsection{Mutation}
+Mutation ensures the variability of chromosomes even if the similarity between the solutions is reached. The population chromosomes similarity is common state of the GA, because all offspring solutions are forced to converge to the best result. First attempts of GA realizations used only one type of mutation. It was based on random inversion of the luminaire presence in a chromosome. The GA worked quite well and all results met always the standard requirements. However the returned solutions had distinctly different quality for several runs.
+
+The mention mutation hardly overcame the local extremes of fitness function, that were reached in later generations. The later results were typical of identification of adequate count of luminaires, that was needed to satisfy the target illuminance. The difference in phenotypes among results from several runs was made especially by a little bit different placement of luminaires. The change of position of one luminaire is associated with two inversions of not equal elements in the above defined chromosome. One inversion just add or remove the luminaire. Therefore at least two mutation of the same chromosome had to happen to get slightly different solution in the latter generations. This hardly happened for low probabilities of mutations. On the other hand high probability of mutations increased the variation of the results and the GA slew down its convergence.
+
+To improve the GA behavior the random permutation of the chromosome was added. The mutation has two stages in the final GA. At first the inversion of the elements is made. Then up to three random pairs of elements are switched with defined probability. It was expected that the permutation helps the algorithm especially in the later generations. However the permutation has strong effect to the convergence and it is essential for solving the presented task. After adding the permutation, the results had very similar quality. They were also superior in comparison to results with simple mutation in most of the runs. And the speed of convergence was increased and the solution finding lasted less count of generations.
