@@ -146,7 +146,7 @@ stenaJ.N = mstn.Nx*mstn.Nz;
 stenaJ.E = 0;
 stenaJ.E0 = 0;
 stenaJ.Ep = 0;
-stenaJ.co = 0;
+stenaJ.co = 0.5;
 stenaJ.nv = [0 1 0];
 
 for idx= 1:1:mstn.Nz

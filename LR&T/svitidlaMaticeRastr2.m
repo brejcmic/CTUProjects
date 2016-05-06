@@ -222,13 +222,14 @@ pop.dna = (pop.dna > 0);
 %SMYCKA GENETICKEHO ALGORITMU
 %--------------------------------------------------------------------------
 %opakovat tolikrat, kolik je pozadovano generaci
+pop.E = zeros(pop.N, podlaha.N);
 for generace = 1:1:pop.gen
-    %vynulovani sledovanych promennych
-    pop.E = zeros(pop.N, podlaha.N);
+    %vynulovani sledovanych promennych (prvni je elita)
+    pop.E(2:end,:) = zeros((pop.N-1), podlaha.N);
 
     %----------------------------------------------------------------------
     %Vypocet osvetleni vsech bodu pro kazdeho clena populace
-    for clen = 1:1:pop.N
+    for clen = 2:1:pop.N
         %------------------------------------------------------------------
         %Vsechna svitidla tohoto clena populace vuci bodum mistnosti
         %------------------------------------------------------------------
@@ -594,7 +595,7 @@ for generace = 1:1:pop.gen
     %prumerna osvetlenost, kazdy radek jeden clen
     pop.Eavg = sum(pop.E, 2)./ srovina.N;
     %rovnomernost, kazdy radek jeden clen
-    pop.Uo = min(pop.E,[],2)./pop.Eavg;
+    pop.Uo = min(pop.E,[],2)./(pop.Eavg + eps);
     %oprava stredni hodnoty o udrzovaci cinitel
     pop.Eavg= target.MF .* pop.Eavg;
     %fitness
@@ -602,9 +603,9 @@ for generace = 1:1:pop.gen
     DROP = (pop.Eavg < target.Eavg) | (pop.Uo < target.Uo);
     pop.fitness = DROP .* pop.dnaDelka;
     pop.fitness = pop.fitness + not(DROP) .* sum(pop.dna, 2);
-    pop.fitness = pop.fitness + target.Uo.*target.Eavg./(pop.Uo.*pop.Eavg + 0.00001);
-    %pop.fitness = pop.fitness + target.Eavg./(pop.Eavg + 0.00001);
-    %pop.fitness = pop.fitness + target.Uo./(pop.Uo + 0.00001);
+    pop.fitness = pop.fitness + target.Uo.*target.Eavg./(pop.Uo.*pop.Eavg + eps);
+    %pop.fitness = pop.fitness + target.Eavg./(pop.Eavg + eps);
+    %pop.fitness = pop.fitness + target.Uo./(pop.Uo + eps);
     
     %----------------------------------------------------------------------
     %Generovani nove populace
@@ -617,8 +618,9 @@ for generace = 1:1:pop.gen
     
     %ulozeni nejlepsi hodnoty fitness funkce
     vysl.fitness(generace)= pop.fitness(elita.idx);
-    %tento clen nebude mutovat
+    %tento clen nebude mutovat (zachranena elita)
     pop.dnaPotomku(1,:) = pop.dna(elita.idx,:);
+    pop.E(1,:) = pop.E(elita.idx,:);%neni treba pocitat
     %tento clen muze mutovat
     pop.dnaPotomku(2,:) = pop.dna(elita.idx,:);
     %----------------------------------------------------------------------
@@ -680,10 +682,10 @@ end
 %--------------------------------------------------------------------------
 %Zobrazeni vysledku
 %--------------------------------------------------------------------------
-vysl.E = pop.E(elita.idx,:);
+vysl.E = pop.E(1,:);
 vysl.E_MAX = max(vysl.E);
 vysl.E_MIN = min(vysl.E);
-vysl.E_AVG = sum(pop.E, 2)./ srovina.N;
+vysl.E_AVG = sum(vysl.E, 2)./ srovina.N;
 figure(1)
 vysl.ME = vec2mat(vysl.E,mstn.Nx);
 surf(mstn.bx,mstn.by,vysl.ME);
@@ -693,7 +695,7 @@ zlabel('E (lx)');
 
 figure(2)
 
-vysl.dna = pop.dna(1, :);
+vysl.dna = pop.dna(1,:);
 vysl.sx = svt.x;
 vysl.sy = svt.y;
 vysl.sz = svt.z;
@@ -724,3 +726,4 @@ grid on;
 %Ulozeni vysledku
 str = sprintf('_V%d%d%d_S%d.mat', svt.vax(1), svt.vax(2), svt.vax(3), pop.sym);
 save(['Vysledky/' filenameinput ID str], 'vysl', 'pop', 'target', 'svt', 'mstn', 'srovina', 'stenaJ', 'stenaS', 'stenaV', 'stenaZ', 'strop')
+
