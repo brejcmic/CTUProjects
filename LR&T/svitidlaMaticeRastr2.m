@@ -15,7 +15,7 @@ gain = 5.4;
 %symetrie rozmisteni, je DNA zrcadlove rozkopirovano pro druhou polovinu
 %souradnic.
 %Typ symetrie: 0 = stredova, 1 = osova
-pop.sym = 0;
+pop.sym = 1;
 %Krizeni: jednobodove (udat pravdepodobnost)
                 pop.kriz = 0.9;
 %Mutace (pomerna hodnota):
