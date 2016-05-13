@@ -6,7 +6,7 @@ close;
 %Vstupem je krivka svitivosti v soubooru csv. Gain udava nasobek vsech
 %hodnot v krivce svitivosti.
 filenameinput = 'MSTR_SLB_4x18W_5G4';
-ID = '_Fit2';
+ID = '_Per3';
 gain = 5.4;
 %Reseni rozmisteni svetel pomoci genetickeho algoritmu. Algorytmus vklada
 %svitidla do rovnomerneho rastru.
@@ -659,6 +659,7 @@ for generace = 1:1:pop.gen
     %----------------------------------------------------------------------
     %Permutace
     %----------------------------------------------------------------------
+    %% 
     for idx = 1:1:3 %mozne az 3 permutace
         per= ceil(pop.dnaDelka*rand(pop.N,2)/pop.permut + eps);
         for clen = 2:1:pop.N
@@ -670,6 +671,7 @@ for generace = 1:1:pop.gen
             end
         end
     end
+    %% 
     %----------------------------------------------------------------------
     %NOVA GENERACE
     %----------------------------------------------------------------------
