@@ -1,2 +1,27 @@
 \section{Fitness Function}
-The fitness function is the essential part of the GA that assess the solutions. The target solutions are on the extreme value of the fitness and it does not matter if it is maximum or minimum. There are no rule for its range of values and only simple recommendations for its creation. The target value of average maintained illuminance and the target value of uniformity are watched in the algorithm. The design is most effective when the target values are reached with minimum count of luminaires. Therefore the minimalization of the luminaires count is also expected.
+The fitness function is the essential part of the GA that assess the solutions. The target solutions lie on the extreme value of the fitness and it does not matter if it is maximum or minimum. There are no rule for its range of values and only simple recommendations for its creation. The target value of average maintained illuminance and the target value of uniformity are watched in the algorithm. The output design is the most effective and the cheapest after the target values are reached with minimum count of luminaires. Therefore the minimalization of the luminaires count is also expected.
+
+First attempt to create suitable fitness function was based on the idea, that the least count of luminaries was got for the exact target value of illuminace. The fitness function had two parts defined as follows:
+
+\begin{equation}
+\label{eq:fitV1}
+f\left(\overline{E}_{m}, U_0\right) = g_1\left(\overline{E}_{m}\right) + g_2\left(U_0\right)
+\end{equation}
+
+\begin{equation}
+\label{eq:fitV1G1}
+	g_1\left(\overline{E}_{m}\right)=
+	\begin{cases} 
+		e^{\frac{\overline{E}_{m}-\overline{E}_{mT}}{\overline{E}_{m}}} & \left\langle 0, \overline{E}_{mT}\right\rangle\\
+		e^{\frac{\overline{E}_{mT}-\overline{E}_{m}}{\overline{E}_{m}}} & \left( \overline{E}_{mT}, \infty\right)
+	\end{cases}
+\end{equation}
+
+\begin{equation}
+%\label{eq:fitV1G2}
+	g_2\left(U_0\right)=
+	\begin{cases} 
+		\frac{U_0}{2\cdot U_{0T}} & \left\langle 0, U_{0T}\right\rangle\\
+		1-\frac{e^{\frac{U_{0T}-U_0}{U_{0T}}}}{2} & \left( U_{0T}, \infty\right)
+	\end{cases}
+\end{equation}
