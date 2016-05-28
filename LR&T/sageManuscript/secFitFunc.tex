@@ -47,7 +47,7 @@ The exponential function were used in both parts. Each part could reach maximum 
 
 The Function~\ref{eq:fitV1G1} respected the requirements for uniformity and it was linear until it reached the target value. Then the exponential function created the saturation effect.
 
-According to designed fitness function, the algorithm was supposed to reach the target value of illuminance with the highest possible uniformity. However only the restriction of getting exact value of the illuminance was not sufficient to get least count of luminaires. The demand of maximum uniformity favored solutions with little bit more luminaires. Although this fact could be fixed by adding weight multiplier to one of the function \ref{eq:fitV1G1} or \ref{eq:fitV1G2}, the function did not seem to be further suitable for the algorithm and optimization. Especially it could hardly include any preferences from designer and the calculation of exponential function were time consuming.
+According to designed fitness function, the algorithm was supposed to reach the target value of illuminance with the highest possible uniformity. However only the restriction of getting exact value of the illuminance was not sufficient to get least count of luminaires. The demand of maximum uniformity favored solutions with little bit more luminaires. Although this fact could be fixed by adding weight multiplier to one of the part given by Equation~\ref{eq:fitV1G1} or \ref{eq:fitV1G2}, the function did not seem to be further suitable for the algorithm and optimization. Especially it could hardly include any preferences from designer and the calculations of exponential functions were time consuming.
 
 \begin{figure}[htb]
   \centering
@@ -63,7 +63,7 @@ The fitness function bellow is currently used in the algorithm. Solutions that d
 	f\left(C,\overline{E}_{m}, U_0\right)= L
 \end{equation}
 
-Otherwise the fitness is evaluated by:
+\noindent Otherwise the fitness is evaluated by:
 
 \begin{equation}
 \label{eq:fitV2EUB}
