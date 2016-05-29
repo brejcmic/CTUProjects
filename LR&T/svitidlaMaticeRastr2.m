@@ -6,7 +6,7 @@ close;
 %Vstupem je krivka svitivosti v soubooru csv. Gain udava nasobek vsech
 %hodnot v krivce svitivosti.
 filenameinput = 'MSTR_SLB_4x18W_5G4';
-ID = '_pokus';
+ID = '_Per3';
 gain = 5.4;
 %Reseni rozmisteni svetel pomoci genetickeho algoritmu. Algorytmus vklada
 %svitidla do rovnomerneho rastru.
@@ -15,13 +15,17 @@ gain = 5.4;
 %symetrie rozmisteni, je DNA zrcadlove rozkopirovano pro druhou polovinu
 %souradnic.
 %Typ symetrie: 0 = stredova, 1 = osova
-pop.sym = 0;
+pop.sym = 1;
 %Krizeni: jednobodove (udat pravdepodobnost)
                 pop.kriz = 0.9;
 %Mutace (pomerna hodnota):
-                pop.mut = 0.04;
+                pop.mut = 0.01;
+%Pravdepodobnost nejmene 1 permutace z 3 moznych (pomerna hodnota):
+                pop.permut = 0.05;
+                pop.permut = 1 - (1 - pop.permut)^(1/3);
+                pop.permut = sqrt(pop.permut);%viz vypocet, je tam and!!
 %Pocet generací:
-                pop.gen = 40;
+                pop.gen = 25;
 %Velikost populace:
                 pop.N = 100;
 %Pocet jedincu v turnaji:
@@ -63,7 +67,7 @@ pop.sym = 0;
 %--------------------------------------------------------------------------
 %Fenotyp - cilove paramety
 %Prumerna hladina osvetlenosti:
-                target.Eavg = 530;
+                target.Eavg = 500;
 %Rovnomernost:
                 target.Uo = 0.6;
 %Udrzovaci cinitel:
@@ -218,13 +222,14 @@ pop.dna = (pop.dna > 0);
 %SMYCKA GENETICKEHO ALGORITMU
 %--------------------------------------------------------------------------
 %opakovat tolikrat, kolik je pozadovano generaci
+pop.E = zeros(pop.N, podlaha.N);
 for generace = 1:1:pop.gen
-    %vynulovani sledovanych promennych
-    pop.E = zeros(pop.N, podlaha.N);
+    %vynulovani sledovanych promennych (prvni je elita)
+    pop.E(2:end,:) = zeros((pop.N-1), podlaha.N);
 
     %----------------------------------------------------------------------
     %Vypocet osvetleni vsech bodu pro kazdeho clena populace
-    for clen = 1:1:pop.N
+    for clen = 2:1:pop.N
         %------------------------------------------------------------------
         %Vsechna svitidla tohoto clena populace vuci bodum mistnosti
         %------------------------------------------------------------------
@@ -590,15 +595,17 @@ for generace = 1:1:pop.gen
     %prumerna osvetlenost, kazdy radek jeden clen
     pop.Eavg = sum(pop.E, 2)./ srovina.N;
     %rovnomernost, kazdy radek jeden clen
-    pop.Uo = min(pop.E,[],2)./pop.Eavg;
+    pop.Uo = min(pop.E,[],2)./(pop.Eavg + eps);
     %oprava stredni hodnoty o udrzovaci cinitel
     pop.Eavg= target.MF .* pop.Eavg;
     %fitness
     pop.fitness = zeros(pop.N, 1);
-    pop.fitness = 2.*(pop.Eavg < target.Eavg);
-    pop.fitness = pop.fitness + (pop.Uo < target.Uo);
-    pop.fitness = pop.fitness .* pop.dnaDelka;
-    pop.fitness = pop.fitness + sum(pop.dna, 2);
+    DROP = (pop.Eavg < target.Eavg) | (pop.Uo < target.Uo);
+    pop.fitness = DROP .* pop.dnaDelka;
+    pop.fitness = pop.fitness + not(DROP) .* sum(pop.dna, 2);
+    pop.fitness = pop.fitness + target.Uo.*target.Eavg./(pop.Uo.*pop.Eavg + eps);
+    %pop.fitness = pop.fitness + target.Eavg./(pop.Eavg + eps);
+    %pop.fitness = pop.fitness + target.Uo./(pop.Uo + eps);
     
     %----------------------------------------------------------------------
     %Generovani nove populace
@@ -611,8 +618,9 @@ for generace = 1:1:pop.gen
     
     %ulozeni nejlepsi hodnoty fitness funkce
     vysl.fitness(generace)= pop.fitness(elita.idx);
-    %tento clen nebude mutovat
+    %tento clen nebude mutovat (zachranena elita)
     pop.dnaPotomku(1,:) = pop.dna(elita.idx,:);
+    pop.E(1,:) = pop.E(elita.idx,:);%neni treba pocitat
     %tento clen muze mutovat
     pop.dnaPotomku(2,:) = pop.dna(elita.idx,:);
     %----------------------------------------------------------------------
@@ -648,7 +656,22 @@ for generace = 1:1:pop.gen
 
     %zmena hodnoty
     pop.dnaPotomku(2:end, :) = xor(pop.dnaPotomku(2:end, :), mut);
-
+    %----------------------------------------------------------------------
+    %Permutace
+    %----------------------------------------------------------------------
+    %% 
+    for idx = 1:1:3 %mozne az 3 permutace
+        per= ceil(pop.dnaDelka*rand(pop.N,2)/pop.permut + eps);
+        for clen = 2:1:pop.N
+            %zde permutace jen za splneni podminky
+            if ((per(clen, 1) <= pop.dnaDelka) && (per(clen, 2) <= pop.dnaDelka)) 
+                mut = pop.dnaPotomku(clen,(per(clen, 1)));
+                pop.dnaPotomku(clen,(per(clen, 1))) = pop.dnaPotomku(clen,(per(clen, 2)));
+                pop.dnaPotomku(clen,(per(clen, 2))) = mut;
+            end
+        end
+    end
+    %% 
     %----------------------------------------------------------------------
     %NOVA GENERACE
     %----------------------------------------------------------------------
@@ -661,10 +684,10 @@ end
 %--------------------------------------------------------------------------
 %Zobrazeni vysledku
 %--------------------------------------------------------------------------
-vysl.E = pop.E(elita.idx,:);
+vysl.E = pop.E(1,:);
 vysl.E_MAX = max(vysl.E);
 vysl.E_MIN = min(vysl.E);
-vysl.E_AVG = sum(pop.E, 2)./ srovina.N;
+vysl.E_AVG = sum(vysl.E, 2)./ srovina.N;
 figure(1)
 vysl.ME = vec2mat(vysl.E,mstn.Nx);
 surf(mstn.bx,mstn.by,vysl.ME);
@@ -674,7 +697,7 @@ zlabel('E (lx)');
 
 figure(2)
 
-vysl.dna = pop.dna(elita.idx, :);
+vysl.dna = pop.dna(1,:);
 vysl.sx = svt.x;
 vysl.sy = svt.y;
 vysl.sz = svt.z;
@@ -705,3 +728,4 @@ grid on;
 %Ulozeni vysledku
 str = sprintf('_V%d%d%d_S%d.mat', svt.vax(1), svt.vax(2), svt.vax(3), pop.sym);
 save(['Vysledky/' filenameinput ID str], 'vysl', 'pop', 'target', 'svt', 'mstn', 'srovina', 'stenaJ', 'stenaS', 'stenaV', 'stenaZ', 'strop')
+

@@ -53,6 +53,7 @@
 !*.xls
 !*.rtf
 !*.pptx
+!*.ppt
 !*.odp
 !*.csv
 
