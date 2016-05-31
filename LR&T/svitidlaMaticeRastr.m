@@ -150,7 +150,7 @@ stenaJ.N = mstn.Nx*mstn.Nz;
 stenaJ.E = 0;
 stenaJ.E0 = 0;
 stenaJ.Ep = 0;
-stenaJ.co = 0;
+stenaJ.co = 0.5;
 stenaJ.nv = [0 1 0];
 
 for idx= 1:1:mstn.Nz
@@ -221,13 +221,14 @@ pop.dna = (pop.dna > 0);
 %SMYCKA GENETICKEHO ALGORITMU
 %--------------------------------------------------------------------------
 %opakovat tolikrat, kolik je pozadovano generaci
+pop.E = zeros(pop.N, podlaha.N);
 for generace = 1:1:pop.gen
-    %vynulovani sledovanych promennych
-    pop.E = zeros(pop.N, podlaha.N);
+    %vynulovani sledovanych promennych (prvni je elita)
+    pop.E(2:end,:) = zeros((pop.N-1), podlaha.N);
 
     %----------------------------------------------------------------------
     %Vypocet osvetleni vsech bodu pro kazdeho clena populace
-    for clen = 1:1:pop.N
+    for clen = 2:1:pop.N
         %------------------------------------------------------------------
         %Vsechna svitidla tohoto clena populace vuci bodum mistnosti
         %------------------------------------------------------------------
@@ -593,18 +594,15 @@ for generace = 1:1:pop.gen
     %prumerna osvetlenost, kazdy radek jeden clen
     pop.Eavg = sum(pop.E, 2)./ srovina.N;
     %rovnomernost, kazdy radek jeden clen
-    pop.Uo = min(pop.E,[],2)./pop.Eavg;
+    pop.Uo = min(pop.E,[],2)./(pop.Eavg + eps);
     %oprava stredni hodnoty o udrzovaci cinitel
     pop.Eavg= target.MF .* pop.Eavg;
     %fitness
     pop.fitness = zeros(pop.N, 1);
-    pop.fitness = exp((target.Eavg - pop.Eavg)./pop.Eavg).*(pop.Eavg > target.Eavg);
-    pop.fitness = pop.fitness + exp((pop.Eavg - target.Eavg)./pop.Eavg).*(pop.Eavg <= target.Eavg);
+    pop.fitness = exp((target.Eavg - pop.Eavg)./(pop.Eavg + eps)).*(pop.Eavg > target.Eavg);
+    pop.fitness = pop.fitness + exp((pop.Eavg - target.Eavg)./(pop.Eavg + eps)).*(pop.Eavg <= target.Eavg);
     pop.fitness = pop.fitness + (1 - 0.5*exp((target.Uo-pop.Uo)./ target.Uo)).*(pop.Uo > target.Uo);
     pop.fitness = pop.fitness + (0.5*pop.Uo./ target.Uo).*(pop.Uo <= target.Uo);
-
-    %pravdepodobnost vyberu
-    pop.pravdep = pop.fitness./ sum(pop.fitness, 1);
     
     %----------------------------------------------------------------------
     %Generovani nove populace
@@ -613,12 +611,13 @@ for generace = 1:1:pop.gen
     %----------------------------------------------------------------------
     %ELITISMUS - vyber nejlepsiho clena populace na prvni misto
     %----------------------------------------------------------------------
-    [~, elita.idx]= max(pop.pravdep);
+    [~, elita.idx]= max(pop.fitness);
     
     %ulozeni nejlepsi hodnoty fitness funkce
     vysl.fitness(generace)= pop.fitness(elita.idx);
-    %tento clen nebude mutovat
+    %tento clen nebude mutovat (zachranena elita)
     pop.dnaPotomku(1,:) = pop.dna(elita.idx,:);
+    pop.E(1,:) = pop.E(elita.idx,:);%neni treba pocitat
     %tento clen muze mutovat
     pop.dnaPotomku(2,:) = pop.dna(elita.idx,:);
     %----------------------------------------------------------------------
@@ -627,11 +626,11 @@ for generace = 1:1:pop.gen
     for clen = 3:2:pop.N
         %Vyber potomku na zaklade souteze mezi nekolika nahodnymi
         idx = ceil(pop.N*rand(1,pop.N_turnament)+eps);
-        [rodicA.p, rodicA.idx]= max(pop.pravdep(idx));
+        [rodicA.p, rodicA.idx]= max(pop.fitness(idx));
         rodicA.idx = idx(rodicA.idx);
 
         idx = ceil(pop.N*rand(1,pop.N_turnament)+eps);
-        [rodicB.p, rodicB.idx]= max(pop.pravdep(idx));
+        [rodicB.p, rodicB.idx]= max(pop.fitness(idx));
         rodicB.idx = idx(rodicB.idx);
 
         %Krizeni - podle indexu a dle pravdepodobnosti krizeni
@@ -680,10 +679,10 @@ end
 %--------------------------------------------------------------------------
 %Zobrazeni vysledku
 %--------------------------------------------------------------------------
-vysl.E = pop.E(elita.idx,:);
+vysl.E = pop.E(1,:);
 vysl.E_MAX = max(vysl.E);
 vysl.E_MIN = min(vysl.E);
-vysl.E_AVG = sum(pop.E, 2)./ srovina.N;
+vysl.E_AVG = sum(vysl.E, 2)./ srovina.N;
 figure(1)
 vysl.ME = vec2mat(vysl.E,mstn.Nx);
 surf(mstn.bx,mstn.by,vysl.ME);
@@ -693,7 +692,7 @@ zlabel('E (lx)');
 
 figure(2)
 
-vysl.dna = pop.dna(1, :);
+vysl.dna = pop.dna(1,:);
 vysl.sx = svt.x;
 vysl.sy = svt.y;
 vysl.sz = svt.z;

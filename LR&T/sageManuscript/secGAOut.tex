@@ -1,0 +1,48 @@
+\section{GA Outputs}
+Some of the done tests are presented in this section. If it is not otherwise stated, all tests run under conditions defined in the section "Settings" with previously specified "Model Room". The central symmetry was preferred because there was greater freedom for luminaire placement. Onlz the fitness function (\ref{eq:fitV2EUB}) was used. There was not preferred any target value in most of the tests therefore the preferences factor $\alpha$ was set to $0.5$.
+
+\subsection{Settings}
+
+All GA settings are summarized in the Table~\ref{tab:GAsettings}. All tests ended after reaching 25\textsuperscript{th} generation. The best solution from each generation was saved in two specimens. The first one was not able to mutate and it only took the best chromosome from previous to the next generation. This method is called "Elitism". The second one was able to mutate with defined probabilities and its purpose was to try a little change in the best chromosome.
+
+Other parent solutions for the recombination and mutation were taken by tournament selection. One tournament made random group of four solutions and took the one with the best fitness (minimum). This method avoided a premature convergence of the best solution. It was desirable to let the diversity among solutions at least in early populations. The crossovers were made only in one point and its probability was set to~$90 \%$.
+
+\begin{table}[htb]
+	\renewcommand{\arraystretch}{1.3}
+	\caption{Genetic Algorithm Settings}
+ 	\label{tab:GAsettings}
+	\centering
+  \begin{tabular}{| l | c |}
+    \hline
+    \textbf{First Population} & Random logic vectors \\
+    \hline
+    \textbf{Termination Cond.} & Defined count of generations \\
+    \hline
+		\textbf{Count of Gen.} & $25$ \\
+    \hline
+		\textbf{Population Size} & $100$ \\
+	\hline
+		\textbf{Parent Selec.} & Tournament 1 of 4 \\
+    \hline
+		\textbf{Survival Selec.} & Elitism \\
+	\hline
+		\textbf{Recombination Type} & One point \\
+    \hline
+		\textbf{Recombination Prop.} & $90 \%$ \\
+	\hline
+		\textbf{Mutation Method} & Bit inversion \& Permutation\\
+	\hline
+		\textbf{Mutation Prop.} & $1 \%$ \\
+	\hline
+		& $5 \% \left( per \geq 1\right)$\\
+		\textbf{Permutation Prop.} &  $0.08 \% \left( per \geq 2\right)$ \\
+		&$0.0005 \% \left( per = 3\right)$\\
+    \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Symmetry Comparison}
+
+\subsection{Different Preferences}
+
+\subsection{No Reflection from South Wall}

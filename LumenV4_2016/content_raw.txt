@@ -1,0 +1,11 @@
+INTRO
+Man gets 80 to 90 % of information about the surroundings through the eyes. How objects affect luminous flux constitutes what we call the object's appearance. Most light-active surfaces around us are secondary light sources. Light emitted from primary light sources (sun, artificial light sources), hits a surface, changes its properties, is reflected and thus transmits information about the nature of the object's surface. The photometric properties of material surfaces are especially important in the design and construction of light-active surfaces in terms of reflected light flux spatial distribution , eg. to reduce brightness in certain directions while maintaining maximum efficiency of the arrangement.
+
+OPTE-F3K
+Measuring reflective properties of surface materials may be carried out using a reflectometer. The Department of Electrical Power Engineering owns an OPTE-F3K reflectophotometer (Fig. 1). This device requires a Bruel & Kjaer Type 1100 luminance contrast meter with an external photosensor to measure reflective properties of material surfaces. The sensor is fixed in the reflectophotometer, its output connected to the contrast meter and the analog luminance output voltage fed back to the reflectophotometer (Fig. XXX).
+
+
+
+REFERENCES
+Technical Review: Luminance Contract Measurement [online]. Denmark, 1980, 1980(1) [cit. 2016-05-29]. ISSN 0007-2621. Dostupné z: http://www.bksv.com/doc/bn1681.pdf
+
