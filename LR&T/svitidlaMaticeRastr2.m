@@ -6,7 +6,7 @@ close;
 %Vstupem je krivka svitivosti v soubooru csv. Gain udava nasobek vsech
 %hodnot v krivce svitivosti.
 filenameinput = 'MSTR_SLB_4x18W_5G4';
-ID = '_Fit2';
+ID = '_Fit2_U';
 gain = 5.4;
 %Reseni rozmisteni svetel pomoci genetickeho algoritmu. Algorytmus vklada
 %svitidla do rovnomerneho rastru.
@@ -73,8 +73,9 @@ pop.sym = 0;
 %Udrzovaci cinitel:
                 target.MF = 0.75;
 %Preferencni koeficient:
-                target.r = 1;
-                target.a = 1/(1+target.r^2);
+                %target.r = 1;
+                %target.a = 1/(1+target.r^2);
+                target.a = 1;
 %%
 %--------------------------------------------------------------------------
 %GENEROVANI RASTRU SVITIDEL
@@ -664,13 +665,19 @@ for generace = 1:1:pop.gen
     %----------------------------------------------------------------------
     %% 
     for idx = 1:1:3 %mozne az 3 permutace
-        per= ceil(pop.dnaDelka*rand(pop.N,2)/pop.permut + eps);
+        per= rand(pop.N,1);
         for clen = 2:1:pop.N
             %zde permutace jen za splneni podminky
-            if ((per(clen, 1) <= pop.dnaDelka) && (per(clen, 2) <= pop.dnaDelka)) 
-                mut = pop.dnaPotomku(clen,(per(clen, 1)));
-                pop.dnaPotomku(clen,(per(clen, 1))) = pop.dnaPotomku(clen,(per(clen, 2)));
-                pop.dnaPotomku(clen,(per(clen, 2))) = mut;
+            if (per(clen) <= pop.permut)
+                if((sum(pop.dnaPotomku(clen,:)) > 0) && (sum(~pop.dnaPotomku(clen,:)) > 0))
+                    ONE = find(pop.dnaPotomku(clen,:));
+                    ZER = find(~pop.dnaPotomku(clen,:));
+                    i1 = ceil(length(ONE)*rand(1,1) + eps);
+                    i0 = ceil(length(ZER)*rand(1,1) + eps);
+                    mut = pop.dnaPotomku(clen,ONE(i1));
+                    pop.dnaPotomku(clen,ONE(i1)) = pop.dnaPotomku(clen,ZER(i0));
+                    pop.dnaPotomku(clen,ZER(i0)) = mut;
+                end
             end
         end
     end
