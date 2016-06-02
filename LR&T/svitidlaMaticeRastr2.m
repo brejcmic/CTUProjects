@@ -6,7 +6,7 @@ close;
 %Vstupem je krivka svitivosti v soubooru csv. Gain udava nasobek vsech
 %hodnot v krivce svitivosti.
 filenameinput = 'MSTR_SLB_4x18W_5G4';
-ID = '_Per3';
+ID = '_Fit2_U';
 gain = 5.4;
 %Reseni rozmisteni svetel pomoci genetickeho algoritmu. Algorytmus vklada
 %svitidla do rovnomerneho rastru.
@@ -15,13 +15,13 @@ gain = 5.4;
 %symetrie rozmisteni, je DNA zrcadlove rozkopirovano pro druhou polovinu
 %souradnic.
 %Typ symetrie: 0 = stredova, 1 = osova
-pop.sym = 1;
+pop.sym = 0;
 %Krizeni: jednobodove (udat pravdepodobnost)
                 pop.kriz = 0.9;
 %Mutace (pomerna hodnota):
                 pop.mut = 0.01;
 %Pravdepodobnost nejmene 1 permutace z 3 moznych (pomerna hodnota):
-                pop.permut = 0.05;
+                pop.permut = 0.1;
                 pop.permut = 1 - (1 - pop.permut)^(1/3);
                 pop.permut = sqrt(pop.permut);%viz vypocet, je tam and!!
 %Pocet generací:
@@ -72,6 +72,10 @@ pop.sym = 1;
                 target.Uo = 0.6;
 %Udrzovaci cinitel:
                 target.MF = 0.75;
+%Preferencni koeficient:
+                %target.r = 1;
+                %target.a = 1/(1+target.r^2);
+                target.a = 1;
 %%
 %--------------------------------------------------------------------------
 %GENEROVANI RASTRU SVITIDEL
@@ -603,9 +607,9 @@ for generace = 1:1:pop.gen
     DROP = (pop.Eavg < target.Eavg) | (pop.Uo < target.Uo);
     pop.fitness = DROP .* pop.dnaDelka;
     pop.fitness = pop.fitness + not(DROP) .* sum(pop.dna, 2);
-    pop.fitness = pop.fitness + target.Uo.*target.Eavg./(pop.Uo.*pop.Eavg + eps);
-    %pop.fitness = pop.fitness + target.Eavg./(pop.Eavg + eps);
-    %pop.fitness = pop.fitness + target.Uo./(pop.Uo + eps);
+    %pop.fitness = pop.fitness + target.Uo.*target.Eavg./(pop.Uo.*pop.Eavg + eps);
+    pop.fitness = pop.fitness + (1-target.a).*target.Eavg./(pop.Eavg + eps);
+    pop.fitness = pop.fitness + target.a.*target.Uo./(pop.Uo + eps);
     
     %----------------------------------------------------------------------
     %Generovani nove populace
@@ -661,13 +665,19 @@ for generace = 1:1:pop.gen
     %----------------------------------------------------------------------
     %% 
     for idx = 1:1:3 %mozne az 3 permutace
-        per= ceil(pop.dnaDelka*rand(pop.N,2)/pop.permut + eps);
+        per= rand(pop.N,1);
         for clen = 2:1:pop.N
             %zde permutace jen za splneni podminky
-            if ((per(clen, 1) <= pop.dnaDelka) && (per(clen, 2) <= pop.dnaDelka)) 
-                mut = pop.dnaPotomku(clen,(per(clen, 1)));
-                pop.dnaPotomku(clen,(per(clen, 1))) = pop.dnaPotomku(clen,(per(clen, 2)));
-                pop.dnaPotomku(clen,(per(clen, 2))) = mut;
+            if (per(clen) <= pop.permut)
+                if((sum(pop.dnaPotomku(clen,:)) > 0) && (sum(~pop.dnaPotomku(clen,:)) > 0))
+                    ONE = find(pop.dnaPotomku(clen,:));
+                    ZER = find(~pop.dnaPotomku(clen,:));
+                    i1 = ceil(length(ONE)*rand(1,1) + eps);
+                    i0 = ceil(length(ZER)*rand(1,1) + eps);
+                    mut = pop.dnaPotomku(clen,ONE(i1));
+                    pop.dnaPotomku(clen,ONE(i1)) = pop.dnaPotomku(clen,ZER(i0));
+                    pop.dnaPotomku(clen,ZER(i0)) = mut;
+                end
             end
         end
     end
