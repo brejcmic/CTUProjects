@@ -6,7 +6,7 @@ close;
 %Vstupem je krivka svitivosti v soubooru csv. Gain udava nasobek vsech
 %hodnot v krivce svitivosti.
 filenameinput = 'MSTR_SLB_4x18W_5G4';
-ID = '_Fit2_U';
+ID = '_Fit2_NoSWall';
 gain = 5.4;
 %Reseni rozmisteni svetel pomoci genetickeho algoritmu. Algorytmus vklada
 %svitidla do rovnomerneho rastru.
@@ -15,7 +15,7 @@ gain = 5.4;
 %symetrie rozmisteni, je DNA zrcadlove rozkopirovano pro druhou polovinu
 %souradnic.
 %Typ symetrie: 0 = stredova, 1 = osova
-pop.sym = 0;
+pop.sym = 1;
 %Krizeni: jednobodove (udat pravdepodobnost)
                 pop.kriz = 0.9;
 %Mutace (pomerna hodnota):
@@ -73,9 +73,9 @@ pop.sym = 0;
 %Udrzovaci cinitel:
                 target.MF = 0.75;
 %Preferencni koeficient:
-                %target.r = 1;
-                %target.a = 1/(1+target.r^2);
-                target.a = 1;
+                target.r = 1;
+                target.a = 1/(1+target.r^2);
+                %target.a = 0;
 %%
 %--------------------------------------------------------------------------
 %GENEROVANI RASTRU SVITIDEL
@@ -156,6 +156,7 @@ stenaJ.E = 0;
 stenaJ.E0 = 0;
 stenaJ.Ep = 0;
 stenaJ.co = 0.5;
+%stenaJ.co = 0;
 stenaJ.nv = [0 1 0];
 
 for idx= 1:1:mstn.Nz

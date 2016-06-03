@@ -20,7 +20,7 @@ pop.sym = 0;
 %Mutace (pomerna hodnota):
                 pop.mut = 0.01;
 %Pravdepodobnost nejmene 1 permutace z 3 moznych (pomerna hodnota):
-                pop.permut = 0.05;
+                pop.permut = 0.1;
                 pop.permut = 1 - (1 - pop.permut)^(1/3);
                 pop.permut = sqrt(pop.permut);%viz vypocet, je tam and!!
 %Pocet generací:
@@ -657,13 +657,19 @@ for generace = 1:1:pop.gen
     %Permutace
     %----------------------------------------------------------------------
     for idx = 1:1:3 %mozne az 3 permutace
-        per= ceil(pop.dnaDelka*rand(pop.N,2)/pop.permut + eps);
+        per= rand(pop.N,1);
         for clen = 2:1:pop.N
             %zde permutace jen za splneni podminky
-            if ((per(clen, 1) <= pop.dnaDelka) && (per(clen, 2) <= pop.dnaDelka)) 
-                mut = pop.dnaPotomku(clen,(per(clen, 1)));
-                pop.dnaPotomku(clen,(per(clen, 1))) = pop.dnaPotomku(clen,(per(clen, 2)));
-                pop.dnaPotomku(clen,(per(clen, 2))) = mut;
+            if (per(clen) <= pop.permut)
+                if((sum(pop.dnaPotomku(clen,:)) > 0) && (sum(~pop.dnaPotomku(clen,:)) > 0))
+                    ONE = find(pop.dnaPotomku(clen,:));
+                    ZER = find(~pop.dnaPotomku(clen,:));
+                    i1 = ceil(length(ONE)*rand(1,1) + eps);
+                    i0 = ceil(length(ZER)*rand(1,1) + eps);
+                    mut = pop.dnaPotomku(clen,ONE(i1));
+                    pop.dnaPotomku(clen,ONE(i1)) = pop.dnaPotomku(clen,ZER(i0));
+                    pop.dnaPotomku(clen,ZER(i0)) = mut;
+                end
             end
         end
     end
