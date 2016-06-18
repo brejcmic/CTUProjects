@@ -50,7 +50,7 @@ Both symmetries have the same count of luminaires and very close resulting value
 The rotational symmetry luminaire placement in Figure~\ref{fig:V010_S0} seems to be X shaped. That was very common during the tests. The target ratio R was set to 1 in the presented outputs. However the resulting ratio is about 0.8 in both cases of symmetry. It means that the increase of uniformity was cheaper than the increase of average illuminance. This phenomenon is dependent on the shape of the luminous intensity distribution curve. For other curves the resulting ratio would be different.
 
 \begin{table}[tb]
-	\renewcommand{\arraystretch}{1.8}
+	\renewcommand{\arraystretch}{1.3}
 	\caption{Results for symmetry comparison}
  	\label{tab:symmetry}
 	\centering
@@ -68,14 +68,12 @@ The rotational symmetry luminaire placement in Figure~\ref{fig:V010_S0} seems to
   \hline
   \end{tabular}
 \end{table}
-
 \begin{figure}[tb]
   \centering
   \includegraphics[width=\columnwidth]{MSTR_SLB_4x18W_5G4_Fit2_V010_S0}
   \caption{Luminaires placement with rotational symmetry}
   \label{fig:V010_S0}
 \end{figure}
-
 \begin{figure}[tb]
   \centering
   \includegraphics[width=\columnwidth]{../Vysledky/MSTR_SLB_4x18W_5G4_Fit2_V010_S1}
@@ -88,7 +86,7 @@ The rotational symmetry luminaire placement in Figure~\ref{fig:V010_S0} seems to
 Results for different preference settings, i.e. preferring illuminance or preferring uniformity,can be found in Figures~\ref{fig:V010_S1_E}, \ref{fig:V010_S1_U} respectively and in Table~\ref{tab:preferences}. These results show that the parameter not being preferred was stuck at its minimal allowed value in both cases. The placement design for $\alpha = 0$ is more compressed around the longitudinal axis of the room (Figure~\ref{fig:V010_S1_E}). There is a narrow area with high illuminace that increases the resulting average illuminance. The results for $\alpha = 1$ are very similar to the results with no preferences in Figure~\ref{fig:V010_S1} and Table~\ref{tab:symmetry}. This was common to the presented type of luminous intensity distribution curve. However after comparing all three ratios R it can be seen, that the highest ratio has been obtained in the case of preferred illuminance and the lowest in the case of preferred uniformity.
 
 \begin{table}[tb]
-	\renewcommand{\arraystretch}{1.8}
+	\renewcommand{\arraystretch}{1.3}
 	\caption{Results for different preferences}
  	\label{tab:preferences}
 	\centering
@@ -106,14 +104,12 @@ Results for different preference settings, i.e. preferring illuminance or prefer
   \hline
   \end{tabular}
 \end{table}
-
 \begin{figure}[tb]
   \centering
   \includegraphics[width=\columnwidth]{../Vysledky/MSTR_SLB_4x18W_5G4_Fit2_E_V010_S1}
   \caption{Luminaires placement with prefered illuminance}
   \label{fig:V010_S1_E}
 \end{figure}
-
 \begin{figure}[tb]
   \centering
   \includegraphics[width=\columnwidth]{../Vysledky/MSTR_SLB_4x18W_5G4_Fit2_U_V010_S1}
@@ -126,7 +122,7 @@ Results for different preference settings, i.e. preferring illuminance or prefer
 The behavior of the GA results without calculating reflections has been tested too. The design without reflections is shown in Figure~\ref{fig:V010_S1_NoRef}. Results when reflections only of the south wall have been disabled are shown in Figure~\ref{fig:V010_S1_NoSWall}. The resulting watched values are presented in Table~\ref{tab:noRef}. The number of luminaires C is higher in these cases in comparison to the number of luminaires of the equivalent case with calculated reflections for all walls in Figure~\ref{fig:V010_S1} and Table~\ref{tab:symmetry}. It is common that the luminaires are placed closer to walls that are darker (walls not reflecting light). Luminaire distances were even smaller from the south wall compared to results of preferred uniformity. Asymmetric illuminace for symmetric luminaire placement can be seen in Figure~\ref{fig:V010_S1_NoSWall}. Both cases show that the design is clearly affected by the usage of reflections. Therefore they cannot be omitted from the algorithm.
 
 \begin{table}[tb]
-	\renewcommand{\arraystretch}{1.8}
+	\renewcommand{\arraystretch}{1.3}
 	\caption{Results for missing reflections from any wall}
  	\label{tab:noRef}
 	\centering
@@ -144,14 +140,12 @@ The behavior of the GA results without calculating reflections has been tested t
   \hline
   \end{tabular}
 \end{table}
-
 \begin{figure}[tb]
   \centering
   \includegraphics[width=\columnwidth]{../Vysledky/MSTR_SLB_4x18W_5G4_Fit2_NoRef_V010_S1}
   \caption{Luminaires placement without reflections from the walls and ceiling}
   \label{fig:V010_S1_NoRef}
 \end{figure}
-
 \begin{figure}[tb]
   \centering
   \includegraphics[width=\columnwidth]{../Vysledky/MSTR_SLB_4x18W_5G4_Fit2_NoSWall_V010_S1}
