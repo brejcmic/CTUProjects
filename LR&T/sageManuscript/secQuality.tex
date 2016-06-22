@@ -54,7 +54,7 @@ Luminous intensity curves can be found in Eulumdat files of luminaires to enable
   \label{fig:cgamma}
 \end{figure}
 
-To bring simulation results closer to real conditions, interaction of light and surfaces has to be included into calculations the most affecting the light scene in this project being light reflection. In case of the model room light active surfaces are walls, ceiling and floor becoming after light impact secondary light sources. Using the finite element method, surfaces of the model room are divided into smaller facets each becoming a point light source illuminating other facets leading to multiple reflections (Figure~\ref{fig:difRefl}). During each light reflection a portion of incident luminous flux is absorbed by the surface defined by reflectance value $\rho$. After several reflections the reflected luminous flux becomes negligible.
+To bring simulation results closer to real conditions, interaction of light and surfaces has to be included into calculations the most affecting the light scene in this project being light reflection. In case of the model room light active surfaces are walls, ceiling and floor, becoming after light impact secondary light sources. Using the finite element method, surfaces of the model room are divided into smaller facets each becoming a point light source illuminating other facets leading to multiple reflections (Figure~\ref{fig:difRefl}). During each light reflection a portion of incident luminous flux is absorbed by the surface defined by reflectance value $\rho$. After several reflections the reflected luminous flux becomes negligible.
 
 \begin{figure}[htb]
   \centering
@@ -63,7 +63,7 @@ To bring simulation results closer to real conditions, interaction of light and 
   \label{fig:difRefl}
 \end{figure}
 
-Most common indoor wall and ceiling surfaces exhibit near Lambertian (diffuse) reflectance. The spacial luminous intensity distribution of purely Lambertian surfaces is dependent only on luminous intensity $I_{0}$ in direction $\gamma=0^{\circ}$ and on angle~$\gamma$ between the facet's normal~$N_{\rho}$ and the observed direction of the outgoing light ray (Equation~\ref{eq:Igamma}). For simplification reasons all surfaces including the floor of the model room exhibit purely diffuse reflection. Such surfaces become secondary light sources of luminous intensity in direction $\gamma=0^{\circ}$ according to \cite{Habel}:
+Most common indoor wall and ceiling surfaces exhibit near Lambertian (diffuse) reflectance. The spacial luminous intensity distribution of purely Lambertian surfaces is dependent only on luminous intensity $I_{0}$ in direction $\gamma=0^{\circ}$ and on angle~$\gamma$ between the facet's normal~$N_{\rho}$ and the observed direction of the outgoing light ray (Equation~\ref{eq:Igamma}). For simplification reasons it has been chosen that all surfaces, including the floor of the model room, will exhibit purely diffuse reflection. Such surfaces become secondary light sources of luminous intensity in direction $\gamma=0^{\circ}$ according to \cite{Habel}:
 
 \begin{equation}
 I_{0}=\frac{\rho \cdot E \cdot dA}{\pi} \quad \mathrm{(cd;-,lx,m^{2})}
