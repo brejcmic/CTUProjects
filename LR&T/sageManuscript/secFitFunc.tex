@@ -35,11 +35,18 @@ f\left(C, \overline{E}_{m}, U_0\right)&=C +\\
 $\alpha$ represents the designer's intention to prefer one of the parameter to another. The target ratio between relative values of the parameters can be obtained from partial derivation of the fitness function:
 
 \begin{equation}
-\label{eq:fitV2ratio}
-R =\frac{\overline{E}_{m}}{\overline{E}_{mT}}\cdot\frac{U_{0T}}{U_0}=\sqrt{\frac{1-\alpha}{\alpha}}
+\label{eq:fitV2targetRatio}
+R_T =\sqrt{\frac{1-\alpha}{\alpha}}
 \end{equation}
 
-\noindent There is no preference if $\alpha$ is equal to $0.5$. Only illuminance is considered for $\alpha = 0$ and only uniformity is considered for $\alpha = 1$.
+\noindent There is no preference if $\alpha$ is equal to $0.5$. Only illuminance is considered for $\alpha = 0$ and only uniformity is considered for $\alpha = 1$. The real resulting ratio $R$ is affected by the difficulty of parameters change. Consider the case where the illuminance is preferred ($R_T > 1$), but its value could not be change to much by different luminaire placement. Then the uniformity is optimized and the ratio:
+
+\begin{equation}
+\label{eq:fitV2ratio}
+R =\frac{\overline{E}_{m}}{\overline{E}_{mT}}\cdot\frac{U_{0T}}{U_0}
+\end{equation}
+
+\noindent might even reach a value less than~$1$. 
 
 This fitness function is supposed to be minimized, i.e. the smaller the output of the fitness function, the higher the quality of the solution. Equation \ref{eq:fitV2EUB} can be, if close to the target values of illuminance and uniformity, separated into an integer part, given only by the count of luminaires $h_1\left(C\right)= C$ and a fraction part that is given by:
 
