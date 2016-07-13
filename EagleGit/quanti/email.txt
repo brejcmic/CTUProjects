@@ -1,0 +1,6 @@
+Aktualni dps v priloze.
+
+Potrebujeme udelat to same pro tyto ic:
+ICM-20600,
+ ICM-20602,
+https://www.invensense.com/products/mod-1600/
