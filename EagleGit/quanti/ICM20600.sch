@@ -7960,7 +7960,7 @@ Source: www.kingbright.com</description>
 </class>
 </classes>
 <parts>
-<part name="IO1" library="gyro" deviceset="ICM20600" device=""/>
+<part name="IO1" library="gyro" deviceset="ICM20600" device="" value="ICM2600"/>
 <part name="U1" library="con-hirose" deviceset="MICRO-USB-SHIELD-" device="ZX62R-B-5P"/>
 <part name="H1" library="holes" deviceset="MOUNT-PAD-ROUND" device="3.2"/>
 <part name="H2" library="holes" deviceset="MOUNT-PAD-ROUND" device="3.2"/>
