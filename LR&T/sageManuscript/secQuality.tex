@@ -1,15 +1,15 @@
 \section{Lighting System Quality Evaluation}
 %Výpočet mnohonásobných odrazů, algoritmus - odrazy
-Evaluating the model room's lighting system quality in terms of standard \v{C}SN EN 12464-1\cite{12464} requires observing four parameters. As mentioned in the previous section only average maintained illuminance $\overline{E}_{m}$ (Equation~\ref{eq:em}) and uniformity $U_{0}$ (Equation~\ref{eq:u0}) will be calculated in this project, both obtained from illuminances of the working plane.
+Evaluating the model room's lighting system quality in terms of standard \v{C}SN EN 12464-1\cite{12464} requires the observation of four parameters. As mentioned in the previous section only average maintained illuminance $\overline{E}_{m}$ (Equation~\ref{eq:em}) and uniformity $U_{0}$ (Equation~\ref{eq:u0}) will be calculated in this project, both obtained from illuminances of the reference plane.
 
 \begin{equation}
 \overline{E}_{m}=\frac{\sum_{i=1}^N E_{i}}{N} \cdot MF \quad \mathrm{(lx;lx,-)}
 \label{eq:em}
 \end{equation}
 
-where:
+\noindent where:
 \begin{description}
-	\item[$E_{i}$] is the measured/calculated illuminance in a defined point of the working plane,
+	\item[$E_{i}$] is the measured/calculated illuminance in a defined point of the reference plane,
 	\item[$MF$] is the maintenance factor.
 \end{description}
 
@@ -18,20 +18,20 @@ U_{0}=\frac{E_{min}\cdot MF}{\overline{E}_{m}} \quad \mathrm{(-;lx,lx)}
 \label{eq:u0}
 \end{equation}
 
-where:
+\noindent where:
 \begin{description}
-	\item[$E_{min}$] is the minimum illuminance of the working plane,
-	\item[$\overline{E}_{m}$] is the average maintained illuminance of the working plane.
+	\item[$E_{min}$] is the minimum illuminance of the reference plane,
+	\item[$\overline{E}_{m}$] is the average maintained illuminance of the reference plane.
 \end{description}
 
-Illuminances are acquired by measurements or calculations in defined points of working planes chosen in accordance to the purpose of the indoor space~\cite{12464}. Calculating illuminance in a given point of the working plane requires summing up all partial contributions of illuminances from light sources illuminating this point. Illuminance can be obtained from luminous intensity of the light source in direction pointing towards the measurement point $P$ of plane $\rho$ (Figure\ref{fig:osv}):
+Illuminances are acquired by measurements or calculations in defined points of reference planes chosen in accordance to the purpose of the indoor space~\cite{12464}. Calculating illuminance in a given point of the reference plane requires summing up all partial contributions of illuminances from light sources illuminating this point. Illuminance can be obtained from the luminous intensity of the light source in direction pointing towards the measurement point~$P$ of plane~$\rho$ (Figure\ref{fig:osv}):
 
 \begin{equation}
 E_{P\rho}=\sum_{i} \frac{I_{C \gamma i} \cdot \cos{\beta_{i}}}{{l_{i}}^{2}} \quad \mathrm{(lx;cd,-,m^{2})}
 \label{eq:illSum}
 \end{equation}
 
-where:
+\noindent where:
 \begin{description}
 	\item[$I_{C \gamma i}$] is the luminous intensity of the light source pointing towards point P of plane $\rho$, i.e. luminous intensity in plane C at angle $\gamma$ ($C-\gamma$ angular coordinate system),
 	\item[$\beta_{i}$] is the angle between the normal of plane $\rho$ and the light ray from light source $S_{i}$,
@@ -50,20 +50,20 @@ Luminous intensity curves can be found in Eulumdat files of luminaires to enable
 \begin{figure}[htb]
   \centering
   \includegraphics[width=150pt]{Cgama}
-  \caption{$C-\gamma$ polar coordinate system with luminaire in center.}
+  \caption{$C-\gamma$ polar coordinate system with luminaire in center}
   \label{fig:cgamma}
 \end{figure}
 
-To bring simulation results closer to real conditions, interaction of light and surfaces has to be included into calculations the most affecting the light scene in this project being light reflection. In case of the model room light active surfaces are walls, ceiling and floor, becoming after light impact secondary light sources. Using the finite element method, surfaces of the model room are divided into smaller facets each becoming a point light source illuminating other facets leading to multiple reflections (Figure~\ref{fig:difRefl}). During each light reflection a portion of incident luminous flux is absorbed by the surface defined by reflectance value $\rho$. After several reflections the reflected luminous flux becomes negligible.
+To bring simulation results closer to real conditions, interaction of light and surfaces has to be included into calculations. Due to the model room's geometric configuration, light reflection affects the light scene the most in this project. Walls, ceiling and floor are becoming secondary light sources after light impact. Using the finite element method, surfaces of the model room are divided into smaller facets each becoming a point light source illuminating other facets leading to multiple reflections (Figure~\ref{fig:difRefl}). During each light reflection a portion of incident luminous flux is absorbed by the surface defined by reflectance value $\rho$. After several reflections the reflected luminous flux becomes negligible.
 
 \begin{figure}[htb]
   \centering
   \includegraphics[width=136pt]{diffuseReflection}
-  \caption{Multiple reflections between planes $\rho1$ and $\rho2$ with Lambertian reflectance.}
+  \caption{Multiple reflections between planes $\rho1$ and $\rho2$ with Lambertian reflectance}
   \label{fig:difRefl}
 \end{figure}
 
-Most common indoor wall and ceiling surfaces exhibit near Lambertian (diffuse) reflectance. The spacial luminous intensity distribution of purely Lambertian surfaces is dependent only on luminous intensity $I_{0}$ in direction $\gamma=0^{\circ}$ and on angle~$\gamma$ between the facet's normal~$N_{\rho}$ and the observed direction of the outgoing light ray (Equation~\ref{eq:Igamma}). For simplification reasons it has been chosen that all surfaces, including the floor of the model room, will exhibit purely diffuse reflection. Such surfaces become secondary light sources of luminous intensity in direction $\gamma=0^{\circ}$ according to \cite{Habel}:
+Most common indoor wall and ceiling surfaces exhibit near Lambertian (diffuse) reflectance. The spacial luminous intensity distribution of purely Lambertian surfaces is dependent only on the referential luminous intensity $I_{0}$ and on angle~$\gamma$ between the surface's normal and the observed direction of the outgoing light ray (Equation~\ref{eq:Igamma}). $I_{0}$ is the luminous intensity of a surface into direction $\gamma=0^{\circ}$, i.e. the surface's normal ($I_{P_{1}0}$ for surface $\rho_1$ and $I_{P_{2}0}$ for surface $\rho_2$ in Figure~\ref{fig:difRefl}). For simplification reasons all surfaces have been chosen to exhibit purely diffuse reflection, including the floor of the model room. Such surfaces become secondary light sources of luminous intensity in direction $\gamma=0^{\circ}$ according to \cite{Habel}:
 
 \begin{equation}
 I_{0}=\frac{\rho \cdot E \cdot dA}{\pi} \quad \mathrm{(cd;-,lx,m^{2})}
@@ -72,11 +72,13 @@ I_{0}=\frac{\rho \cdot E \cdot dA}{\pi} \quad \mathrm{(cd;-,lx,m^{2})}
 
 where:
 \begin{description}
-	\item[$I_{0}$] is the luminous intensity of the facet in direction of the facet's normal,
+	\item[$I_{0}$] is the referential luminous intensity of the facet in direction of the facet's normal,
 	\item[$\rho$] is the facet's integral reflectance,
 	\item[$E$] is the facet's illuminance,
 	\item[$dA$] is the facet's area.
 \end{description}
+
+It must be noted, that luminous intensity is defined only for point light sources. The larger the facet's area $dA$, the lower the calculation accuracy~\cite{handbook}.
 
 After obtaining $I_{0}$, the luminous intensity curve of a facet of Lambertian reflectance will be:
 
@@ -88,11 +90,11 @@ I_{\gamma}=I_{0} \cdot \cos(\gamma) \quad \mathrm{(cd;cd,-)}
 where:
 \begin{description}
 	\item[$I_{\gamma}$] is the luminous intensity in direction $\gamma$,
-	\item[$I_{0}$] is the luminous intensity in direction of facet's normal,
-	\item[$\gamma$] is the angle between the facet's normal and the required direction.
+%	\item[$I_{0}$] is the luminous intensity in direction of facet's normal,
+%	\item[$\gamma$] is the angle between the facet's normal and the required direction.
 \end{description}
 
-Calculating resulting luminous intensities $I_{0}$ of all available facets of the model room becoming secondary light sources after light impact is achieved in several passes depending on the required amount of reflections. During a pass for each facet light flux cast from all light sources and facets onto this facet is calculated. Every following pass facets' luminous intensities from the previous pass are used.
+Calculating resulting luminous intensities $I_{0}$ of all available facets of the model room becoming secondary light sources after light impact is achieved in several passes depending on the required amount of reflections. For each facet of the model room light flux cast by primary light sources and the remaining facets is calculated during a single pass. The newly obtained values can than be used later for another pass or for the final reference plane illuminance calculations.
 
 %\begin{itemize}
 %	\item Primary light sources emit light incident on visible facets (direct illumination). Initial illuminance $E_{0\rho}$ of facet $\rho$ is obtained by summing up all partial illuminances from all primary light sources (Equation~\ref{eq:illSum}).
