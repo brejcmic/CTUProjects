@@ -1,0 +1,45 @@
+<Qucs Schematic 0.0.18>
+<Properties>
+  <View=0,96,1354,1089,1,0,0>
+  <Grid=10,10,0>
+  <DataSet=sim1.dat>
+  <DataDisplay=sim1.sch>
+  <OpenDisplay=1>
+  <Script=sim1.m>
+  <RunScript=0>
+  <showFrame=0>
+  <FrameText0=Název>
+  <FrameText1=Nakresleno:>
+  <FrameText2=Datum:>
+  <FrameText3=Verze:>
+</Properties>
+<Symbol>
+  <.ID -20 -16 SUB>
+  <Line -20 20 40 0 #000080 2 1>
+  <Line 20 20 0 -40 #000080 2 1>
+  <Line -20 -20 40 0 #000080 2 1>
+  <Line -20 20 0 -40 #000080 2 1>
+</Symbol>
+<Components>
+</Components>
+<Wires>
+</Wires>
+<Diagrams>
+  <Rect 740 489 487 373 3 #c0c0c0 1 00 0 1.38 0.005 1.4 1 -0.698151 0.2 0.698151 1 -1 0.2 1 315 0 225 "t(s)" "" "">
+	<"I1.It" #0000ff 0 3 0 0 0>
+	<"I2.It" #ff0000 0 3 0 0 0>
+	<"I3.It" #ff00ff 0 3 0 0 0>
+  </Rect>
+  <Rect 120 489 487 373 3 #c0c0c0 1 00 0 1.38 0.005 1.4 1 -12 5 12 1 -1 0.2 1 315 0 225 "t (s)" "" "">
+	<"U1.Vt" #0000ff 0 3 0 0 0>
+	<"U2.Vt" #ff0000 0 3 0 0 0>
+	<"U3.Vt" #ff00ff 0 3 0 0 0>
+  </Rect>
+  <Rect 120 919 487 373 3 #c0c0c0 1 00 0 1.38 0.005 1.4 1 -12 5 12 1 -1 0.2 1 315 0 225 "t (s)" "" "">
+	<"UR.Vt" #0000ff 0 3 0 0 0>
+	<"US.Vt" #ff0000 0 3 0 0 0>
+	<"UT.Vt" #ff00ff 0 3 0 0 0>
+  </Rect>
+</Diagrams>
+<Paintings>
+</Paintings>

@@ -7,6 +7,11 @@
 #permited files
 #--------------------------------------
 
+#qucs
+!*.data
+!*.dpl
+!*.sch
+
 #pdf files
 !*.pdf
 
@@ -19,6 +24,7 @@
 
 #figures
 !*.png
+!*.jpg
 !*.svg
 
 #PROFICAD

@@ -9,11 +9,163 @@
   \end{frame}
 
 \subsection{\texorpdfstring{Vysokofrekvenèní rušení}{Vysokofrekvencni ruseni}}
+
+%------------------------------------------------------------------------------
   \begin{frame}
-    \frametitle{Elektromagnetická kompatibilita}
+    \frametitle{Vlastnosti pasivních souèástek na vysokıch frekvencích}
+    
+    \begin{center}
+		\begin{tabular}{c c}
+			\begin{tabular}{l}\includegraphics[width=0.50\linewidth]{nahrSch.png}\end{tabular} &
+			\begin{tabular}{l}\parbox{0.35\linewidth}
+			{
+			a) Rezistor nebo cívka\\
+			b) Kondenzátor
+			}
+			\end{tabular}
+		\end{tabular}
+	\end{center}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Typická závislost impedance do 1 MHz}
+    
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.90\linewidth]{impedance.png}
+		\end{tabular}
+	\end{center}
+  \end{frame}
+  
+  \begin{frame}
+    \frametitle{Typická závislost impedance nad 1 MHz}
+    
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.90\linewidth]{impedance2.png}
+		\end{tabular}
+	\end{center}
+  \end{frame}
+  
+  \begin{frame}
+    \frametitle{Rezistory rùznıch hodnot}
+    
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.90\linewidth]{faze.png}
+		\end{tabular}
+	\end{center}
+  \end{frame}
+  
+    \begin{frame}
+    \frametitle{Kondenzátory rùznıch hodnot}
+    
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.90\linewidth]{faze2.png}
+		\end{tabular}
+	\end{center}
+  \end{frame}
+
+%------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Rozvrení DPS - Pøíklad}
+    
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.60\linewidth]{dps_propojeni2.png}
+		\end{tabular}
+	\end{center}
+  \end{frame}
+  
+  \begin{frame}
+    \frametitle{Rozvrení DPS - Pøíklad TOP = Rychlé signály}
+    
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.53\linewidth]{dps_top.png}
+		\end{tabular}
+	\end{center}
+  \end{frame}
+  
+  \begin{frame}
+    \frametitle{Rozvrení DPS - Pøíklad IN2 = GND}
+    
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.53\linewidth]{dps_in2.png}
+		\end{tabular}
+	\end{center}
+  \end{frame}
+  
+  \begin{frame}
+    \frametitle{Rozvrení DPS - Pøíklad IN3 = Napájeni}
+    
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.53\linewidth]{dps_in3.png}
+		\end{tabular}
+	\end{center}
+  \end{frame}
+  
+  \begin{frame}
+    \frametitle{Rozvrení DPS - Pøíklad BOT = Pomalé signály}
+    
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.53\linewidth]{dps_bot.png}
+		\end{tabular}
+	\end{center}
   \end{frame}
 
 \subsection{\texorpdfstring{Elektrické filtry}{Elektricke filtry}}
   \begin{frame}
-    \frametitle{Elektromagnetická kompatibilita}
+    \frametitle{Elektrické filtry}
+    
+    Návrh:
+        \begin{itemize}
+			\item obvykle pro frekvence nad 150 kHz
+			\item úèinnost filtru znaènì závisí na vstupní (zdroj) a vıstupní (zátì) impedanci
+			\item úèinnost je posuzována dle vloného útlumu
+			\item pouíváme návrhovı software nebo tabulky dle pro daná toleranèní pásma
+			
+		\end{itemize}
+  \end{frame}
+  
+  \begin{frame}
+    \frametitle{Vlonı útlum}
+
+			\begin{equation}
+			U_{Z1}= U_S \cdot \frac{Z_Z}{Z_Z+Z_S} 
+			\end{equation}
+			
+			\begin{equation}
+			U_{Z2}= U_S \cdot \frac{Z_Z}{Z_Z+Z_S+Z_F} 
+			\end{equation}
+	Vlonı útlum:
+			\begin{equation}
+			A_{UF}= 20 \cdot log\left( \frac{Z_Z+Z_S+Z_F}{Z_Z+Z_S}\right) 
+			\end{equation}
+  \end{frame}
+  
+  \begin{frame}
+    \frametitle{Síové filtry}
+
+	Odlišnosti:
+        \begin{itemize}
+			\item zpracovávají relativnì velké pracovní proudy
+			\item pracují na nízkém napìtí = nároky na bezpeènost
+			\item impedance sítì pøípadnì zátìe v daném frekvenèním pásmu není obvykle známá
+			\item podle ÈSN CISPR 17 je útlum filtru mìøen pro zakonèovací impedance $50\Omega$ nebo $75\Omega$ (Standardní metoda)
+		\end{itemize}
+  \end{frame}
+  
+  \begin{frame}
+    \frametitle{Kompenzovaná tlumivka - Common-Mode Choke}
+
+        \begin{itemize}
+			\item není pøesycována pracovním proudem
+			\item hodnota indukènosti mùe bıt velmi vysoká (mnoho závitù)
+			\item potlaèuje pouze souhlasnou sloku rušení
+		\end{itemize}
   \end{frame}
