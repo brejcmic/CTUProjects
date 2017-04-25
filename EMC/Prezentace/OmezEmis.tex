@@ -5,7 +5,14 @@
 
 \subsection{\texorpdfstring{Nízkofrekvenèní rušení}{Nizkofrekvencni ruseni}}
   \begin{frame}
-    \frametitle{Neharmonické prùbìhy}
+    \frametitle{Nízkofrekvenèní rušení}
+		
+		Vlastnosti:
+		\begin{itemize}
+			\item Mají nízkou frekvenci – omezené použití pasivních filtrù
+			\item Zpùsobeny pøedevším proudy usmìròovaèù
+		\end{itemize}
+
   \end{frame}
 
 \subsection{\texorpdfstring{Vysokofrekvenèní rušení}{Vysokofrekvencni ruseni}}
@@ -24,7 +31,7 @@
 			}
 			\end{tabular}
 		\end{tabular}
-	\end{center}
+		\end{center}
   \end{frame}
 
   \begin{frame}
@@ -34,7 +41,7 @@
 		\begin{tabular}{c}
 			\includegraphics[width=0.90\linewidth]{impedance.png}
 		\end{tabular}
-	\end{center}
+		\end{center}
   \end{frame}
   
   \begin{frame}
@@ -44,7 +51,7 @@
 		\begin{tabular}{c}
 			\includegraphics[width=0.90\linewidth]{impedanceR.png}
 		\end{tabular}
-	\end{center}
+		\end{center}
   \end{frame}
   
   \begin{frame}
@@ -54,7 +61,7 @@
 		\begin{tabular}{c}
 			\includegraphics[width=0.90\linewidth]{impedanceC.png}
 		\end{tabular}
-	\end{center}
+		\end{center}
   \end{frame}
 	
 	\begin{frame}
@@ -64,7 +71,45 @@
 		\begin{tabular}{c}
 			\includegraphics[width=0.90\linewidth]{impedanceCP.png}
 		\end{tabular}
-	\end{center}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Blokovací kondenzátory}
+    
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.750\linewidth]{blok_kond.png}\\
+		\end{tabular}
+		\end{center}
+		
+		\begin{itemize}
+			\item Vlastní indukènost pøímého vodièe: $L_V \approx 1$ nH/mm
+			\item S rostoucí vzdáleností $b$ a klesající vzdáleností $a$ klesá vzájemná indukènost mezi prokovy a tím i výsledná celková indukènost.
+		\end{itemize}	
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Odhad indukènosti prokovù}
+    
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.750\linewidth]{IndSousedVod.png}\\
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Zpìtné proudy}
+    \begin{itemize}
+			\item nevhodné a vhodné odboèení více vodièù
+			\item prokovy umístìné blízko sebe vytváøejí mezeru ve vodivé cestì
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.750\linewidth]{mezera.png}\\
+		\end{tabular}
+		\end{center}
   \end{frame}
 
 %------------------------------------------------------------------------------
