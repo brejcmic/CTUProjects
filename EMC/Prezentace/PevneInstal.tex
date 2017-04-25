@@ -50,6 +50,102 @@
     \frametitle{Pøipojování filtrù}
   \end{frame}
 	
+	\begin{frame}
+    \frametitle{Vyzaøování}
+    \begin{itemize}
+			\item Materiálové konstanty: $\mu_0 = 4\pi \cdot 10^{-12}$ H/m, $\epsilon_0 = 8,85 \cdot 10^{-12}$ F/m
+			\item Hustota výkonu: $W = \frac{1}{2} \cdot E\times H = \frac{1}{2} \cdot \frac{E^2}{Z} = \frac{1}{2} \cdot Z\cdot H^2$
+			\item Vlnová impedance: $Z= \sqrt{\frac{j\omega \mu}{\sigma + j\omega\epsilon}}$
+			\item Pro vzduch: $Z= \sqrt{\frac{\mu_0}{\epsilon_0}}$
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c l}
+		\includegraphics[width=0.45\linewidth]{EM_vlna.png}
+		\end{tabular}
+		\end{center}
+		
+  \end{frame}
+	
   \begin{frame}
     \frametitle{Stínìní}
+		
+		\begin{itemize}
+			\item lze definovat jako lokalizaci elmag. pole v ohranièeném prostoru
+			\item úèelem je odstranit z okolí citlivého zaøízení rušivé pole
+			\item stínìný prostor je ohranièen mechanickým krytem
+			\item souèástí jsou i filtry a oddìlovací obvody pro potlaèení rušení z procházejících vodièù
+			\item podle rušivého elmag. pole na které je stínìní úèinné dìlíme stínìní:
+			
+			\begin{itemize}
+				\item elektrostatické
+				\item magnetostatické
+				\item elektromagnetické
+			\end{itemize}
+		\end{itemize}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Stínìní}
+    
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.90\linewidth]{stineni.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Stínìní}
+		\small{
+    Na vysokých frekvencích roste hodnota $Z_M$:
+		
+		\begin{equation}
+			Z_{M}= \sqrt{\frac{j\omega \mu}{\sigma + j\omega\epsilon}}\approx\sqrt{\frac{j\omega \mu}{\sigma}}
+		\end{equation}
+			
+		Absorpèní útlum nabývá na významu - požadujeme nízkou hodnotu hloubky vniku: $\delta= \frac{2\cdot\sigma}{\omega\mu}$
+		}
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.75\linewidth]{tab_hlVniku.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Otvory ve stínìní}
+		Dùvody:
+		\begin{itemize}
+			\item montážní, vìtrání, prùhledy
+			\item prùchodky pro kabely
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c c}
+			\includegraphics[width=0.35\linewidth]{stineniOtvor.png} &
+			\includegraphics[width=0.35\linewidth]{stineniPapez.png}
+		\end{tabular}
+		\end{center}
+		\begin{itemize}
+			\item víøivé proudy procházející stìnami krytu by mìly procházet i spojem, spojitì po jeho délce
+			\item existence oblastí spoje, které nejsou vodivì propojeny vede ke snížení úèinnosti krytu
+		\end{itemize}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Otvory ve stínìní}
+		Pro útlum štìrbiny lze psát:
+		\begin{equation}
+			b (dB)= 20\cdot log\left(\frac{\lambda}{2\cdot l}\right)
+		\end{equation}
+		
+		\begin{itemize}
+			\item mnoho šroubových spojù umístìných blízko sebe
+			\item kvalitní spojení nejèastìji zajištìno pružnými kontaktními lištami:
+		\end{itemize}
+		
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.75\linewidth]{stineniLamely.png}
+		\end{tabular}
+		\end{center}
   \end{frame}
