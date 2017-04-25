@@ -4,42 +4,111 @@
 \section{\texorpdfstring{Pevné instalace}{Pevne instalace}}
 
   \begin{frame}
-    \frametitle{Vliv harmonickıch sloek na zaøízení}
+    \frametitle{Kompenzace harmonickıch proudù}
+		\begin{center}
+		\begin{tabular}{c c}
+			\includegraphics[width=0.4\linewidth]{filt_pas.png} &
+			\includegraphics[width=0.25\linewidth]{filt_akt.png}
+		\end{tabular}
+		\end{center}
+		
+		\begin{itemize}
+			\item \textbf{Pasivní filtry}
+			\begin{itemize}
+			\item ladìné sekce filtrù pro danou harmonickou sloku
+			\item vytváøejí uzel s nízkou impedancí pro danou frekvenci
+			\end{itemize}
+			\item \textbf{Aktivní filtry - AHC (velmi populární)}
+			\begin{itemize}
+			\item vıkonovı tranzistorovı PWM mìniè
+			\item pomocí PWM doplòuje filtr ($I_F$) odebírané harmonické ($I_H$) a jalové ($I_J$) sloky proudu zátìe ($I_Z$)
+			\item mùe kompenzovat také nesymetrii odbìru proudu
+			\end{itemize}
+		\end{itemize}
   \end{frame}
 %------------------------------------------------------------------------------	
-  \begin{frame}
-    \frametitle{Napìová a proudová nesymetrie 3f soustavy}
-  \end{frame}
-  
-  \begin{frame}
-    \frametitle{Symetrizaèní Steinmetzùv obvod}
-  \end{frame}
-  
-  \begin{frame}
-    \frametitle{Symetrizaèní obvod - Pøíklad}
-    \begin{center}
-		\begin{tabular}{c c}
-			\includegraphics[width=0.45\linewidth]{sym_obv.png} &
-			\includegraphics[width=0.46\linewidth]{sym_Vst.png}
+	\begin{frame}
+    \frametitle{Ochrana proti pøepìtí}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.4\linewidth]{LPZ.png}
 		\end{tabular}
-	\end{center}
+		\end{center}
+		\small{
+		\begin{itemize}
+			\item \textbf{\textcolor{blue}{LPZ0}:} systém hromosvodù, jímacích tyèí, svodù a zemnìní
+			\item \textbf{\textcolor{blue}{LPZ1,2}:} prostory uvnitø budovy
+			\begin{itemize}
+			\item zóna 1 kolem hlavních rozvadìèù 
+			\item zóna 2 kolem podrunıch rozvadìèù a instalací nn
+			\end{itemize}
+		\end{itemize}
+		}
   \end{frame}
-  
   \begin{frame}
-    \frametitle{Symetrizaèní obvod - Pøíklad}
+    \frametitle{Ochrana proti pøepìtí}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.4\linewidth]{LPZ.png}
+		\end{tabular}
+		\end{center}
+		\small{
+		\begin{itemize}
+			\item \textbf{\textcolor{blue}{LPZ3}:} prostor uvnitø koncového zaøízení
+			\begin{itemize}
+			\item mimo napájecí sí nn
+			\item napø. jde o skøíò poèítaèe, telefonní aparát aj.
+			\item ochranu nelze dodateènì ovlivnit
+			\end{itemize}
+		\end{itemize}
+		}
+  \end{frame}
+	
+  \begin{frame}
+    \frametitle{Ochrana proti pøepìtí}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{slajd1.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Ochrana proti pøepìtí}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{slajd2.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Porovnání vlastností svodièù pøepìtí}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{slajd3.png}
+		\end{tabular}
+		\end{center}
+		\begin{itemize}
+			\item Varistory mají nevıhodu, e postupem èasu se u nich zvyšuje unikající proud
+			\item Je tøeba respektovat silové pùsobení velkıch proudù na vodièe - odpovídající upevnìní instalace
+		\end{itemize}
+  \end{frame}
+	
+  \begin{frame}
+    \frametitle{Zemnìní a pospojování}
+		\begin{itemize}
+			\item[A] Vyuití konstrukèního systému budov
+			\item[B] Vodivá loe strojù
+			\item[C] Propojení s hromosvodnım systémem
+			\item Vytvoøení zón podle úrovnì rušení
+			\item Paralelní zemní vodièe
+		\end{itemize}
     \begin{center}
 		\begin{tabular}{c}
-			\includegraphics[width=0.9\linewidth]{sym_Vys.png}
+			\includegraphics[width=0.4\linewidth]{zem.png}
 		\end{tabular}
-	\end{center}
-  \end{frame}
-	
-  \begin{frame}
-    \frametitle{Pøepìtí}
-  \end{frame}
-	
-  \begin{frame}
-    \frametitle{Zemnìní}
+		\end{center}
   \end{frame}
 	
 	\begin{frame}
@@ -137,7 +206,134 @@
   \end{frame}
 	
 	\begin{frame}
-    \frametitle{Vyzaøování}
+    \frametitle{Propojování labù}
+    \begin{itemize}
+			\item nepropojené nemohou plnit funkci stínìní ani zemního vodièe
+			\item	vhodné propojení je v místech, kde vedou kabely (zpìtné proudy)
+			\item nejlépe propojovat po celém obvodu labu
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.8\linewidth]{kab_zl1.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Køíení a odboèování}
+    \begin{itemize}
+			\item spoj po celém obvodu labu
+			\item	pro odboèení je moné vyuít vodivé konstrukce budovy
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.9\linewidth]{kab_zl2.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Napojení na rozvadìè}
+    \begin{itemize}
+			\item ukonèení labu pøed rozvadìèem (vlevo) - \textbf{\textcolor{red}{špatnì}}
+			\item lab se propojuje s rozvadìèovou skøíní podobnì jako pøi realizaci odboèení (vpravo)
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.8\linewidth]{kab_zl3.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Umisování kabelù na vodivé konstrukci}
+    \begin{itemize}
+			\item[A] vyuití stínícího úèinku v rozích
+			\item[B] naprosto nevhodné - malı stínící úèinek, kabel vlevo je navíc v místì s monım vıskytem vysoké elektrické intenzity
+			\item[C] vyuití stínícího úèinku støedu vodivé plochy
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.9\linewidth]{kab_zl6.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Umisování kabelù do labu}
+    \begin{itemize}
+			\item stínìnı lab
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.7\linewidth]{kab_zl4.png}
+		\end{tabular}
+		\end{center}
+		\begin{itemize}
+			\item otevøenı lab - vyuívá se stínící úèinek rohù
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.7\linewidth]{kab_zl5.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Umisování kabelù do labu}
+    \begin{itemize}
+			\item rozhodující je jejich klasifikace - obdobnì jako u zón v rozvádìèích
+			\item rùzné tøídy se oddìlují
+			\begin{enumerate}
+				\item[a)] vzdáleností
+				\item[b)] pøepákou
+			\end{enumerate}
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.9\linewidth]{kab_zl7.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Klasifikace}
+    \begin{itemize}
+			\item \textbf{\textcolor{blue}{Tøída 1:}} Kabely s proudy z velmi citlivıch nízkoúrovòovıch signálù - SENZORY, pøípadnì rychlá komunikace nad 1 MHz
+			\item \textbf{\textcolor{blue}{Tøída 2:}} Ménì citlivé signály do 1 MHz - DIGITÁlNÍ KOMUNIKACE (RS232, RS485 apod.)
+			\item \textbf{\textcolor{blue}{Tøída 3:}} Signály s nízkou úrovní vyzaøování - AC/DC NAPÁJENÍ
+			\item \textbf{\textcolor{blue}{Tøída 4:}} Silnì rušící signály - VİKONOVÉ OBVODY, pwm, komutátorové stroje apod.
+			\item Poadavek na oddìlení roste s èíslem tøídy - nutná vìtší vzdálenost nebo vlastní lab
+		\end{itemize}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Umisování kabelù do labu}
+    \begin{itemize}
+			\item sousední tøídy je moné vést jedním labem
+			\item nesousední tøídy je vhodné vést v oddìlenıch labech
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.5\linewidth]{kab_zl8.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Køíení kabelù}
+    \begin{itemize}
+			\item Je tøeba minimalizovat vazby mezi jednotlivımi tøídami
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.8\linewidth]{kab_zl9.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Stínìní - vyzaøování}
     \begin{itemize}
 			\item Materiálové konstanty: $\mu_0 = 4\pi \cdot 10^{-12}$ H/m, $\epsilon_0 = 8,85 \cdot 10^{-12}$ F/m
 			\item Hustota vıkonu: $W = \frac{1}{2} \cdot E\times H = \frac{1}{2} \cdot \frac{E^2}{Z} = \frac{1}{2} \cdot Z\cdot H^2$

@@ -7,17 +7,184 @@
   \begin{frame}
     \frametitle{Nízkofrekvenèní rušení}
 		
-		Vlastnosti:
 		\begin{itemize}
-			\item Mají nízkou frekvenci – omezené pouití pasivních filtrù
-			\item Zpùsobeny pøedevším proudy usmìròovaèù
+			\item mají nízkou frekvenci – omezené pouití pasivních filtrù
+			\item \textbf{\textcolor{blue}{harmonické proudy usmìròovaèù}}
+			\item kolísání napìtí
+			\item rázová a impulzní pøepìtí
 		\end{itemize}
-
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.5\linewidth]{povedeni.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Harmonické}
+		
+		\begin{itemize}
+			\item pøi sinusovém napájení se nepodílejí na tvorbì èinného vıkonu
+			\item zvyšují hodnotu efektivního proudu
+			\item nìkteré se projevují jako nesymetrické sloky: liché násobky 3 = netoèivá, (6n-1) zpìtná
+			\item netoèivá sloka se projevuje jako souhlasné rušení (uzavírá se pøes støední vodiè)
+		\end{itemize}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.5\linewidth]{FA_Rozklad.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Zdroje harmonickıch proudù}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{pfc0.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Korektory úèiníku - Power Factor Corection}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{pfc1.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Korektory úèiníku - Power Factor Corection}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{pfc2.png}
+		\end{tabular}
+		\end{center}
   \end{frame}
 
 \subsection{\texorpdfstring{Vysokofrekvenèní rušení}{Vysokofrekvencni ruseni}}
 
 %------------------------------------------------------------------------------
+	\begin{frame}
+    \frametitle{Vysokofrekvenèní rušení}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{vf1.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Vysokofrekvenèní rušení}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{vf2.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Galvanická vazba}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{gv1.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Galvanická vazba}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.9\linewidth]{gv2.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Galvanická vazba - minimalizace}
+		
+		\begin{itemize}
+			\item dostateènì dimenzovanı a nízkoimpedanèní zemní vodiè
+			\item neslouèené spoleèné vodièe
+		\end{itemize}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{gv3.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Zvìtšování imunity proti souhlasnému rušení}
+		
+		\begin{itemize}
+			\item Kompenzovaná tlumivka
+			\item Galvanické oddìlení obvodù transformátorem nebo optoèlenem
+			\item Diferenciální signály
+		\end{itemize}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{gv4.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Kapacitní vazba}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.9\linewidth]{kap1.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Pøíklad kapacitní vazby}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.9\linewidth]{kap2.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Omezování kapacitní vazby}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.9\linewidth]{kap3.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Induktivní vazba}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.9\linewidth]{ind1.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Omezování induktivní vazby}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.9\linewidth]{ind2.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Analıza vzájemného pùsobení soubìhu vodièù}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.9\linewidth]{ind2.png}\\
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
   \begin{frame}
     \frametitle{Vlastnosti pasivních souèástek na vysokıch frekvencích}
     
@@ -160,7 +327,7 @@
 		\begin{tabular}{c}
 			\includegraphics[width=0.53\linewidth]{dps_bot.png}
 		\end{tabular}
-	\end{center}
+		\end{center}
   \end{frame}
 
 \subsection{\texorpdfstring{Elektrické filtry}{Elektricke filtry}}
@@ -168,29 +335,17 @@
     \frametitle{Elektrické filtry}
     
     Návrh:
-        \begin{itemize}
+    \begin{itemize}
 			\item obvykle pro frekvence nad 150 kHz
 			\item úèinnost filtru znaènì závisí na vstupní (zdroj) a vıstupní (zátì) impedanci
 			\item úèinnost je posuzována dle vloného útlumu
-			\item pouíváme návrhovı software nebo tabulky dle pro daná toleranèní pásma
-			
+			\item pouíváme návrhovı software nebo tabulky pro daná toleranèní pásma - normované hodnoty
 		\end{itemize}
-  \end{frame}
-  
-  \begin{frame}
-    \frametitle{Vlonı útlum}
-
-			\begin{equation}
-			U_{Z1}= U_S \cdot \frac{Z_Z}{Z_Z+Z_S} 
-			\end{equation}
-			
-			\begin{equation}
-			U_{Z2}= U_S \cdot \frac{Z_Z}{Z_Z+Z_S+Z_F} 
-			\end{equation}
-	Vlonı útlum:
-			\begin{equation}
-			A_{UF}= 20 \cdot log\left( \frac{Z_Z+Z_S+Z_F}{Z_Z+Z_S}\right) 
-			\end{equation}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.7\linewidth]{approx.png}
+		\end{tabular}
+		\end{center}
   \end{frame}
   
   \begin{frame}
@@ -199,18 +354,35 @@
 	Odlišnosti:
         \begin{itemize}
 			\item zpracovávají relativnì velké pracovní proudy
-			\item pracují na nízkém napìtí = nároky na bezpeènost
+			\item jsou urèeny pro nn = nároky na bezpeènost
 			\item impedance sítì pøípadnì zátìe v daném frekvenèním pásmu není obvykle známá
 			\item podle ÈSN CISPR 17 je útlum filtru mìøen pro zakonèovací impedance $50\Omega$ nebo $75\Omega$ (Standardní metoda)
 		\end{itemize}
   \end{frame}
+	
+	\begin{frame}
+    \frametitle{Síové filtry}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{emis1.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
   
   \begin{frame}
-    \frametitle{Kompenzovaná tlumivka - Common-Mode Choke}
-
-        \begin{itemize}
-			\item není pøesycována pracovním proudem
-			\item hodnota indukènosti mùe bıt velmi vysoká (mnoho závitù)
-			\item potlaèuje pouze souhlasnou sloku rušení
-		\end{itemize}
+    \frametitle{Síové filtry}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{emis2.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Síové filtry}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{emis3.png}
+		\end{tabular}
+		\end{center}
   \end{frame}
