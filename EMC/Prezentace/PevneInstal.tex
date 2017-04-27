@@ -1,0 +1,535 @@
+%------------------------------------------------------------------------------
+%Pevné instalace
+%------------------------------------------------------------------------------
+\section{\texorpdfstring{Pevné instalace}{Pevne instalace}}
+
+  \begin{frame}
+    \frametitle{Kompenzace harmonickıch proudù}
+		\begin{center}
+		\begin{tabular}{c c}
+			\includegraphics[width=0.4\linewidth]{filt_pas.png} &
+			\includegraphics[width=0.25\linewidth]{filt_akt.png}
+		\end{tabular}
+		\end{center}
+		
+		\begin{itemize}
+			\item \textbf{Pasivní filtry}
+			\begin{itemize}
+			\item ladìné sekce filtrù pro danou harmonickou sloku
+			\item vytváøejí uzel s nízkou impedancí pro danou frekvenci
+			\end{itemize}
+			\item \textbf{Aktivní filtry - AHC (velmi populární)}
+			\begin{itemize}
+			\item vıkonovı tranzistorovı PWM mìniè
+			\item pomocí PWM doplòuje filtr ($I_F$) odebírané harmonické ($I_H$) a jalové ($I_J$) sloky proudu zátìe ($I_Z$)
+			\item mùe kompenzovat také nesymetrii odbìru proudu
+			\end{itemize}
+		\end{itemize}
+  \end{frame}
+%------------------------------------------------------------------------------	
+	\begin{frame}
+    \frametitle{Ochrana proti pøepìtí}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.4\linewidth]{LPZ.png}
+		\end{tabular}
+		\end{center}
+		\small{
+		\begin{itemize}
+			\item \textbf{\textcolor{blue}{LPZ0}:} systém hromosvodù, jímacích tyèí, svodù a zemnìní
+			\item \textbf{\textcolor{blue}{LPZ1,2}:} prostory uvnitø budovy
+			\begin{itemize}
+			\item zóna 1 kolem hlavních rozvadìèù 
+			\item zóna 2 kolem podrunıch rozvadìèù a instalací nn
+			\end{itemize}
+		\end{itemize}
+		}
+  \end{frame}
+  \begin{frame}
+    \frametitle{Ochrana proti pøepìtí}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.4\linewidth]{LPZ.png}
+		\end{tabular}
+		\end{center}
+		\small{
+		\begin{itemize}
+			\item \textbf{\textcolor{blue}{LPZ3}:} prostor uvnitø koncového zaøízení
+			\begin{itemize}
+			\item mimo napájecí sí nn
+			\item napø. jde o skøíò poèítaèe, telefonní aparát aj.
+			\item ochranu nelze dodateènì ovlivnit
+			\end{itemize}
+		\end{itemize}
+		}
+  \end{frame}
+	
+  \begin{frame}
+    \frametitle{Ochrana proti pøepìtí}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{slajd1.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Ochrana proti pøepìtí}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{slajd2.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Porovnání vlastností svodièù pøepìtí}
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.95\linewidth]{slajd3.png}
+		\end{tabular}
+		\end{center}
+		\begin{itemize}
+			\item Varistory mají nevıhodu, e postupem èasu se u nich zvyšuje unikající proud
+			\item Je tøeba respektovat silové pùsobení velkıch proudù na vodièe - odpovídající upevnìní instalace
+		\end{itemize}
+  \end{frame}
+	
+  \begin{frame}
+    \frametitle{Zemnìní a pospojování}
+		\begin{itemize}
+			\item[A] Vyuití konstrukèního systému budov
+			\item[B] Vodivá loe strojù
+			\item[C] Propojení s hromosvodnım systémem
+			\item Vytvoøení zón podle úrovnì rušení
+			\item Paralelní zemní vodièe
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.4\linewidth]{zem.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Volba kabelovıch tras}
+    \textbf{\textcolor{blue}{Vhodné uskupení minimalizuje smyèky}}
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.7\linewidth]{kab_rozl.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+  \begin{frame}
+    \frametitle{Volba kabelovıch tras}
+    \textbf{\textcolor{blue}{Prevence vytváøení velkıch smyèek}}
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.90\linewidth]{kab_rozv1.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Volba kabelovıch tras}
+    
+		\begin{itemize}
+			\item uspoøádání rozvaïeèù do funkèních blokù - tvorba zón (A,B,C)
+			\item oddìlení rušivıch a na rušení citlivıch zaøízení (A,B,C)
+			\item potlaèení vazeb (C)
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.90\linewidth]{kab_rozv2.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+  \begin{frame}
+    \frametitle{Montá filtrù}
+		
+		\begin{itemize}
+			\item \textbf{Nevhodná - nejsou potlaèeny vazby s okolím}
+		\end{itemize}
+		
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.60\linewidth]{kab_fil1.png}
+		\end{tabular}
+		\end{center}
+		
+		\begin{itemize}
+			\item \textbf{Vhodné provedení}
+		\end{itemize}
+		
+		\begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.80\linewidth]{kab_fil2.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Vstup kabelu do stínìní}
+    \begin{itemize}
+			\item[A] Pláš oddìluje stínící vodiè od stínìní - \textbf{\textcolor{red}{špatnì}}
+			\item[B-C] Stínící vodiè je pøipojen pøes ocásek uvnitø nebo vnì stínìní - velká indukènost, monost zataení rušení do stínìného prostoru
+			\item[D] Správné pøipojení nejlépe $360^\circ$
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c l}
+		\includegraphics[width=0.9\linewidth]{kab_vst.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Kabelové laby}
+		\textbf{\textcolor{blue}{Funkce:}}
+    \begin{itemize}
+			\item nosná
+			\item uspoøádávající
+			\item paralelní vodiè
+			\item stínící
+		\end{itemize}
+		\textbf{\textcolor{blue}{Materiál:}}
+		\begin{itemize}
+			\item kov
+			\item plast
+		\end{itemize}
+		\textbf{\textcolor{blue}{Provedení:}}
+		\begin{itemize}
+			\item otevøenı nebo uzavøenı
+			\item drátìnı, plnı nebo dìrovanı plech
+		\end{itemize}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Propojování labù}
+    \begin{itemize}
+			\item nepropojené nemohou plnit funkci stínìní ani zemního vodièe
+			\item	vhodné propojení je v místech, kde vedou kabely (zpìtné proudy)
+			\item nejlépe propojovat po celém obvodu labu
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.8\linewidth]{kab_zl1.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Køíení a odboèování}
+    \begin{itemize}
+			\item spoj po celém obvodu labu
+			\item	pro odboèení je moné vyuít vodivé konstrukce budovy
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.9\linewidth]{kab_zl2.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Napojení na rozvadìè}
+    \begin{itemize}
+			\item ukonèení labu pøed rozvadìèem (vlevo) - \textbf{\textcolor{red}{špatnì}}
+			\item lab se propojuje s rozvadìèovou skøíní podobnì jako pøi realizaci odboèení (vpravo)
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.8\linewidth]{kab_zl3.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Umisování kabelù na vodivé konstrukci}
+    \begin{itemize}
+			\item[A] vyuití stínícího úèinku v rozích
+			\item[B] naprosto nevhodné - malı stínící úèinek, kabel vlevo je navíc v místì s monım vıskytem vysoké elektrické intenzity
+			\item[C] vyuití stínícího úèinku støedu vodivé plochy
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.9\linewidth]{kab_zl6.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Umisování kabelù do labu}
+    \begin{itemize}
+			\item stínìnı lab
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.7\linewidth]{kab_zl4.png}
+		\end{tabular}
+		\end{center}
+		\begin{itemize}
+			\item otevøenı lab - vyuívá se stínící úèinek rohù
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.7\linewidth]{kab_zl5.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Umisování kabelù do labu}
+    \begin{itemize}
+			\item rozhodující je jejich klasifikace - obdobnì jako u zón v rozvádìèích
+			\item rùzné tøídy se oddìlují
+			\begin{enumerate}
+				\item[a)] vzdáleností
+				\item[b)] pøepákou
+			\end{enumerate}
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.9\linewidth]{kab_zl7.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Klasifikace}
+    \begin{itemize}
+			\item \textbf{\textcolor{blue}{Tøída 1:}} Kabely s proudy z velmi citlivıch nízkoúrovòovıch signálù - SENZORY, pøípadnì rychlá komunikace nad 1 MHz
+			\item \textbf{\textcolor{blue}{Tøída 2:}} Ménì citlivé signály do 1 MHz - DIGITÁlNÍ KOMUNIKACE (RS232, RS485 apod.)
+			\item \textbf{\textcolor{blue}{Tøída 3:}} Signály s nízkou úrovní vyzaøování - AC/DC NAPÁJENÍ
+			\item \textbf{\textcolor{blue}{Tøída 4:}} Silnì rušící signály - VİKONOVÉ OBVODY, pwm, komutátorové stroje apod.
+			\item Poadavek na oddìlení roste s èíslem tøídy - nutná vìtší vzdálenost nebo vlastní lab
+		\end{itemize}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Umisování kabelù do labu}
+    \begin{itemize}
+			\item sousední tøídy je moné vést jedním labem
+			\item nesousední tøídy je vhodné vést v oddìlenıch labech
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.5\linewidth]{kab_zl8.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Køíení kabelù}
+    \begin{itemize}
+			\item Je tøeba minimalizovat vazby mezi jednotlivımi tøídami
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c}
+		\includegraphics[width=0.8\linewidth]{kab_zl9.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Stínìní - vyzaøování}
+    \begin{itemize}
+			\item Materiálové konstanty: $\mu_0 = 4\pi \cdot 10^{-12}$ H/m, $\epsilon_0 = 8,85 \cdot 10^{-12}$ F/m
+			\item Hustota vıkonu: $W = \frac{1}{2} \cdot E\times H = \frac{1}{2} \cdot \frac{E^2}{Z} = \frac{1}{2} \cdot Z\cdot H^2$
+			\item Vlnová impedance: $Z= \sqrt{\frac{j\omega \mu}{\sigma + j\omega\epsilon}}$
+			\item Pro vzduch: $Z= \sqrt{\frac{\mu_0}{\epsilon_0}}$
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c l}
+		\includegraphics[width=0.45\linewidth]{EM_vlna.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+  \begin{frame}
+    \frametitle{Stínìní}
+		
+		\begin{itemize}
+			\item lze definovat jako lokalizaci elmag. pole v ohranièeném prostoru
+			\item úèelem je odstranit z okolí citlivého zaøízení rušivé pole
+			\item stínìnı prostor je ohranièen mechanickım krytem
+			\item souèástí jsou i filtry a oddìlovací obvody pro potlaèení rušení z procházejících vodièù
+			\item podle rušivého elmag. pole na které je stínìní úèinné dìlíme stínìní:
+			
+			\begin{itemize}
+				\item elektrostatické
+				\item magnetostatické
+				\item elektromagnetické
+			\end{itemize}
+		\end{itemize}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Stínìní}
+    
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.90\linewidth]{stineni.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Stínìní}
+		\small{
+    Na vysokıch frekvencích roste hodnota $Z_M$:
+		
+		\begin{equation}
+			Z_{M}= \sqrt{\frac{j\omega \mu}{\sigma + j\omega\epsilon}}\approx\sqrt{\frac{j\omega \mu}{\sigma}}
+		\end{equation}
+			
+		Absorpèní útlum nabıvá na vıznamu - poadujeme nízkou hodnotu hloubky vniku: $\delta= \frac{2\cdot\sigma}{\omega\mu}$
+		}
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.75\linewidth]{tab_hlVniku.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Otvory ve stínìní}
+		Dùvody:
+		\begin{itemize}
+			\item montání, vìtrání, prùhledy
+			\item prùchodky pro kabely
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c c}
+			\includegraphics[width=0.35\linewidth]{stineniOtvor.png} &
+			\includegraphics[width=0.35\linewidth]{stineniPapez.png}
+		\end{tabular}
+		\end{center}
+		\begin{itemize}
+			\item víøivé proudy procházející stìnami krytu by mìly procházet i spojem, spojitì po jeho délce
+			\item existence oblastí spoje, které nejsou vodivì propojeny vede ke sníení úèinnosti krytu
+		\end{itemize}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Otvory ve stínìní}
+		Pro útlum štìrbiny lze psát:
+		\begin{equation}
+			b (dB)= 20\cdot log\left(\frac{\lambda}{2\cdot l}\right)
+		\end{equation}
+		
+		\begin{itemize}
+			\item mnoho šroubovıch spojù umístìnıch blízko sebe
+			\item kvalitní spojení nejèastìji zajištìno prunımi kontaktními lištami:
+		\end{itemize}
+		
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.75\linewidth]{stineniLamely.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Provedení konstrukèních èástí}
+		Konstrukèní prvky plní øadu funkcí:
+		\begin{itemize}
+			\item mechanické - nosné
+			\item ochrana osob nebo zaøízení, krytí
+			\item zemnìní
+			\item ochranné pospojování a pospojování EMC - \textcolor{blue}{stínìní}
+		\end{itemize}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Problematika propojovani}
+		
+		\begin{itemize}
+			\item[a)] nepropojeno
+			\item[b)] nf propojení - bezpeènostní pospojování
+			\item[c)] vf propojení - EMC pospojování
+		\end{itemize}
+		
+    \begin{center}
+		\begin{tabular}{c}
+			\includegraphics[width=0.9\linewidth]{propojovani1.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Problematika propojovani}
+		
+		\begin{itemize}
+			\item pøípojná místa musí bıt bez nátìru, rzi, neèistot apod.
+			\item pásková propojení mají niší indukènost
+			\item pro vodivé spojení pohyblivıch èástí je vhodná plochá pletená propojka
+		\end{itemize}
+		
+    \begin{center}
+		\begin{tabular}{c c}
+			\includegraphics[width=0.4\linewidth]{propojovani2.png} &
+			\includegraphics[width=0.35\linewidth]{propojovaniVod.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Varianty propojovani}
+		\textbf{Minimalizace mezer:}
+		\begin{itemize}
+			\item[A-B] Pøeplátování vodivım pásem
+			\item[B-C] Svaøované díly
+			\item[C-D] Vzájemné pøeplátování spojovanıch dílù
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c }
+			\includegraphics[width=0.75\linewidth]{propojovani3.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Varianty propojovani}
+		\textbf{Malé rozestupy mezi propoji:}
+		\begin{itemize}
+			\item[A-B] Pletené propojky - lze i pro pohyblivé èásti
+			\item[B-C] Øada vodièù kruhového prùøezu - pro pohyblivé souèásti licnu
+			\item[C-D] Øada páskù - menší indukènost ne kruhovı prùøez
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c }
+			\includegraphics[width=0.8\linewidth]{propojovani4.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Propojování pohyblivıch souèátí}
+		\begin{itemize}
+			\item[A] Nízkofrekvenèní - jen bezpeènostní, velká indukènost
+			\item[B] Jednobodové - špatné stínìní mezer
+			\item[C] Nìkolikabodové propojení - vhodné, ale stále špatné stínìní mezer
+		\end{itemize}
+    \begin{center}
+		\begin{tabular}{c }
+			\includegraphics[width=0.8\linewidth]{propojovani5.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}
+	
+	\begin{frame}
+    \frametitle{Propojování pohyblivıch souèátí}
+		Vodivé tìsnìní:
+		\begin{itemize}
+			\item Potlaèení rušení
+			\item Potlaèení emisí
+		\end{itemize}
+		Prùzor do rozvadìèe musí bıt opatøen vodivou sítí.
+    \begin{center}
+		\begin{tabular}{c }
+			\includegraphics[width=0.6\linewidth]{propojovani6.png}
+		\end{tabular}
+		\end{center}
+  \end{frame}

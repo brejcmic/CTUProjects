@@ -1,0 +1,39 @@
+%Beamer class
+\documentclass{beamer}
+
+\usepackage[czech]{babel}
+\usepackage[cp1250]{inputenc}
+\usepackage{fontenc}
+\usepackage{tgheros}
+
+\usetheme{CambridgeUS}
+
+
+\title[EMC]{EMC}
+\subtitle[Soucasna legislativa a praxe] {Souèasná legislativa a praxe}
+\author[Brejcha]{Michal Brejcha}
+\institute[CSVTS]{
+  poboèka ÈSVTS pøi FEL Praha}
+\date[Praha, 2017]{Praha, 2017}
+
+\begin{document}
+%------------------------------------------------------------------------------
+%Uvodni slajd
+%------------------------------------------------------------------------------
+\frame{\titlepage}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Obsah}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\include{ZaklPojmy}
+\include{Legislativa}
+\include{PrehlZkous}
+\include{OmezEmis}
+\include{PevneInstal}
+% etc
+\end{document}

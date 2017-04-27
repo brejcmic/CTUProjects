@@ -1,0 +1,29 @@
+Základy: - Michal
+- elektrický proud, vodièe, polovodièe, izolanty
+- lineární souèástky (odpor, kondenzátor, cívka), typy a parametry
+- nelineární souèástky, princip PN usmìròovací diody, charakteristiky
+Shottky a Zener diod, charakteristiky bipolárních tranzistorù a MOSFETù
+
+Mìøení: - Papež
+- digitální mìøicí pøístroje (volt, ampér a RLC meter)
+- mìøení impedancí kondenzátoru a cívek
+- AD a DA pøevodníky
+- digitální osciloskop
+
+Elektrické zdroje: - Michal
+- princip lineárních regulátorù
+- princip spínaných zdrojù (buck a boost konvertory)
+- funkce zdroje (boost konvertoru) pro LED podsvit displejù
+
+Mikroprocesorová technika: - Karel
+- úvod do univerzálních mikroprocesorù (základy architektura, funkce pinù,
+reset, pøerušení, watchdog, taktovací frekvence, apod.)
+- datové sbìrnice mezi èipy (I2C, I2S, SPI, UART, USB)
+- dynamické pamìti (SDRAM, DDR2, DDR3), princip, adresování
+- flash pamìti (NAND, NOR, eMMC), princip, adresování
+
+TFT LCD s aktivní maticí RGB:
+- technologie TN, VA, IPS a jejich vlastnosti (úhly pohledu, rozlišení,
+svítivost, kontrast, white point, homogenita)
+- barevná hloubka, Chip On Glass driver a jeho funkce. gamma, VCOM
+- synchronizaèní a datové signály (Open LDI, RGB data, VSYNC, HSYNC, PCLK)

@@ -1,0 +1,38 @@
+********************************************************************************
+12345678901234567890123456789012345678901234567890123456789012345678901234567890
+********************************************************************************
+Základy:
+- ELEKTROMAGNETICKÁ POLE 
+-- elektrostatické pole, intenzita elektrického pole, indukce, náboj ...
+-- magnetické pole, intenzita magnetického pole, indukce, tok ...
+-- elektrické pole, potenciál, elektrický proud, ohmùv zákon ...
+- DÌLENÍ MATERIÁLÙ Z HLEDISKA ELEKTRICKÉ VODIVOSTI 
+-- vodièe, materiály (kovy, elektrolyty), výpoèet odporu, vlastnosti
+-- polovodièe, typy, vlastní a pøímìsová vodivost, vlastnosti
+-- izolanty, materiály, permitivita, kapacita, ztrátový èinitel
+- ZÁKLADNÍ PASIVNÍ ELEKTRONICKÉ SOUÈÁSTKY -- rezistory, potenciometry, druhy, øada hodnot, tolerance, výkonová ztráta, vlastnosti
+-- kondenzátory, elektrolytické kondenzátory, druhy, øada hodnot, tolerance, dielektrika, vlastnosti
+-- cívky, èinitel jakosti, magnetická jádra (pøíp. obvody), maximální proud, vlastnosti
+-- spojování prvkù, definice impedance
+- POLOVODIÈE
+-- PN pøechod, oblast prostorového náboje, pøechod kov polovodiè, diody (usmìròovací, Zenerovy), vlastnosti, typické souèástky a jejich použití
+-- bipolární tranzistory, hybridní parametry, základní zapojení,vlastnosti, typické souèástky a jejich použití
+-- unipolární tranzistotry, y parametry, základní zapojení, vlastnosti, typické souèástky a jejich použití
+
+********************************************************************************
+12345678901234567890123456789012345678901234567890123456789012345678901234567890
+********************************************************************************
+Elektrické zdroje:
+- LINEÁRNÍ STABILIZÁTORY
+-- princip a vlastnosti paralelních stabilizátorù
+-- princip a vlastnosti sériových stabilizátorù
+-- typické integrované obvody (78xx, LM431 apod.) a jejich zapojení, podmínky návrhu
+- SPÍNANÉ STABILIZÁTORY
+-- pøehled propustné, blokující mìnièe, realizace spínaèù
+-- základní propustné mìnièe (buck), princip a vlastnosti, základní topologie
+-- základní blokující mìnièe (boost, buck-boost, flyback), princip a vlastnosti, základní topologie
+-- režim s nepøerušovaným a pøerušovaným proudem
+-- návrh výstupního LC filtru
+
+FUNKCE ZDROJE (BOOST CONVERTER) PRO LED PODSVIT DISPLEJÙ - Po
+- je zapotøebí dodat bližší specifikaci od Continentalu

@@ -1,0 +1,29 @@
+<Qucs Schematic 0.0.18>
+<Properties>
+  <View=0,0,1162,800,1,0,0>
+  <Grid=10,10,0>
+  <DataSet=sim3.dat>
+  <DataDisplay=sim3.sch>
+  <OpenDisplay=1>
+  <Script=sim3.m>
+  <RunScript=0>
+  <showFrame=0>
+  <FrameText0=Název>
+  <FrameText1=Nakresleno:>
+  <FrameText2=Datum:>
+  <FrameText3=Verze:>
+</Properties>
+<Symbol>
+</Symbol>
+<Components>
+</Components>
+<Wires>
+</Wires>
+<Diagrams>
+  <Rect 280 609 865 459 3 #c0c0c0 1 10 1 10000 1 1e+08 1 -192.522 20 10.934 1 -1 0.2 1 315 0 225 "f (Hz)" "" "">
+	<"Au1" #0000ff 3 3 0 0 0>
+	<"Au2" #ff0000 3 3 0 0 0>
+  </Rect>
+</Diagrams>
+<Paintings>
+</Paintings>

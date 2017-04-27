@@ -1,0 +1,8 @@
+Název: EMC - souèasná legislativa a praxe
+Datum konání: 26.4.2017
+Program: (4 tematické bloky)
+
+1) Legislativa EMC - základní pojmy, zákony, požadavky na výrobky uvádìné na trh, naøízení vlády vztahující se k EMC.
+2) Zkoušky EMC - pøedepisované zkoušky, pøíklady a zpùsoby mìøení EMC ve firmì Vyrtych.
+3) Zpùsoby omezování emisí - nf a vf rušení, základy integrity signálù, pøizpùsobování, základní návrh odrušovacích filtrù.
+4) Pevné instalace - Správné technické postupy, vedení kabelù, zemnìní, komponenty s urèeným použitím.
