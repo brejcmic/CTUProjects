@@ -15,7 +15,7 @@
    version="1.1"
    inkscape:version="0.92.1 r15371"
    sodipodi:docname="diffuseReflection.svg"
-   inkscape:export-filename="/home/bayeriste/Repositories/CTUProjects/LightSvetlo2015/diffuseReflection.png"
+   inkscape:export-filename="D:\Bayer\Projects\CTU projects\LR&amp;T\Word Manuscript\diffuseReflection.png"
    inkscape:export-xdpi="180"
    inkscape:export-ydpi="180">
   <defs
@@ -117,8 +117,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="355.05384"
-     inkscape:cy="424.03071"
+     inkscape:cx="261.86727"
+     inkscape:cy="444.23376"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -135,7 +135,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
